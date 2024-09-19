@@ -3,7 +3,6 @@
 - 🌱 I’m currently learning C,C++,java,web dev and game dev.
 - 💞️ I’m looking to collaborate on game dev 
 - 📫 How to reach me ayushsingh2005811@gmail.com
-- 
 - ⚡ Fun fact: I am alive 
 
 <!---
