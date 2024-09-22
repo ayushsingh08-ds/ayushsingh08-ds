@@ -6,7 +6,7 @@
 
 - 🔭 I’m currently a student doing [B tech. in CSE Data science](in Dayananda Sagar university)
 
-- 👯 I’m looking to collaborate on **Qr Attendance**
+- 👯 I’m am collaborating  on **Qr Attendance** with <a href="https://github.com/alurubalakarthikeya">Karthikheya</a> and <a hre="https://github.com/ArjiJethin" >Jethin</a>
 
 - 🤝 I’m looking for help with **2D side scrolling game**
 
@@ -16,16 +16,27 @@
 
 <h3 align="left">Connect with me:</h3>
 <p align="left">
-<a href="https://twitter.com/@11d_ayush" target="blank"><img align="center" src=![235294011-b8074c31-9097-4a65-a594-4151b58743a8](https://github.com/user-attachments/assets/9beb7936-9143-4fa3-bb76-0caee93b5c9f)
-alt="@11d_ayush" height="30" width="40" /></a>
-<a href="https://linkedin.com/in/https://www.linkedin.com/in/ayush-singh-b7760a224/overlay/about-this-profile/?lipi=urn%3ali%3apage%3ad_flagship3_profile_view_base%3b%2fdpqtyznq4odaedzl%2fyj2g%3d%3d" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="https://www.linkedin.com/in/ayush-singh-b7760a224/overlay/about-this-profile/?lipi=urn%3ali%3apage%3ad_flagship3_profile_view_base%3b%2fdpqtyznq4odaedzl%2fyj2g%3d%3d" height="30" width="40" /></a>
-<a href="https://instagram.com/_r_e_d_08" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" alt="_r_e_d_08" height="30" width="40" /></a>
-<a href="https://www.hackerrank.com/@eng23ds0098" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/hackerrank.svg" alt="@eng23ds0098" height="30" width="40" /></a>
+<a href="https://twitter.com/@11d_ayush" target="blank"><img align="center"  src="https://user-images.githubusercontent.com/74038190/235294011-b8074c31-9097-4a65-a594-4151b58743a8.gif" width="100" alt="twitter link"  /></a>
+<a href="https://linkedin.com/in/https://www.linkedin.com/in/ayush-singh-b7760a224/overlay/about-this-profile/?lipi=urn%3ali%3apage%3ad_flagship3_profile_view_base%3b%2fdpqtyznq4odaedzl%2fyj2g%3d%3d" target="blank"><img align="center" src="https://user-images.githubusercontent.com/74038190/235294012-0a55e343-37ad-4b0f-924f-c8431d9d2483.gif" alt="https://www.linkedin.com/in/ayush-singh-b7760a224/overlay/about-this-profile/?lipi=urn%3ali%3apage%3ad_flagship3_profile_view_base%3b%2fdpqtyznq4odaedzl%2fyj2g%3d%3d" height="90" width="90" /></a>
+<a href="https://instagram.com/_r_e_d_08" target="blank"><img align="center" src="https://user-images.githubusercontent.com/74038190/235294013-a33e5c43-a01c-43f6-b44d-a406d8b4ab75.gif" alt="_r_e_d_08" height="90" width="90" /></a>
+<a href="https://www.hackerrank.com/@eng23ds0098" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/hackerrank.svg" alt="@eng23ds0098" height="90" width="90" /></a>
 </p>
 
 <h3 align="left">Languages and Tools:</h3>
-<p align="left"> <a href="https://www.cprogramming.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-original.svg" alt="c" width="40" height="40"/> </a> <a href="https://www.w3schools.com/cpp/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg" alt="cplusplus" width="40" height="40"/> </a> <a href="https://www.java.com" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="java" width="40" height="40"/> </a> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a> <a href="https://www.python.org" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="python" width="40" height="40"/> </a> </p>
+<p align="left"> <a href="#" target="_blank" rel="noreferrer"> <img src="https://user-images.githubusercontent.com/74038190/212257472-08e52665-c503-4bd9-aa20-f5a4dae769b5.gif" alt="c" width="40" height="40"/> </a> 
+<a href="https://www.w3schools.com/cpp/" target="_blank" rel="noreferrer"> <img src="https://user-images.githubusercontent.com/74038190/212257454-16e3712e-945a-4ca2-b238-408ad0bf87e6.gif" alt="cplusplus" width="40" height="40"/> </a> 
+<a href="https://www.java.com" target="_blank" rel="noreferrer"> <img src="https://user-images.githubusercontent.com/74038190/212257465-7ce8d493-cac5-494e-982a-5a9deb852c4b.gif" alt="java" width="40" height="40"/> </a> 
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://user-images.githubusercontent.com/74038190/212257460-738ff738-247f-4445-a718-cdd0ca76e2db.gif" alt="javascript" width="40" height="40"/> </a> 
+<a href="https://www.python.org" target="_blank" rel="noreferrer"> <img src="https://github.com/Anmol-Baranwal/Cool-GIFs-For-GitHub/assets/74038190/29fd6286-4e7b-4d6c-818f-c4765d5e39a9" alt="python" width="40" height="40"/> </a>
+<a href="https://www.python.org" target="_blank" rel="noreferrer"> <img src="https://github.com/Anmol-Baranwal/Cool-GIFs-For-GitHub/assets/74038190/67f477ed-6624-42da-99f0-1a7b1a16eecb" alt="python" width="40" height="40"/> </a>
+<a href="https://www.python.org" target="_blank" rel="noreferrer"> <img src="https://github.com/Anmol-Baranwal/Cool-GIFs-For-GitHub/assets/74038190/de038172-e903-4951-926c-755878deb0b4" alt="python" width="40" height="40"/> </a>
+ </p>
 
-<p>&nbsp;<img align="center" src="https://github-readme-stats.vercel.app/api?username=ayushsingh08-ds&show_icons=true&locale=en" alt="ayushsingh08-ds" /></p>
+<h1>MAH STATS </h1>
+<p>&nbsp;<img align="center" src="https://github-readme-stats.vercel.app/api?username=ayushsingh08-ds&show_icons=true&locale=en&&mode=daily&theme=radical&hide_border=false&border_radius=5" height="170vh" alt="streak grap" alt="ayushsingh08-ds" /></p>
+<h1>MAH STREAK </h1>
 
-<p><img align="center" src="https://github-readme-streak-stats.herokuapp.com/?user=ayushsingh08-ds&" alt="ayushsingh08-ds" /></p>
+<p><img align="center" src="https://github-readme-streak-stats.herokuapp.com/?user=ayushsingh08-ds&theme=radical&locale=en&hide_title=false&langs_count=12&hide_border=false" alt="ayushsingh08-ds" /></p>
+
+<h1>MAH Language  </h1>
+<p><img align="left" src="https://github-readme-stats.vercel.app/api/top-langs/?username=ayushsingh08-ds&layout=donut&theme=radical&locale=en&hide_title=false&langs_count=12&hide_border=false" height="220vh" width="" alt="languages graph" /></p>
