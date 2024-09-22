@@ -1,11 +1,13 @@
 
 <img src=assets/cyberpunk.gif>
 <h1 align="center">Hi 👋, I'm Ash</h1>
+<img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" >
+
 <h3 align="center">A passionate Student from India</h3>
 
 - 🔭 I’m currently a student doing [B tech. in CSE Data science](in Dayananda Sagar university)
 
-- 👯 I’m am collaborating  on **Qr Attendance** with <a href="https://github.com/alurubalakarthikeya">Karthikheya</a> and <a hre="https://github.com/ArjiJethin" >Jethin</a>
+- 👯 I’m am collaborating  on **Qr Attendance** with <a href="https://github.com/alurubalakarthikeya">Karthikheya</a> and <a href="https://github.com/ArjiJethin" >Jethin</a>
 
 - 🤝 I’m looking for help with **2D side scrolling game**
 
@@ -30,12 +32,23 @@
 <a href="https://www.python.org" target="_blank" rel="noreferrer"> <img src="https://github.com/Anmol-Baranwal/Cool-GIFs-For-GitHub/assets/74038190/67f477ed-6624-42da-99f0-1a7b1a16eecb" alt="python" width="40" height="40"/> </a>
 <a href="https://www.python.org" target="_blank" rel="noreferrer"> <img src="https://github.com/Anmol-Baranwal/Cool-GIFs-For-GitHub/assets/74038190/de038172-e903-4951-926c-755878deb0b4" alt="python" width="40" height="40"/> </a>
  </p>
+<br clear="both">
 
-<h1>MAH STATS </h1>
+<h1 style="text-align:center">Git data</h1>
+<h3>MAH STATS </h3>
 <p>&nbsp;<img align="center" src="https://github-readme-stats.vercel.app/api?username=ayushsingh08-ds&show_icons=true&locale=en&&mode=daily&theme=radical&hide_border=false&border_radius=5" height="170vh" alt="streak grap" alt="ayushsingh08-ds" /></p>
-<h1>MAH STREAK </h1>
+<br clear="both">
 
+<h3>MAH STREAK </h3>
 <p><img align="center" src="https://github-readme-streak-stats.herokuapp.com/?user=ayushsingh08-ds&theme=radical&locale=en&hide_title=false&langs_count=12&hide_border=false" alt="ayushsingh08-ds" /></p>
+<br clear="both">
 
-<h1>MAH Language  </h1>
+<h3>MAH Language  </h3>
 <p><img align="left" src="https://github-readme-stats.vercel.app/api/top-langs/?username=ayushsingh08-ds&layout=donut&theme=radical&locale=en&hide_title=false&langs_count=12&hide_border=false" height="220vh" width="" alt="languages graph" /></p>
+<br clear="both">
+
+<h3> MAH TROPHY</h3>
+![](https://github-profile-trophy.vercel.app/?username=ayushsingh08-ds&theme=shadow_green&no-frame=false&no-bg=true&margin-w=4)
+
+
+<img src="https://camo.githubusercontent.com/748433fbf833d18f543ad4bb6d8c8c4f7f340c7fe8b9706df131a525049f0c8c/68747470733a2f2f63756c746f667468657061727479706172726f742e636f6d2f706172726f74732f68642f6c6170746f705f706172726f742e676966" height="20"> Snake & Contributins</h3>
