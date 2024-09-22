@@ -52,6 +52,20 @@
 ![](https://github-profile-trophy.vercel.app/?username=ayushsingh08-ds&theme=shadow_green&no-frame=false&no-bg=true&margin-w=4)
 
 
-<img src="https://camo.githubusercontent.com/748433fbf833d18f543ad4bb6d8c8c4f7f340c7fe8b9706df131a525049f0c8c/68747470733a2f2f63756c746f667468657061727479706172726f742e636f6d2f706172726f74732f68642f6c6170746f705f706172726f742e676966" height="20"> Snake & Contributins</h3>
-### 🐍 A Snake Eating My Contributions:
+<img src="https://camo.githubusercontent.com/748433fbf833d18f543ad4bb6d8c8c4f7f340c7fe8b9706df131a525049f0c8c/68747470733a2f2f63756c746f667468657061727479706172726f742e636f6d2f706172726f74732f68642f6c6170746f705f706172726f742e676966" ><h3>🐍 A Snake Eating My Contributions:</h3>
 
+
+<picture>
+  <source
+    media="(prefers-color-scheme: dark)"
+    srcset="https://raw.githubusercontent.com/ayushsingh08-ds/snk/output/github-contribution-grid-snake-dark.svg"
+  />
+  <source
+    media="(prefers-color-scheme: light)"
+    srcset="https://raw.githubusercontent.com/ayushsingh08-ds/snk/output/github-contribution-grid-snake.svg"
+  />
+  <img
+    alt="github contribution grid snake animation"
+    src="https://raw.githubusercontent.com/ayushsingh08-ds/snk/output/github-contribution-grid-snake.svg"
+  />
+</picture>
