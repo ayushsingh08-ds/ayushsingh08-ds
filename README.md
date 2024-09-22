@@ -1,6 +1,5 @@
 
-![cyberpunk](https://github.com/user-attachments/assets/46d8547a-e39b-4d75-92a4-f28276e080c7)
-
+<img src=assets/cyberpunk.gif>
 <h1 align="center">Hi 👋, I'm Ash</h1>
 <h3 align="center">A passionate Student from India</h3>
 
