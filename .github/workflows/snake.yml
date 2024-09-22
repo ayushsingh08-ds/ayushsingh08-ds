@@ -1,0 +1,31 @@
+name: Generate Snake Animation
+
+# Controls when the action will run
+on:
+  schedule: # Run at a scheduled time
+    - cron: "0 0 * * *"  # Every day at midnight UTC
+  workflow_dispatch: # Allows manual triggering
+
+# This is the job definition, where the workflow actually runs
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out the repository content
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Generate the snake animation and save it as a SVG file
+      - name: Generate Snake Animation
+        uses: Platane/snk@v2.0.1
+        with:
+          github_user_name: YOUR_GITHUB_USERNAME  # Replace with your GitHub username
+          svg_out_path: dist/github-snake.svg
+
+      # Upload the generated SVG as an artifact
+      - name: Upload Snake Animation
+        uses: actions/upload-artifact@v2
+        with:
+          name: snake-animation
+          path: dist/github-snake.svg
