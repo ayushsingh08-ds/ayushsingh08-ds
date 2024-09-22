@@ -16,7 +16,8 @@
 
 <h3 align="left">Connect with me:</h3>
 <p align="left">
-<a href="https://twitter.com/@11d_ayush" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/twitter.svg" alt="@11d_ayush" height="30" width="40" /></a>
+<a href="https://twitter.com/@11d_ayush" target="blank"><img align="center" src=![235294011-b8074c31-9097-4a65-a594-4151b58743a8](https://github.com/user-attachments/assets/9beb7936-9143-4fa3-bb76-0caee93b5c9f)
+alt="@11d_ayush" height="30" width="40" /></a>
 <a href="https://linkedin.com/in/https://www.linkedin.com/in/ayush-singh-b7760a224/overlay/about-this-profile/?lipi=urn%3ali%3apage%3ad_flagship3_profile_view_base%3b%2fdpqtyznq4odaedzl%2fyj2g%3d%3d" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="https://www.linkedin.com/in/ayush-singh-b7760a224/overlay/about-this-profile/?lipi=urn%3ali%3apage%3ad_flagship3_profile_view_base%3b%2fdpqtyznq4odaedzl%2fyj2g%3d%3d" height="30" width="40" /></a>
 <a href="https://instagram.com/_r_e_d_08" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" alt="_r_e_d_08" height="30" width="40" /></a>
 <a href="https://www.hackerrank.com/@eng23ds0098" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/hackerrank.svg" alt="@eng23ds0098" height="30" width="40" /></a>
