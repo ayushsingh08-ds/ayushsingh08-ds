@@ -1,27 +1,63 @@
-<h1 align="center">Hi 👋, I'm Ash</h1>
-<h3 align="center">A passionate Student from India</h3>
-
-- 🔭 I’m currently a student doing [B tech. in CSE Data science](in Dayananda Sagar university)
-
-- 👯 I’m looking to collaborate on **Qr Attendance**
-
-- 🤝 I’m looking for help with **2D side scrolling game**
-
-- 📫 How to reach me **ayushsingh2005811@gmail.com**
-
-- ⚡ Fun fact **I am alive**
-
-<h3 align="left">Connect with me:</h3>
+<!-- Profile Greeting and Introduction -->
+<h1 align="center"><b>Hello, I'm [Your Name] <img src="https://user-images.githubusercontent.com/74038190/226127913-88de86d3-8437-45b9-a3b6-e746b47f655a.gif" height="35px"></b></h1>
+<h3 align="left">👨‍💻 About Me</h3>
 <p align="left">
-<a href="https://twitter.com/@11d_ayush" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/twitter.svg" alt="@11d_ayush" height="30" width="40" /></a>
-<a href="https://linkedin.com/in/https://www.linkedin.com/in/ayush-singh-b7760a224/overlay/about-this-profile/?lipi=urn%3ali%3apage%3ad_flagship3_profile_view_base%3b%2fdpqtyznq4odaedzl%2fyj2g%3d%3d" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="https://www.linkedin.com/in/ayush-singh-b7760a224/overlay/about-this-profile/?lipi=urn%3ali%3apage%3ad_flagship3_profile_view_base%3b%2fdpqtyznq4odaedzl%2fyj2g%3d%3d" height="30" width="40" /></a>
-<a href="https://instagram.com/_r_e_d_08" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" alt="_r_e_d_08" height="30" width="40" /></a>
-<a href="https://www.hackerrank.com/@eng23ds0098" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/hackerrank.svg" alt="@eng23ds0098" height="30" width="40" /></a>
+  <b>
+    I'm a passionate front-end web developer from [Your Location].<br><br>
+    - 🔭 Currently working on: [Your Project]<br>
+    - 🌱 Learning: [Tech you're learning, e.g., React.js, Node.js]<br>
+    - 💼 Interested in: [Career Interests, e.g., Full Stack Development, UI/UX Design]<br>
+    - ⚡ Fun fact: [Your Fun Fact]<br>
+    - 🔗 Portfolio: <a href="[Your Portfolio Link]">Click here</a>
+  </b>
 </p>
 
-<h3 align="left">Languages and Tools:</h3>
-<p align="left"> <a href="https://www.cprogramming.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-original.svg" alt="c" width="40" height="40"/> </a> <a href="https://www.w3schools.com/cpp/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg" alt="cplusplus" width="40" height="40"/> </a> <a href="https://www.java.com" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="java" width="40" height="40"/> </a> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a> <a href="https://www.python.org" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="python" width="40" height="40"/> </a> </p>
+<!-- Stats Section -->
+<h3 align="left">📊 My GitHub Stats:</h3>
 
-<p>&nbsp;<img align="center" src="https://github-readme-stats.vercel.app/api?username=ayushsingh08-ds&show_icons=true&locale=en" alt="ayushsingh08-ds" /></p>
+<div align="left">
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=[YourGitHubUsername]&hide_progress=true&theme=shadow_green" height="170vh" alt="languages graph" />
+  <img src="https://streak-stats.demolab.com?user=[YourGitHubUsername]&locale=en&mode=daily&theme=shadow_green&hide_border=false&border_radius=5&order=3" height="170vh"/>
+  <img src="https://github-readme-stats.vercel.app/api?username=[YourGitHubUsername]&theme=shadow_green&show_icons=true&rank_icon=github" height="170vh"/>
+</div>
 
-<p><img align="center" src="https://github-readme-streak-stats.herokuapp.com/?user=ayushsingh08-ds&" alt="ayushsingh08-ds" /></p>
+<!-- Language and Tools -->
+<h3 align="left">🛠️ Languages and Tools:</h3>
+
+<div align="left">
+  <img src="https://user-images.githubusercontent.com/74038190/212257454-16e3712e-945a-4ca2-b238-408ad0bf87e6.gif" height="40" alt="javascript logo" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" height="40" alt="html5 logo" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" height="40" alt="css3 logo" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" height="40" alt="react logo" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" height="40" alt="nodejs logo" />
+  <!-- Add more logos or tools as needed -->
+</div>
+
+<!-- GitHub Trophies -->
+<h3 align="left">🏆 GitHub Trophies</h3>
+<img src="https://github-profile-trophy.vercel.app/?username=[YourGitHubUsername]&theme=shadow_green&no-frame=false&no-bg=true&margin-w=4"/>
+
+<!-- Snake and Contributions -->
+<h3 align="left">🐍 Contribution Snake</h3>
+<img src="https://raw.githubusercontent.com/[YourGitHubUsername]/[YourGitHubUsername]/output/snake.svg" alt="Snake animation" />
+
+<!-- Social Links -->
+<h3 align="left">🌍 Find me on:</h3>
+<div align="left">
+  <a href="https://www.linkedin.com/in/[YourLinkedInUsername]/" target="_blank">
+    <img src="https://raw.githubusercontent.com/maurodesouza/profile-readme-generator/master/src/assets/icons/social/linkedin/default.svg" width="52" height="40" alt="linkedin logo" />
+  </a>
+  <a href="https://twitter.com/[YourTwitterUsername]" target="_blank">
+    <img src="https://raw.githubusercontent.com/maurodesouza/profile-readme-generator/master/src/assets/icons/social/twitter/default.svg" width="52" height="40" alt="twitter logo" />
+  </a>
+  <a href="https://www.instagram.com/[YourInstagramUsername]/" target="_blank">
+    <img src="https://raw.githubusercontent.com/maurodesouza/profile-readme-generator/master/src/assets/icons/social/instagram/default.svg" width="52" height="40" alt="instagram logo" />
+  </a>
+  <a href="https://stackoverflow.com/users/[YourStackOverflowID]/" target="_blank">
+    <img src="https://raw.githubusercontent.com/maurodesouza/profile-readme-generator/master/src/assets/icons/social/stackoverflow/default.svg" width="52" height="40" alt="stackoverflow logo" />
+  </a>
+  <!-- Add more social links as needed -->
+</div>
+
+<!-- Profile View Counter -->
+<img align="left" src="https://komarev.com/ghpvc/?username=[YourGitHubUsername]&style=for-the-badge&color=brightgreen" />
