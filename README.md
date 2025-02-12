@@ -1,4 +1,4 @@
-
+![image](https://github.com/user-attachments/assets/5bea5f15-90c9-4365-af9d-2f7f5618ff34)
 <img src=assets/cyberpunk.gif>
 <h1 align="center">Hi 👋, I'm Ash</h1>
 <img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" >
@@ -40,7 +40,7 @@
 <br clear="both">
 
 <h3>MAH STREAK </h3>
-<p><img align="center" src="https://github-readme-streak-stats.herokuapp.com/?user=ayushsingh08-ds&theme=radical&locale=en&hide_title=false&langs_count=12&hide_border=false" alt="ayushsingh08-ds" /></p>
+<p><img align="center" src="[https://github-readme-streak-stats.herokuapp.com/?user=ayushsingh08-ds&theme=radical&locale=en&hide_title=false&langs_count=12&hide_border=false](https://git.io/streak-stats"><img src="https://streak-stats.demolab.com?user=ayushingh08-ds&theme=radical" alt="GitHub Streak)" alt="ayushsingh08-ds" /></p>
 <br clear="both">
 
 <h3>MAH Language  </h3>
