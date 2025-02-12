@@ -1,4 +1,3 @@
-![image](https://github.com/user-attachments/assets/5bea5f15-90c9-4365-af9d-2f7f5618ff34)
 <img src=assets/cyberpunk.gif>
 <h1 align="center">Hi 👋, I'm Ash</h1>
 <img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" >
