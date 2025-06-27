@@ -6,10 +6,6 @@
 
 - 🔭 I’m currently a student doing [B tech. in CSE Data science](in Dayananda Sagar university)
 
-- 👯 I’m am collaborating  on **Qr Attendance** with <a href="https://github.com/alurubalakarthikeya">Karthikheya</a> and <a href="https://github.com/ArjiJethin" >Jethin</a>
-
-- 🤝 I’m looking for help with **2D side scrolling game**
-
 - 📫 How to reach me **ayushsingh2005811@gmail.com**
 
 - ⚡ Fun fact **I am alive**
