@@ -37,14 +37,6 @@
   </tr>
 </table>
 
----
-
-- 🔭 I’m currently a student doing [B tech. in CSE Data science](in Dayananda Sagar university)
-
-- 📫 How to reach me **ayushsingh2005811@gmail.com**
-
-- ⚡ Fun fact **I am alive**
-
 ## 🌐 Connect With Me
 
 <div align="center">
