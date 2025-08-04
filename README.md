@@ -1,7 +1,9 @@
+## Born to wander the void, forced to BALL
 <div align="center">
  <img src="https://github.com/Anmol-Baranwal/Cool-GIFs-For-GitHub/assets/74038190/0c7eb6ed-663b-4ce4-bfbd-18239a38ba1b" width="500">
 <br><br>
-  
+
+
   <a href="https://git.io/typing-svg">
     <img src="https://readme-typing-svg.demolab.com?font=&pause=1000&color=F70000&center=true&vCenter=true&width=500&height=100&lines=Hey+there+%F0%9F%91%8B+I'm+Ash+;Code+with+logic%2C+design+with+ambiguity.;Nothing+matters.+So+I+build+what+I+want." alt="Typing SVG" />
   </a>
@@ -27,7 +29,7 @@
     <td>
       
 - 🎓 **Student** pursuing B.Tech in **Computer Science & Data Science** at Dayananda Sagar University
-- 🔍 **Passionate** about Data Science, Machine Learning, and Software Development
+- 🔍 **Not so Passionate** about Data Science, Machine Learning, and Software Development
 - 💻 **Currently Learning** Advanced Python, Deep Learning, and Web Technologies
 - 📈 **Interested in** AI/ML projects, Data Visualization, and Backend Development
 - 📧 **Reach me at** [ayushsingh2005811@gmail.com](mailto:ayushsingh2005811@gmail.com)
@@ -110,19 +112,21 @@
   <table>
     <tr>
       <td align="center" width="33.3%">
-        <img src="https://user-images.githubusercontent.com/74038190/212749168-86d6c7ab-98da-409b-998f-c5b74721badd.gif" width="200">
-        <h3>🔬 Data Science Projects</h3>
-        <p>Working on ML models and data analysis</p>
+        <img src="https://user-images.githubusercontent.com/74038190/212749168-86d6c7ab-98da-409b-998f-c5b74721badd.gif" width="200" height="200">
+        <h3 style="font-weight: bold;">🔬AI & Data Science Projects</h3>
+        <p>Training models to find meaning in noise while I silently question mine.<br>Mostly me staring at graphs, wrangling CSVs, and hoping the accuracy gods are kind.
+</p>
       </td>
       <td align="center" width="33.3%">
-        <img src="https://user-images.githubusercontent.com/74038190/229223263-cf2e4b07-2615-4f87-9c38-e37600f8381a.gif" width="200">
-        <h3>💻 Software Development</h3>
-        <p>Building web applications and tools</p>
+        <img src="https://user-images.githubusercontent.com/74038190/229223263-cf2e4b07-2615-4f87-9c38-e37600f8381a.gif" width="200"height="200">
+        <h3 style="font-weight: bold;">💻 Software Development</h3>
+        <p>Building tools no one asked for but I couldn’t not make.<br>
+        Code runs. I don’t. Half logic, half caffeine, fully committed to overengineering the simplest things.</p>
       </td>
       <td align="center" width="33.3%">
-        <img src="assets\gameing.gif" width="200">
-        <h3>🎮 Game Development</h3>
-        <p>Creating interactive games and experiences</p>
+        <img src="assets\gameing.gif" width="200"height="200">
+        <h3 style="font-weight: bold;">🎮 Game Development</h3>
+        <p>Never learned Game development but doesnt stop me from balling in it <br> hoping to create not a fun but a mad game</p>
       </td>
     </tr>
   </table>
@@ -148,7 +152,7 @@
   <img src="https://user-images.githubusercontent.com/74038190/212284094-e50ceae2-de86-4dd6-9f9c-a3ebcb3ede9e.gif" width="400">
 <br><br> – ASH
   
-  **Thanks for visiting my profile! Let's connect and build something amazing together! 🚀**
+  **Thanks for visiting my profile! Let's hope i live another day to update this repo**
   
 <div align="">
     <img src="https://cultofthepartyparrot.com/parrots/hd/githubparrot.gif" width="25" height="25"/>
