@@ -1,0 +1,94 @@
+<svg fill="none" viewBox="0 0 290 220" width="290" height="220" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject width="100%" height="100%">
+    <div xmlns="http://www.w3.org/1999/xhtml">
+      <style>
+        
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&amp;family=Inter:wght@300;400;500;600;700&amp;family=Outfit:wght@400;500;600;700;800&amp;family=Courier+Prime&amp;display=swap');
+body {
+  font-family: 'Inter', sans-serif;
+  color: #3c2f2f;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: transparent;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+  color: #2c1e1e;
+  margin: 0;
+}
+.card {
+  background-color: #fffdfa;
+  border: 1px solid #e5dacf;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(139, 115, 85, 0.05);
+  box-sizing: border-box;
+  height: 100%;
+}
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #2c1e1e;
+}
+
+      </style>
+      
+<style>
+  .progress-container { margin-bottom: 12px; }
+  .progress-header { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; margin-bottom: 5px; color: #3c2f2f; }
+  .progress-bar-bg { background-color: #e5dacf; height: 6px; border-radius: 3px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; border-radius: 3px; }
+</style>
+<div class="card">
+  <h2 class="card-title">🏗️ Currently Building</h2>
+  
+    <div class="progress-container">
+      <div class="progress-header">
+        <span>Go Distributed Message Broker</span>
+        <span>100%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" style="background-color: #5b7c56; width: 100%;"></div>
+      </div>
+    </div>
+    
+    <div class="progress-container">
+      <div class="progress-header">
+        <span>Notification Queue Service</span>
+        <span>70%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" style="background-color: #d48a37; width: 70%;"></div>
+      </div>
+    </div>
+    
+    <div class="progress-container">
+      <div class="progress-header">
+        <span>Distributed Cache Service</span>
+        <span>20%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" style="background-color: #3c2f2f; width: 20%;"></div>
+      </div>
+    </div>
+    
+    <div class="progress-container">
+      <div class="progress-header">
+        <span>Feed Ranking Engine</span>
+        <span>0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" style="background-color: transparent; width: 0%;"></div>
+      </div>
+    </div>
+    
+</div>
+
+    </div>
+  </foreignObject>
+</svg>

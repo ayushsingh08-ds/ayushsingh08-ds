@@ -3,6 +3,10 @@ name: GitHub-Profile-3D-Contrib
 on:
   schedule: # 03:00 JST == 18:00 UTC
     - cron: "0 18 * * *"
+  push:
+    paths:
+      - 'profile.json'
+      - 'generate.py'
   workflow_dispatch:
 
 jobs:
@@ -17,10 +21,19 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
       
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Run Profile Compiler
+        run: |
+          python generate.py
+      
       - name: Commit & Push
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add -A .
-          git commit -m "generated"
+          git commit -m "compiled profile assets" || echo "no changes to commit"
           git push

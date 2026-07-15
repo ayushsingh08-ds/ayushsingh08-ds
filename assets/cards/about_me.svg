@@ -1,0 +1,62 @@
+<svg fill="none" viewBox="0 0 290 310" width="290" height="310" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject width="100%" height="100%">
+    <div xmlns="http://www.w3.org/1999/xhtml">
+      <style>
+        
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&amp;family=Inter:wght@300;400;500;600;700&amp;family=Outfit:wght@400;500;600;700;800&amp;family=Courier+Prime&amp;display=swap');
+body {
+  font-family: 'Inter', sans-serif;
+  color: #3c2f2f;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: transparent;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+  color: #2c1e1e;
+  margin: 0;
+}
+.card {
+  background-color: #fffdfa;
+  border: 1px solid #e5dacf;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(139, 115, 85, 0.05);
+  box-sizing: border-box;
+  height: 100%;
+}
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #2c1e1e;
+}
+
+      </style>
+      
+<style>
+  .about-text { font-size: 12px; line-height: 1.5; margin: 0 0 15px 0; color: #5a4a42; }
+  .divider { border: 0; border-top: 1px solid #e5dacf; margin: 15px 0; }
+  .about-list { list-style: none; padding: 0; margin: 0; }
+  .about-list li { font-size: 11px; line-height: 1.6; margin-bottom: 10px; color: #3c2f2f; }
+</style>
+<div class="card">
+  <h2 class="card-title">☕ About Me</h2>
+  <p class="about-text">
+    I build systems that are reliable, scalable and observable. My interests lie in distributed systems, streaming pipelines, backend platforms and automation.
+  </p>
+  <hr class="divider"/>
+  <ul class="about-list">
+    <li>🎓 <strong>Exploring:</strong> System Design, Cloud, and High Performance Systems</li>
+    <li>💡 <strong>Interests:</strong> Distributed Systems, Observability, Databases, DevOps</li>
+    <li>⚡ <strong>Fun Fact:</strong> I drink coffee and write code. Repeat.</li>
+  </ul>
+</div>
+
+    </div>
+  </foreignObject>
+</svg>

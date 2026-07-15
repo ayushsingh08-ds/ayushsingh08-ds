@@ -1,0 +1,66 @@
+<svg fill="none" viewBox="0 0 110 32" width="110" height="32" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject width="100%" height="100%">
+    <div xmlns="http://www.w3.org/1999/xhtml">
+      <style>
+        
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&amp;family=Inter:wght@300;400;500;600;700&amp;family=Outfit:wght@400;500;600;700;800&amp;family=Courier+Prime&amp;display=swap');
+body {
+  font-family: 'Inter', sans-serif;
+  color: #3c2f2f;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: transparent;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+  color: #2c1e1e;
+  margin: 0;
+}
+.card {
+  background-color: #fffdfa;
+  border: 1px solid #e5dacf;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(139, 115, 85, 0.05);
+  box-sizing: border-box;
+  height: 100%;
+}
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #2c1e1e;
+}
+
+      </style>
+      
+<style>
+  .icon-box {
+    background-color: #fffdfa;
+    border: 1px solid #e5dacf;
+    border-radius: 6px;
+    height: 32px;
+    width: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #3c2f2f;
+    box-sizing: border-box;
+  }
+  .icon { width: 14px; height: 14px; }
+</style>
+<div class="icon-box">
+  <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cGF0aCBmaWxsPSIjMDA3NmIyIiBkPSJNMTE2IDNIMTJhOC45MSA4LjkxIDAgMDAtOSA4Ljh2MTA0LjQyYTguOTEgOC45MSAwIDAwOSA4Ljc4aDEwNGE4LjkzIDguOTMgMCAwMDktOC44MVYxMS43N0E4LjkzIDguOTMgMCAwMDExNiAzeiIvPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0yMS4wNiA0OC43M2gxOC4xMVYxMDdIMjEuMDZ6bTkuMDYtMjlhMTAuNSAxMC41IDAgMTEtMTAuNSAxMC40OSAxMC41IDEwLjUgMCAwMTEwLjUtMTAuNDlNNTAuNTMgNDguNzNoMTcuMzZ2OGguMjRjMi40Mi00LjU4IDguMzItOS40MSAxNy4xMy05LjQxQzEwMy42IDQ3LjI4IDEwNyA1OS4zNSAxMDcgNzV2MzJIODguODlWNzguNjVjMC02Ljc1LS4xMi0xNS40NC05LjQxLTE1LjQ0cy0xMC44NyA3LjM2LTEwLjg3IDE1VjEwN0g1MC41M3oiLz48L3N2Zz4=" class="icon" alt="LinkedIn" />
+  <span>LinkedIn</span>
+</div>
+
+    </div>
+  </foreignObject>
+</svg>

@@ -1,0 +1,85 @@
+<svg fill="none" viewBox="0 0 290 260" width="290" height="260" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject width="100%" height="100%">
+    <div xmlns="http://www.w3.org/1999/xhtml">
+      <style>
+        
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&amp;family=Inter:wght@300;400;500;600;700&amp;family=Outfit:wght@400;500;600;700;800&amp;family=Courier+Prime&amp;display=swap');
+body {
+  font-family: 'Inter', sans-serif;
+  color: #3c2f2f;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: transparent;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+  color: #2c1e1e;
+  margin: 0;
+}
+.card {
+  background-color: #fffdfa;
+  border: 1px solid #e5dacf;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(139, 115, 85, 0.05);
+  box-sizing: border-box;
+  height: 100%;
+}
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #2c1e1e;
+}
+
+      </style>
+      
+<style>
+  .principles-list { display: flex; flex-direction: column; gap: 12px; }
+  .principle-item { display: flex; align-items: flex-start; gap: 8px; }
+  .principle-item span { font-size: 12px; line-height: 1.4; font-weight: 500; color: #3c2f2f; }
+  .checkmark { width: 14px; height: 14px; margin-top: 2px; flex-shrink: 0; }
+  .coffee-stain { position: absolute; right: -30px; bottom: -30px; width: 110px; height: 110px; border: 3px solid rgba(139, 90, 43, 0.08); border-radius: 50%; pointer-events: none; }
+  .coffee-stain-inner { position: absolute; right: -24px; bottom: -24px; width: 98px; height: 98px; border: 1px solid rgba(139, 90, 43, 0.05); border-radius: 50%; pointer-events: none; }
+</style>
+<div class="card" style="position: relative; overflow: hidden;">
+  <h2 class="card-title">📋 Engineering Principles</h2>
+  <div class="principles-list">
+    
+<div class="principle-item">
+  <svg class="checkmark" viewBox="0 0 24 24" fill="none" stroke="#b05a30" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  <span>Build for failure first.</span>
+</div>
+
+<div class="principle-item">
+  <svg class="checkmark" viewBox="0 0 24 24" fill="none" stroke="#b05a30" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  <span>Prefer observability over assumptions.</span>
+</div>
+
+<div class="principle-item">
+  <svg class="checkmark" viewBox="0 0 24 24" fill="none" stroke="#b05a30" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  <span>Measure before optimizing.</span>
+</div>
+
+<div class="principle-item">
+  <svg class="checkmark" viewBox="0 0 24 24" fill="none" stroke="#b05a30" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  <span>Automate repetitive work.</span>
+</div>
+
+<div class="principle-item">
+  <svg class="checkmark" viewBox="0 0 24 24" fill="none" stroke="#b05a30" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  <span>Simple architectures scale better.</span>
+</div>
+
+  </div>
+  <div class="coffee-stain"></div>
+  <div class="coffee-stain-inner"></div>
+</div>
+
+    </div>
+  </foreignObject>
+</svg>

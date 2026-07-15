@@ -1,0 +1,102 @@
+{
+  "name": "Ayush Singh",
+  "role": "Building reliable distributed systems, streaming data infrastructure, and backend platforms.",
+  "academic": "Final-year Computer Science student passionate about Distributed Systems • Backend Engineering • Data Infrastructure",
+  "quote": {
+    "lines": [
+      "I enjoy designing systems that continue to work under failure.",
+      "I turn ideas into <span class=\"highlight-text\">production-grade systems</span>."
+    ]
+  },
+  "about_me": {
+    "text": "I build systems that are reliable, scalable and observable. My interests lie in distributed systems, streaming pipelines, backend platforms and automation.",
+    "exploring": "System Design, Cloud, and High Performance Systems",
+    "interests": "Distributed Systems, Observability, Databases, DevOps",
+    "fun_fact": "I drink coffee and write code. Repeat.",
+    "email": "ayushsingh2005811@gmail.com",
+    "resume_url": "https://drive.google.com/file/d/1ZtA7NnBvqgq2d3lZ_0J9q3f2qWJ1-T5X/view?usp=sharing",
+    "github_url": "https://github.com/ayushsingh08-ds",
+    "linkedin_url": "https://www.linkedin.com/in/ayush-singh-b7760a224/",
+    "twitter_url": "https://twitter.com/@11d_ayush"
+  },
+  "tech_stack": {
+    "languages": ["go", "java", "python", "javascript", "cplusplus", "postgresql"],
+    "distributed": ["apachekafka", "grpc", "redis", "docker", "rabbitmq", "kubernetes"],
+    "data_streaming": ["apachespark", "apacheairflow", "googlecloud", "kubernetes"],
+    "databases": ["postgresql", "redis", "mongodb", "mysql"],
+    "cloud_devops": ["amazonwebservices", "kubernetes", "docker", "terraform", "prometheus"],
+    "observability": ["prometheus", "grafana"],
+    "tools": ["git", "github", "linux", "vscode", "intellij"]
+  },
+  "principles": [
+    "Build for failure first.",
+    "Prefer observability over assumptions.",
+    "Measure before optimizing.",
+    "Automate repetitive work.",
+    "Simple architectures scale better."
+  ],
+  "currently_building": [
+    { "name": "Go Distributed Message Broker", "percentage": 100 },
+    { "name": "Notification Queue Service", "percentage": 70 },
+    { "name": "Distributed Cache Service", "percentage": 20 },
+    { "name": "Feed Ranking Engine", "percentage": 0 }
+  ],
+  "what_i_build": [
+    {
+      "title": "Distributed Systems",
+      "desc": "Message brokers, ordering, consensus, concurrency, persistence, fault tolerance"
+    },
+    {
+      "title": "Streaming Infra",
+      "desc": "Kafka, Spark, Airflow, ETL/ELT, real-time ingestion, data pipelines"
+    },
+    {
+      "title": "Backend Platforms",
+      "desc": "APIs, microservices, storage, caching, auth, rate limiting"
+    },
+    {
+      "title": "Reliability Eng.",
+      "desc": "Retries, DLQ, chaos testing, load testing, monitoring, alerts, observability"
+    }
+  ],
+  "featured_projects": [
+    {
+      "name": "Market Stream Ingestion Engine",
+      "status": "Production",
+      "desc": "Real-time market data ingestion using Kafka, Spark Structured Streaming & Airflow with schema validation, DLQ and sub-200ms latency.",
+      "tags": ["Kafka", "Spark", "Airflow", "Delta Lake", "Docker", "Python"],
+      "url": "https://github.com/ayushsingh08-ds/market-stream-ingestion-engine"
+    },
+    {
+      "name": "Go Distributed Message Broker",
+      "status": "Production",
+      "desc": "High-performance message broker in Go with per-key ordering, persistence, consumer groups, acks & exactly-once semantics (simulated).",
+      "tags": ["Go", "gRPC", "BoltDB", "Concurrency", "Docker"],
+      "url": "https://github.com/ayushsingh08-ds/go-distributed-message-broker"
+    },
+    {
+      "name": "Notification Queue Service",
+      "status": "In Progress",
+      "desc": "Reliable notification delivery with retries, scheduling, priority queues, idempotency keys and Dead Letter Queue.",
+      "tags": ["Go", "PostgreSQL", "Redis", "gRPC", "Docker"],
+      "url": "https://github.com/ayushsingh08-ds/notification-queue-service"
+    },
+    {
+      "name": "Endpoint Observability Platform",
+      "status": "Production",
+      "desc": "Real-time endpoint monitoring with Prometheus, Grafana, FastAPI and React dashboard for metrics, alerts and failure analytics.",
+      "tags": ["Prometheus", "Grafana", "FastAPI", "React", "Docker"],
+      "url": "https://github.com/ayushsingh08-ds/endpoint-observability-platform"
+    }
+  ],
+  "upcoming_projects": [
+    {
+      "name": "Distributed Rate-Limited Cache Service",
+      "desc": "with Consistency Guarantees"
+    },
+    {
+      "name": "Feed Ranking Engine",
+      "desc": "with Distributed Scoring & Cache Coherence"
+    }
+  ]
+}

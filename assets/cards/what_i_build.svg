@@ -1,0 +1,90 @@
+<svg fill="none" viewBox="0 0 510 200" width="510" height="200" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject width="100%" height="100%">
+    <div xmlns="http://www.w3.org/1999/xhtml">
+      <style>
+        
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&amp;family=Inter:wght@300;400;500;600;700&amp;family=Outfit:wght@400;500;600;700;800&amp;family=Courier+Prime&amp;display=swap');
+body {
+  font-family: 'Inter', sans-serif;
+  color: #3c2f2f;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: transparent;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+  color: #2c1e1e;
+  margin: 0;
+}
+.card {
+  background-color: #fffdfa;
+  border: 1px solid #e5dacf;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(139, 115, 85, 0.05);
+  box-sizing: border-box;
+  height: 100%;
+}
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #2c1e1e;
+}
+
+      </style>
+      
+<style>
+  .what-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .what-card { background-color: #fffdfa; border: 1px solid #e5dacf; border-radius: 8px; padding: 12px; }
+  .what-header { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .what-icon { width: 16px; height: 16px; flex-shrink: 0; }
+  .what-title { font-size: 11px; font-weight: 700; color: #2c1e1e; }
+  .what-desc { font-size: 9.5px; line-height: 1.4; color: #7a6a65; margin: 0; }
+</style>
+<div class="card">
+  <h2 class="card-title">💻 What I Build</h2>
+  <div class="what-grid">
+    
+    <div class="what-card">
+      <div class="what-header">
+        <svg class="what-icon" viewBox="0 0 24 24" fill="none" stroke="#b05a30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+        <span class="what-title">Distributed Systems</span>
+      </div>
+      <p class="what-desc">Message brokers, ordering, consensus, concurrency, persistence, fault tolerance</p>
+    </div>
+    
+    <div class="what-card">
+      <div class="what-header">
+        <svg class="what-icon" viewBox="0 0 24 24" fill="none" stroke="#b05a30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10h20M2 14h20M12 2v20"/></svg>
+        <span class="what-title">Streaming Infra</span>
+      </div>
+      <p class="what-desc">Kafka, Spark, Airflow, ETL/ELT, real-time ingestion, data pipelines</p>
+    </div>
+    
+    <div class="what-card">
+      <div class="what-header">
+        <svg class="what-icon" viewBox="0 0 24 24" fill="none" stroke="#b05a30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+        <span class="what-title">Backend Platforms</span>
+      </div>
+      <p class="what-desc">APIs, microservices, storage, caching, auth, rate limiting</p>
+    </div>
+    
+    <div class="what-card">
+      <div class="what-header">
+        <svg class="what-icon" viewBox="0 0 24 24" fill="none" stroke="#b05a30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span class="what-title">Reliability Eng.</span>
+      </div>
+      <p class="what-desc">Retries, DLQ, chaos testing, load testing, monitoring, alerts, observability</p>
+    </div>
+    
+  </div>
+</div>
+
+    </div>
+  </foreignObject>
+</svg>

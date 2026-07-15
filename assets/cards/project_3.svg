@@ -1,0 +1,89 @@
+<svg fill="none" viewBox="0 0 510 135" width="510" height="135" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject width="100%" height="100%">
+    <div xmlns="http://www.w3.org/1999/xhtml">
+      <style>
+        
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&amp;family=Inter:wght@300;400;500;600;700&amp;family=Outfit:wght@400;500;600;700;800&amp;family=Courier+Prime&amp;display=swap');
+body {
+  font-family: 'Inter', sans-serif;
+  color: #3c2f2f;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: transparent;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+  color: #2c1e1e;
+  margin: 0;
+}
+.card {
+  background-color: #fffdfa;
+  border: 1px solid #e5dacf;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(139, 115, 85, 0.05);
+  box-sizing: border-box;
+  height: 100%;
+}
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #2c1e1e;
+}
+
+      </style>
+      
+    <style>
+      .project-item {
+        background-color: #fffdfa;
+        border: 1px solid #e5dacf;
+        border-radius: 8px;
+        padding: 14px;
+        display: flex;
+        gap: 14px;
+        height: 135px;
+        box-sizing: border-box;
+      }
+      .project-icon-box {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        background-color: #3c2f2f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .project-icon-box svg { width: 16px; height: 16px; }
+      .project-content { flex: 1; }
+      .project-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+      .project-name { font-size: 12.5px; font-weight: 700; color: #2c1e1e; }
+      .badge { font-size: 8.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+      .badge-production { background-color: #e2f0d9; color: #385723; border: 1px solid #c5e0b4; }
+      .badge-inprogress { background-color: #fff2cc; color: #7f6000; border: 1px solid #ffe599; }
+      .project-desc { font-size: 11px; line-height: 1.4; color: #5a4a42; margin: 0 0 10px 0; }
+      .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+      .project-tags span { font-family: 'Courier Prime', monospace; font-size: 9.5px; background-color: #f4ebe1; color: #5a4a42; border: 1px solid #e5dacf; border-radius: 4px; padding: 1px 5px; }
+    </style>
+    <div class="project-item">
+      <div class="project-icon-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fffdfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </div>
+      <div class="project-content">
+        <div class="project-header-row">
+          <span class="project-name">Endpoint Observability Platform</span>
+          <span class="badge badge-production">Production</span>
+        </div>
+        <p class="project-desc">Real-time endpoint monitoring with Prometheus, Grafana, FastAPI and React dashboard for metrics, alerts and failure analytics.</p>
+        <div class="project-tags"><span>Prometheus</span><span>Grafana</span><span>FastAPI</span><span>React</span><span>Docker</span></div>
+      </div>
+    </div>
+    
+    </div>
+  </foreignObject>
+</svg>

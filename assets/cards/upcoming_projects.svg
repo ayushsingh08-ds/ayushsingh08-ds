@@ -1,0 +1,73 @@
+<svg fill="none" viewBox="0 0 510 160" width="510" height="160" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject width="100%" height="100%">
+    <div xmlns="http://www.w3.org/1999/xhtml">
+      <style>
+        
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&amp;family=Inter:wght@300;400;500;600;700&amp;family=Outfit:wght@400;500;600;700;800&amp;family=Courier+Prime&amp;display=swap');
+body {
+  font-family: 'Inter', sans-serif;
+  color: #3c2f2f;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: transparent;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+  color: #2c1e1e;
+  margin: 0;
+}
+.card {
+  background-color: #fffdfa;
+  border: 1px solid #e5dacf;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(139, 115, 85, 0.05);
+  box-sizing: border-box;
+  height: 100%;
+}
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #2c1e1e;
+}
+
+      </style>
+      
+<style>
+  .upcoming-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+  .upcoming-list li { display: flex; gap: 10px; align-items: flex-start; }
+  .upcoming-bullet { width: 6px; height: 6px; border-radius: 50%; background-color: #b05a30; margin-top: 5px; flex-shrink: 0; }
+  .upcoming-list li strong { font-size: 12px; font-weight: 600; color: #2c1e1e; }
+  .upcoming-sub { font-size: 10px; color: #7a6a65; margin-top: 2px; }
+</style>
+<div class="card">
+  <h2 class="card-title">📦 Upcoming Projects</h2>
+  <ul class="upcoming-list">
+    
+<li>
+  <span class="upcoming-bullet"></span>
+  <div>
+    <strong>Distributed Rate-Limited Cache Service</strong>
+    <div class="upcoming-sub">with Consistency Guarantees</div>
+  </div>
+</li>
+
+<li>
+  <span class="upcoming-bullet"></span>
+  <div>
+    <strong>Feed Ranking Engine</strong>
+    <div class="upcoming-sub">with Distributed Scoring & Cache Coherence</div>
+  </div>
+</li>
+
+  </ul>
+</div>
+
+    </div>
+  </foreignObject>
+</svg>
