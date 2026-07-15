@@ -20,13 +20,52 @@
     "twitter_url": "https://twitter.com/@11d_ayush"
   },
   "tech_stack": {
-    "languages": ["go", "java", "python", "javascript", "cplusplus", "postgresql"],
-    "distributed": ["apachekafka", "grpc", "redis", "docker", "rabbitmq", "kubernetes"],
-    "data_streaming": ["apachespark", "apacheairflow", "googlecloud", "kubernetes"],
-    "databases": ["postgresql", "redis", "mongodb", "mysql"],
-    "cloud_devops": ["amazonwebservices", "kubernetes", "docker", "terraform", "prometheus"],
-    "observability": ["prometheus", "grafana"],
-    "tools": ["git", "github", "linux", "vscode", "intellij"]
+    "languages": [
+      "go",
+      "java",
+      "python",
+      "javascript",
+      "cplusplus",
+      "postgresql"
+    ],
+    "distributed": [
+      "apachekafka",
+      "grpc",
+      "redis",
+      "docker",
+      "rabbitmq",
+      "kubernetes"
+    ],
+    "data_streaming": [
+      "apachespark",
+      "apacheairflow",
+      "googlecloud",
+      "kubernetes"
+    ],
+    "databases": [
+      "postgresql",
+      "redis",
+      "mongodb",
+      "mysql"
+    ],
+    "cloud_devops": [
+      "amazonwebservices",
+      "kubernetes",
+      "docker",
+      "terraform",
+      "prometheus"
+    ],
+    "observability": [
+      "prometheus",
+      "grafana"
+    ],
+    "tools": [
+      "git",
+      "github",
+      "linux",
+      "vscode",
+      "intellij"
+    ]
   },
   "principles": [
     "Build for failure first.",
@@ -36,10 +75,22 @@
     "Simple architectures scale better."
   ],
   "currently_building": [
-    { "name": "Go Distributed Message Broker", "percentage": 100 },
-    { "name": "Notification Queue Service", "percentage": 70 },
-    { "name": "Distributed Cache Service", "percentage": 20 },
-    { "name": "Feed Ranking Engine", "percentage": 0 }
+    {
+      "name": "Go Distributed Message Broker",
+      "percentage": 100
+    },
+    {
+      "name": "Notification Queue Service",
+      "percentage": 70
+    },
+    {
+      "name": "Distributed Cache Service",
+      "percentage": 20
+    },
+    {
+      "name": "Feed Ranking Engine",
+      "percentage": 0
+    }
   ],
   "what_i_build": [
     {
@@ -62,31 +113,43 @@
   "featured_projects": [
     {
       "name": "Market Stream Ingestion Engine",
-      "status": "Production",
+      "status": "Done",
       "desc": "Real-time market data ingestion using Kafka, Spark Structured Streaming & Airflow with schema validation, DLQ and sub-200ms latency.",
-      "tags": ["Kafka", "Spark", "Airflow", "Delta Lake", "Docker", "Python"],
+      "tags": [
+        "Kafka",
+        "Spark",
+        "Airflow",
+        "Delta Lake",
+        "Docker",
+        "Python"
+      ],
       "url": "https://github.com/ayushsingh08-ds/market-stream-ingestion-engine"
     },
     {
-      "name": "Go Distributed Message Broker",
-      "status": "Production",
+      "name": "Notification-queue-service",
+      "status": "Done",
       "desc": "High-performance message broker in Go with per-key ordering, persistence, consumer groups, acks & exactly-once semantics (simulated).",
-      "tags": ["Go", "gRPC", "BoltDB", "Concurrency", "Docker"],
-      "url": "https://github.com/ayushsingh08-ds/go-distributed-message-broker"
-    },
-    {
-      "name": "Notification Queue Service",
-      "status": "In Progress",
-      "desc": "Reliable notification delivery with retries, scheduling, priority queues, idempotency keys and Dead Letter Queue.",
-      "tags": ["Go", "PostgreSQL", "Redis", "gRPC", "Docker"],
-      "url": "https://github.com/ayushsingh08-ds/notification-queue-service"
+      "tags": [
+        "Go",
+        "gRPC",
+        "BoltDB",
+        "Concurrency",
+        "Docker"
+      ],
+      "url": "https://github.com/ayushsingh08-ds/notification-queue-service-with-reliability-guarantees"
     },
     {
       "name": "Endpoint Observability Platform",
-      "status": "Production",
+      "status": "In progress",
       "desc": "Real-time endpoint monitoring with Prometheus, Grafana, FastAPI and React dashboard for metrics, alerts and failure analytics.",
-      "tags": ["Prometheus", "Grafana", "FastAPI", "React", "Docker"],
-      "url": "https://github.com/ayushsingh08-ds/endpoint-observability-platform"
+      "tags": [
+        "Prometheus",
+        "Grafana",
+        "FastAPI",
+        "React",
+        "Docker"
+      ],
+      "url": "https://github.com/ayushsingh08-ds/client-mdm-observability-hub"
     }
   ],
   "upcoming_projects": [
