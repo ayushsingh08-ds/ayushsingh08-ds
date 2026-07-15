@@ -61,7 +61,7 @@ h1, h2, h3, h4, h5, h6 {
   <span class="upcoming-bullet"></span>
   <div>
     <strong>Feed Ranking Engine</strong>
-    <div class="upcoming-sub">with Distributed Scoring & Cache Coherence</div>
+    <div class="upcoming-sub">with Distributed Scoring &amp; Cache Coherence</div>
   </div>
 </li>
 

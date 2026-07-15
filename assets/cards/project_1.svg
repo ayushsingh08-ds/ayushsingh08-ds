@@ -1,4 +1,4 @@
-<svg fill="none" viewBox="0 0 510 135" width="510" height="135" xmlns="http://www.w3.org/2000/svg">
+<svg fill="none" viewBox="0 0 510 160" width="510" height="160" xmlns="http://www.w3.org/2000/svg">
   <foreignObject width="100%" height="100%">
     <div xmlns="http://www.w3.org/1999/xhtml">
       <style>
@@ -79,7 +79,7 @@ h1, h2, h3, h4, h5, h6 {
           <span class="project-name">Go Distributed Message Broker</span>
           <span class="badge badge-production">Production</span>
         </div>
-        <p class="project-desc">High-performance message broker in Go with per-key ordering, persistence, consumer groups, acks & exactly-once semantics (simulated).</p>
+        <p class="project-desc">High-performance message broker in Go with per-key ordering, persistence, consumer groups, acks &amp; exactly-once semantics (simulated).</p>
         <div class="project-tags"><span>Go</span><span>gRPC</span><span>BoltDB</span><span>Concurrency</span><span>Docker</span></div>
       </div>
     </div>

@@ -46,7 +46,7 @@ h1, h2, h3, h4, h5, h6 {
     border: 1px solid #3c2f2f;
     color: #3c2f2f;
     border-radius: 6px;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     display: flex;
     align-items: center;

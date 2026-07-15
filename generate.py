@@ -36,6 +36,24 @@ os.makedirs(CARDS_DIR, exist_ok=True)
 with open(PROFILE_JSON, "r", encoding="utf-8") as f:
     profile = json.load(f)
 
+# Recursively escape XML characters (like ampersands) in profile data
+def escape_xml(text):
+    if not isinstance(text, str):
+        return text
+    # Escape ampersands that are not already part of an XML entity
+    return re.sub(r'&(?!(amp|lt|gt|quot|apos|#\d+);)', '&amp;', text)
+
+def escape_dict(d):
+    if isinstance(d, dict):
+        return {k: escape_dict(v) for k, v in d.items()}
+    elif isinstance(d, list):
+        return [escape_dict(item) for item in d]
+    elif isinstance(d, str):
+        return escape_xml(d)
+    return d
+
+profile = escape_dict(profile)
+
 # Load base64 icons database
 with open(BASE64_ICONS_JSON, "r", encoding="utf-8") as f:
     icons = json.load(f)
@@ -346,7 +364,7 @@ save_svg("btn_email.svg", 138, 35, """
     background-color: #3c2f2f;
     color: #fffdfa;
     border-radius: 6px;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -371,7 +389,7 @@ save_svg("btn_resume.svg", 138, 35, """
     border: 1px solid #3c2f2f;
     color: #3c2f2f;
     border-radius: 6px;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -397,18 +415,18 @@ tech_rows = []
 for label, keys in [
     ("Languages", ["go", "java", "python", "javascript", "cplusplus", "postgresql"]),
     ("Distributed Systems", ["apachekafka", "grpc", "redis", "docker", "rabbitmq", "kubernetes"]),
-    ("Data & Streaming", ["apachespark", "apacheairflow", "googlecloud", "kubernetes"]),
+    ("Data &amp; Streaming", ["apachespark", "apacheairflow", "googlecloud", "kubernetes"]),
     ("Databases", ["postgresql", "redis", "mongodb", "mysql"]),
-    ("Cloud & DevOps", ["amazonwebservices", "kubernetes", "docker", "terraform", "prometheus"]),
+    ("Cloud &amp; DevOps", ["amazonwebservices", "kubernetes", "docker", "terraform", "prometheus"]),
     ("Observability", ["prometheus", "grafana"]),
     ("Tools", ["git", "github", "linux", "vscode", "intellij"])
 ]:
     category_map = {
         "Languages": "languages",
         "Distributed Systems": "distributed",
-        "Data & Streaming": "data_streaming",
+        "Data &amp; Streaming": "data_streaming",
         "Databases": "databases",
-        "Cloud & DevOps": "cloud_devops",
+        "Cloud &amp; DevOps": "cloud_devops",
         "Observability": "observability",
         "Tools": "tools"
     }
@@ -464,7 +482,7 @@ principles_content = f"""
   <div class="coffee-stain-inner"></div>
 </div>
 """
-save_svg("principles.svg", 290, 260, principles_content)
+save_svg("principles.svg", 290, 290, principles_content)
 
 # ----------------- 7. Currently Building SVG -----------------
 progress_items = []
@@ -496,7 +514,7 @@ currently_building_content = f"""
   {"".join(progress_items)}
 </div>
 """
-save_svg("currently_building.svg", 290, 220, currently_building_content)
+save_svg("currently_building.svg", 290, 240, currently_building_content)
 
 # ----------------- 8. What I Build SVG -----------------
 what_items = []
@@ -598,7 +616,7 @@ for idx, project in enumerate(profile["featured_projects"]):
       </div>
     </div>
     """
-    save_svg(f"project_{idx}.svg", 510, 135, project_card_content)
+    save_svg(f"project_{idx}.svg", 510, 160, project_card_content)
 
 # ----------------- 10. Upcoming Projects SVG -----------------
 upcoming_items = "".join([f"""
@@ -789,13 +807,13 @@ readme_template = f"""<!-- CUSTOM THEME HEADER BANNER -->
 <!-- INFO BAR CARD ROW -->
 <table width="850" border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 15px; margin-bottom: 15px;">
   <tr>
-    <td width="200" align="center"><img src="assets/cards/info_1.svg" width="200" height="80" /></td>
+    <td width="200" align="center"><img src="assets/cards/info_1.svg" width="200" height="85" /></td>
     <td width="16">&nbsp;</td>
-    <td width="200" align="center"><img src="assets/cards/info_2.svg" width="200" height="80" /></td>
+    <td width="200" align="center"><img src="assets/cards/info_2.svg" width="200" height="85" /></td>
     <td width="16">&nbsp;</td>
-    <td width="200" align="center"><img src="assets/cards/info_3.svg" width="200" height="80" /></td>
+    <td width="200" align="center"><img src="assets/cards/info_3.svg" width="200" height="85" /></td>
     <td width="16">&nbsp;</td>
-    <td width="200" align="center"><img src="assets/cards/info_4.svg" width="200" height="80" /></td>
+    <td width="200" align="center"><img src="assets/cards/info_4.svg" width="200" height="85" /></td>
   </tr>
 </table>
 <!-- MAIN GRID (LEFT & RIGHT COLUMNS) -->
@@ -803,7 +821,7 @@ readme_template = f"""<!-- CUSTOM THEME HEADER BANNER -->
   <tr>
     <!-- LEFT COLUMN (About, Stack, Principles, Progress) -->
     <td width="300" valign="top">
-      <img src="assets/cards/about_me.svg" width="290" height="310" style="display: block; margin-bottom: 10px;" />
+      <img src="assets/cards/about_me.svg" width="290" height="340" style="display: block; margin-bottom: 10px;" />
       <!-- Clickable Action Buttons -->
       <table width="290" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 15px;">
         <tr>
@@ -820,18 +838,18 @@ readme_template = f"""<!-- CUSTOM THEME HEADER BANNER -->
           </td>
         </tr>
       </table>
-      <img src="assets/cards/tech_stack.svg" width="290" height="440" style="display: block; margin-bottom: 15px;" />
-      <img src="assets/cards/principles.svg" width="290" height="260" style="display: block; margin-bottom: 15px;" />
-      <img src="assets/cards/currently_building.svg" width="290" height="220" style="display: block;" />
+      <img src="assets/cards/tech_stack.svg" width="290" height="480" style="display: block; margin-bottom: 15px;" />
+      <img src="assets/cards/principles.svg" width="290" height="290" style="display: block; margin-bottom: 15px;" />
+      <img src="assets/cards/currently_building.svg" width="290" height="240" style="display: block;" />
     </td>
     <!-- GRID SPACER -->
     <td width="30">&nbsp;</td>
     <!-- RIGHT COLUMN (What I Build, Featured Projects, Analytics, Upcoming) -->
     <td width="520" valign="top">
-      <img src="assets/cards/what_i_build.svg" width="510" height="200" style="display: block; margin-bottom: 15px;" />
+      <img src="assets/cards/what_i_build.svg" width="510" height="240" style="display: block; margin-bottom: 15px;" />
       <!-- Featured Projects (Fully Clickable) -->
       <h3 style="font-family: 'Outfit', sans-serif; color: #2c1e1e; font-size: 15px; font-weight: 700; margin-top: 0; margin-bottom: 10px; padding: 0;">🚀 Featured Projects</h3>
-      {"".join([f'''<a href="{project["url"]}"><img src="assets/cards/project_{idx}.svg" width="510" height="135" style="display: block; margin-bottom: 10px;" alt="{project["name"]}" /></a>''' for idx, project in enumerate(profile["featured_projects"])])}
+      {"".join([f'''<a href="{project["url"]}"><img src="assets/cards/project_{idx}.svg" width="510" height="180" style="display: block; margin-bottom: 10px;" alt="{project["name"]}" /></a>''' for idx, project in enumerate(profile["featured_projects"])])}
       <table width="510" border="0" cellpadding="0" cellspacing="0" style="margin-top: 5px; margin-bottom: 20px;">
         <tr>
           <td align="right">
@@ -860,7 +878,7 @@ readme_template = f"""<!-- CUSTOM THEME HEADER BANNER -->
         <tr>
           <td colspan="3" style="padding-top: 10px;">
             <a href="{profile["about_me"]["github_url"]}">
-              <img src="https://streak-stats.demolab.com?user={profile["about_me"]["github_url"].split('/')[-1]}&amp;theme=default&amp;background=fffdfa&amp;border=e5dacf&amp;stroke=b05a30&amp;ring=b05a30&amp;fire=b05a30&amp;currStreakNum=2c1e1e&amp;sideNums=3c2f2f&amp;sideLabels=7a6a65&amp;dates=9c8b86&amp;border_radius=8" width="510" height="220" alt="Streak Stats" />
+              <img src="https://streak-stats.demolab.com?user={profile["about_me"]["github_url"].split('/')[-1]}&amp;theme=default&amp;background=fffdfa&amp;border=e5dacf&amp;stroke=b05a30&amp;ring=b05a30&amp;fire=b05a30&amp;currStreakNum=2c1e1e&amp;sideNums=3c2f2f&amp;sideLabels=7a6a65&amp;dates=9c8b86&amp;border_radius=8" width="510" height="240" alt="Streak Stats" />
             </a>
           </td>
         </tr>
@@ -870,7 +888,7 @@ readme_template = f"""<!-- CUSTOM THEME HEADER BANNER -->
           </td>
         </tr>
       </table>
-      <img src="assets/cards/upcoming_projects.svg" width="510" height="160" style="display: block; margin-bottom: 15px;" />
+      <img src="assets/cards/upcoming_projects.svg" width="510" height="180" style="display: block; margin-bottom: 15px;" />
       <!-- Clickable Connect Social Icons -->
       <table width="510" border="0" cellpadding="0" cellspacing="0" style="margin-top: 10px;">
         <tr>
