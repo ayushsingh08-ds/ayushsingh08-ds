@@ -97,7 +97,7 @@ h1, h2, h3, h4, h5, h6 {
   height: 100%;
 }
 .card-title {
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
   margin-bottom: 16px;
   display: flex;
@@ -110,8 +110,8 @@ h1, h2, h3, h4, h5, h6 {
 def save_svg(filename, width, height, content):
     filepath = os.path.join(CARDS_DIR, filename)
     svg = f"""<svg fill="none" viewBox="0 0 {width} {height}" width="{width}" height="{height}" xmlns="http://www.w3.org/2000/svg">
-  <foreignObject width="100%" height="100%">
-    <div xmlns="http://www.w3.org/1999/xhtml">
+  <foreignObject x="0" y="0" width="{width}" height="{height}">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: {width}px; height: {height}px; box-sizing: border-box;">
       <style>
         {COMMON_CSS}
       </style>
@@ -221,7 +221,7 @@ save_svg("header.svg", 850, 380, header_content)
 
 # ----------------- 2. Info Cards (Separate SVGs) -----------------
 # Card 1: Graduation
-save_svg("info_1.svg", 200, 80, f"""
+save_svg("info_1.svg", 200, 95, f"""
 <style>
   .info-box {{
     background-color: #fffdfa;
@@ -231,13 +231,13 @@ save_svg("info_1.svg", 200, 80, f"""
     display: flex;
     align-items: center;
     gap: 10px;
-    height: 80px;
+    height: 95px;
     box-sizing: border-box;
   }}
-  .info-icon {{ width: 20px; height: 20px; flex-shrink: 0; }}
+  .info-icon {{ width: 25px; height: 25px; flex-shrink: 0; }}
   .info-text {{ display: flex; flex-direction: column; }}
-  .info-title {{ font-size: 11px; font-weight: 700; color: #2c1e1e; }}
-  .info-detail {{ font-size: 9px; color: #7a6a65; margin-top: 2px; }}
+  .info-title {{ font-size: 14px; font-weight: 700; color: #2c1e1e; }}
+  .info-detail {{ font-size: 12px; color: #7a6a65; margin-top: 2px; }}
 </style>
 <div class="info-box">
   <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="#b05a30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
@@ -249,7 +249,7 @@ save_svg("info_1.svg", 200, 80, f"""
 """)
 
 # Card 2: Location
-save_svg("info_2.svg", 200, 80, f"""
+save_svg("info_2.svg", 200, 95, f"""
 <style>
   .info-box {{
     background-color: #fffdfa;
@@ -259,13 +259,13 @@ save_svg("info_2.svg", 200, 80, f"""
     display: flex;
     align-items: center;
     gap: 10px;
-    height: 80px;
+    height: 95px;
     box-sizing: border-box;
   }}
-  .info-icon {{ width: 20px; height: 20px; flex-shrink: 0; }}
+  .info-icon {{ width: 25px; height: 25px; flex-shrink: 0; }}
   .info-text {{ display: flex; flex-direction: column; }}
-  .info-title {{ font-size: 11px; font-weight: 700; color: #2c1e1e; }}
-  .info-detail {{ font-size: 9px; color: #7a6a65; margin-top: 2px; }}
+  .info-title {{ font-size: 14px; font-weight: 700; color: #2c1e1e; }}
+  .info-detail {{ font-size: 12px; color: #7a6a65; margin-top: 2px; }}
 </style>
 <div class="info-box">
   <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="#b05a30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -277,7 +277,7 @@ save_svg("info_2.svg", 200, 80, f"""
 """)
 
 # Card 3: Open to
-save_svg("info_3.svg", 200, 80, f"""
+save_svg("info_3.svg", 200, 95, f"""
 <style>
   .info-box {{
     background-color: #fffdfa;
@@ -287,13 +287,13 @@ save_svg("info_3.svg", 200, 80, f"""
     display: flex;
     align-items: center;
     gap: 10px;
-    height: 80px;
+    height: 95px;
     box-sizing: border-box;
   }}
-  .info-icon {{ width: 20px; height: 20px; flex-shrink: 0; }}
+  .info-icon {{ width: 25px; height: 25px; flex-shrink: 0; }}
   .info-text {{ display: flex; flex-direction: column; }}
-  .info-title {{ font-size: 11px; font-weight: 700; color: #2c1e1e; }}
-  .info-detail {{ font-size: 9px; color: #7a6a65; margin-top: 2px; }}
+  .info-title {{ font-size: 14px; font-weight: 700; color: #2c1e1e; }}
+  .info-detail {{ font-size: 12px; color: #7a6a65; margin-top: 2px; }}
 </style>
 <div class="info-box">
   <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="#b05a30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
@@ -305,7 +305,7 @@ save_svg("info_3.svg", 200, 80, f"""
 """)
 
 # Card 4: Let's Connect
-save_svg("info_4.svg", 200, 80, f"""
+save_svg("info_4.svg", 200, 95, f"""
 <style>
   .info-box {{
     background-color: #fffdfa;
@@ -315,13 +315,13 @@ save_svg("info_4.svg", 200, 80, f"""
     display: flex;
     align-items: center;
     gap: 10px;
-    height: 80px;
+    height: 95px;
     box-sizing: border-box;
   }}
-  .info-icon {{ width: 20px; height: 20px; flex-shrink: 0; }}
+  .info-icon {{ width: 25px; height: 25px; flex-shrink: 0; }}
   .info-text {{ display: flex; flex-direction: column; }}
-  .info-title {{ font-size: 11px; font-weight: 700; color: #2c1e1e; }}
-  .info-detail {{ font-size: 9px; color: #7a6a65; margin-top: 2px; }}
+  .info-title {{ font-size: 14px; font-weight: 700; color: #2c1e1e; }}
+  .info-detail {{ font-size: 12px; color: #7a6a65; margin-top: 2px; }}
 </style>
 <div class="info-box">
   <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="#b05a30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
@@ -335,10 +335,10 @@ save_svg("info_4.svg", 200, 80, f"""
 # ----------------- 3. About Me SVG -----------------
 about_me_content = f"""
 <style>
-  .about-text {{ font-size: 12px; line-height: 1.5; margin: 0 0 15px 0; color: #5a4a42; }}
+  .about-text {{ font-size: 15.5px; line-height: 1.5; margin: 0 0 15px 0; color: #5a4a42; }}
   .divider {{ border: 0; border-top: 1px solid #e5dacf; margin: 15px 0; }}
   .about-list {{ list-style: none; padding: 0; margin: 0; }}
-  .about-list li {{ font-size: 11px; line-height: 1.6; margin-bottom: 10px; color: #3c2f2f; }}
+  .about-list li {{ font-size: 14px; line-height: 1.6; margin-bottom: 10px; color: #3c2f2f; }}
 </style>
 <div class="card">
   <h2 class="card-title">☕ About Me</h2>
@@ -353,18 +353,18 @@ about_me_content = f"""
   </ul>
 </div>
 """
-save_svg("about_me.svg", 290, 310, about_me_content)
+save_svg("about_me.svg", 290, 380, about_me_content)
 
 # ----------------- 4. Action Buttons -----------------
-save_svg("btn_email.svg", 138, 35, """
+save_svg("btn_email.svg", 138, 40, """
 <style>
   .btn {
     width: 138px;
-    height: 35px;
+    height: 40px;
     background-color: #3c2f2f;
     color: #fffdfa;
     border-radius: 6px;
-    font-size: 12px;
+    font-size: 14.5px;
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -372,7 +372,7 @@ save_svg("btn_email.svg", 138, 35, """
     gap: 6px;
     box-sizing: border-box;
   }
-  .btn svg { width: 12px; height: 12px; }
+  .btn svg { width: 14px; height: 14px; }
 </style>
 <div class="btn">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
@@ -380,16 +380,16 @@ save_svg("btn_email.svg", 138, 35, """
 </div>
 """)
 
-save_svg("btn_resume.svg", 138, 35, """
+save_svg("btn_resume.svg", 138, 40, """
 <style>
   .btn {
     width: 138px;
-    height: 35px;
+    height: 40px;
     background-color: transparent;
     border: 1px solid #3c2f2f;
     color: #3c2f2f;
     border-radius: 6px;
-    font-size: 12px;
+    font-size: 14.5px;
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -397,7 +397,7 @@ save_svg("btn_resume.svg", 138, 35, """
     gap: 6px;
     box-sizing: border-box;
   }
-  .btn svg { width: 12px; height: 12px; }
+  .btn svg { width: 14px; height: 14px; }
 </style>
 <div class="btn">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
@@ -443,9 +443,9 @@ tech_stack_content = f"""
 <style>
   .tech-table {{ display: flex; flex-direction: column; gap: 14px; }}
   .tech-row {{ display: flex; flex-direction: column; gap: 6px; }}
-  .tech-label {{ font-size: 10px; font-weight: 700; color: #7a6a65; text-transform: uppercase; letter-spacing: 0.5px; }}
+  .tech-label {{ font-size: 13px; font-weight: 700; color: #7a6a65; text-transform: uppercase; letter-spacing: 0.5px; }}
   .tech-icons {{ display: flex; flex-wrap: wrap; gap: 8px; }}
-  .tech-icon {{ width: 24px; height: 24px; border-radius: 4px; }}
+  .tech-icon {{ width: 30px; height: 30px; border-radius: 4px; }}
 </style>
 <div class="card">
   <h2 class="card-title">🛠️ Tech Stack</h2>
@@ -454,7 +454,7 @@ tech_stack_content = f"""
   </div>
 </div>
 """
-save_svg("tech_stack.svg", 290, 440, tech_stack_content)
+save_svg("tech_stack.svg", 290, 540, tech_stack_content)
 
 # ----------------- 6. Engineering Principles SVG -----------------
 principles_items = "".join([f"""
@@ -468,7 +468,7 @@ principles_content = f"""
 <style>
   .principles-list {{ display: flex; flex-direction: column; gap: 12px; }}
   .principle-item {{ display: flex; align-items: flex-start; gap: 8px; }}
-  .principle-item span {{ font-size: 12px; line-height: 1.4; font-weight: 500; color: #3c2f2f; }}
+  .principle-item span {{ font-size: 15.5px; line-height: 1.4; font-weight: 500; color: #3c2f2f; }}
   .checkmark {{ width: 14px; height: 14px; margin-top: 2px; flex-shrink: 0; }}
   .coffee-stain {{ position: absolute; right: -30px; bottom: -30px; width: 110px; height: 110px; border: 3px solid rgba(139, 90, 43, 0.08); border-radius: 50%; pointer-events: none; }}
   .coffee-stain-inner {{ position: absolute; right: -24px; bottom: -24px; width: 98px; height: 98px; border: 1px solid rgba(139, 90, 43, 0.05); border-radius: 50%; pointer-events: none; }}
@@ -482,7 +482,7 @@ principles_content = f"""
   <div class="coffee-stain-inner"></div>
 </div>
 """
-save_svg("principles.svg", 290, 290, principles_content)
+save_svg("principles.svg", 290, 320, principles_content)
 
 # ----------------- 7. Currently Building SVG -----------------
 progress_items = []
@@ -505,7 +505,7 @@ for item in profile["currently_building"]:
 currently_building_content = f"""
 <style>
   .progress-container {{ margin-bottom: 12px; }}
-  .progress-header {{ display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; margin-bottom: 5px; color: #3c2f2f; }}
+  .progress-header {{ display: flex; justify-content: space-between; font-size: 14px; font-weight: 600; margin-bottom: 5px; color: #3c2f2f; }}
   .progress-bar-bg {{ background-color: #e5dacf; height: 6px; border-radius: 3px; overflow: hidden; }}
   .progress-bar-fill {{ height: 100%; border-radius: 3px; }}
 </style>
@@ -514,7 +514,7 @@ currently_building_content = f"""
   {"".join(progress_items)}
 </div>
 """
-save_svg("currently_building.svg", 290, 240, currently_building_content)
+save_svg("currently_building.svg", 290, 270, currently_building_content)
 
 # ----------------- 8. What I Build SVG -----------------
 what_items = []
@@ -540,21 +540,21 @@ for item in profile["what_i_build"]:
 
 what_i_build_content = f"""
 <style>
-  .what-grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }}
-  .what-card {{ background-color: #fffdfa; border: 1px solid #e5dacf; border-radius: 8px; padding: 12px; }}
-  .what-header {{ display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }}
-  .what-icon {{ width: 16px; height: 16px; flex-shrink: 0; }}
-  .what-title {{ font-size: 11px; font-weight: 700; color: #2c1e1e; }}
-  .what-desc {{ font-size: 9.5px; line-height: 1.4; color: #7a6a65; margin: 0; }}
+  .what-grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }}
+  .what-card {{ background-color: #fffdfa; border: 1px solid #e5dacf; border-radius: 8px; padding: 12px; min-height: 110px; box-sizing: border-box; }}
+  .what-header {{ display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }}
+  .what-icon {{ width: 18px; height: 18px; flex-shrink: 0; }}
+  .what-title {{ font-size: 14.5px; font-weight: 700; color: #2c1e1e; }}
+  .what-desc {{ font-size: 12.5px; line-height: 1.5; color: #7a6a65; margin: 0; }}
 </style>
-<div class="card">
+<div class="card" style="height: 330px; box-sizing: border-box;">
   <h2 class="card-title">💻 What I Build</h2>
   <div class="what-grid">
     {"".join(what_items)}
   </div>
 </div>
 """
-save_svg("what_i_build.svg", 510, 200, what_i_build_content)
+save_svg("what_i_build.svg", 510, 330, what_i_build_content)
 
 # ----------------- 9. Featured Projects (Separate Clickable Cards) -----------------
 project_icons = [
@@ -578,7 +578,7 @@ for idx, project in enumerate(profile["featured_projects"]):
         padding: 14px;
         display: flex;
         gap: 14px;
-        height: 135px;
+        height: 190px;
         box-sizing: border-box;
       }}
       .project-icon-box {{
@@ -594,13 +594,13 @@ for idx, project in enumerate(profile["featured_projects"]):
       .project-icon-box svg {{ width: 16px; height: 16px; }}
       .project-content {{ flex: 1; }}
       .project-header-row {{ display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }}
-      .project-name {{ font-size: 12.5px; font-weight: 700; color: #2c1e1e; }}
+      .project-name {{ font-size: 16px; font-weight: 700; color: #2c1e1e; }}
       .badge {{ font-size: 8.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }}
       .badge-production {{ background-color: #e2f0d9; color: #385723; border: 1px solid #c5e0b4; }}
       .badge-inprogress {{ background-color: #fff2cc; color: #7f6000; border: 1px solid #ffe599; }}
-      .project-desc {{ font-size: 11px; line-height: 1.4; color: #5a4a42; margin: 0 0 10px 0; }}
+      .project-desc {{ font-size: 14px; line-height: 1.4; color: #5a4a42; margin: 0 0 10px 0; }}
       .project-tags {{ display: flex; flex-wrap: wrap; gap: 6px; }}
-      .project-tags span {{ font-family: 'Courier Prime', monospace; font-size: 9.5px; background-color: #f4ebe1; color: #5a4a42; border: 1px solid #e5dacf; border-radius: 4px; padding: 1px 5px; }}
+      .project-tags span {{ font-family: 'Courier Prime', monospace; font-size: 12px; background-color: #f4ebe1; color: #5a4a42; border: 1px solid #e5dacf; border-radius: 4px; padding: 1px 5px; }}
     </style>
     <div class="project-item">
       <div class="project-icon-box">
@@ -616,7 +616,7 @@ for idx, project in enumerate(profile["featured_projects"]):
       </div>
     </div>
     """
-    save_svg(f"project_{idx}.svg", 510, 160, project_card_content)
+    save_svg(f"project_{idx}.svg", 510, 190, project_card_content)
 
 # ----------------- 10. Upcoming Projects SVG -----------------
 upcoming_items = "".join([f"""
@@ -634,8 +634,8 @@ upcoming_content = f"""
   .upcoming-list {{ list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }}
   .upcoming-list li {{ display: flex; gap: 10px; align-items: flex-start; }}
   .upcoming-bullet {{ width: 6px; height: 6px; border-radius: 50%; background-color: #b05a30; margin-top: 5px; flex-shrink: 0; }}
-  .upcoming-list li strong {{ font-size: 12px; font-weight: 600; color: #2c1e1e; }}
-  .upcoming-sub {{ font-size: 10px; color: #7a6a65; margin-top: 2px; }}
+  .upcoming-list li strong {{ font-size: 15px; font-weight: 600; color: #2c1e1e; }}
+  .upcoming-sub {{ font-size: 12px; color: #7a6a65; margin-top: 2px; }}
 </style>
 <div class="card">
   <h2 class="card-title">📦 Upcoming Projects</h2>
@@ -644,7 +644,7 @@ upcoming_content = f"""
   </ul>
 </div>
 """
-save_svg("upcoming_projects.svg", 510, 160, upcoming_content)
+save_svg("upcoming_projects.svg", 510, 210, upcoming_content)
 
 # ----------------- 11. Social & Connect Buttons -----------------
 save_svg("icon_github.svg", 110, 32, f"""
@@ -807,13 +807,13 @@ readme_template = f"""<!-- CUSTOM THEME HEADER BANNER -->
 <!-- INFO BAR CARD ROW -->
 <table width="850" border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 15px; margin-bottom: 15px;">
   <tr>
-    <td width="200" align="center"><img src="assets/cards/info_1.svg" width="200" height="85" /></td>
+    <td width="200" align="center"><img src="assets/cards/info_1.svg" width="200" height="95" /></td>
     <td width="16">&nbsp;</td>
-    <td width="200" align="center"><img src="assets/cards/info_2.svg" width="200" height="85" /></td>
+    <td width="200" align="center"><img src="assets/cards/info_2.svg" width="200" height="95" /></td>
     <td width="16">&nbsp;</td>
-    <td width="200" align="center"><img src="assets/cards/info_3.svg" width="200" height="85" /></td>
+    <td width="200" align="center"><img src="assets/cards/info_3.svg" width="200" height="95" /></td>
     <td width="16">&nbsp;</td>
-    <td width="200" align="center"><img src="assets/cards/info_4.svg" width="200" height="85" /></td>
+    <td width="200" align="center"><img src="assets/cards/info_4.svg" width="200" height="95" /></td>
   </tr>
 </table>
 <!-- MAIN GRID (LEFT & RIGHT COLUMNS) -->
@@ -821,35 +821,35 @@ readme_template = f"""<!-- CUSTOM THEME HEADER BANNER -->
   <tr>
     <!-- LEFT COLUMN (About, Stack, Principles, Progress) -->
     <td width="300" valign="top">
-      <img src="assets/cards/about_me.svg" width="290" height="340" style="display: block; margin-bottom: 10px;" />
+      <img src="assets/cards/about_me.svg" width="290" height="380" style="display: block; margin-bottom: 10px;" />
       <!-- Clickable Action Buttons -->
       <table width="290" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 15px;">
         <tr>
           <td width="138" align="center">
             <a href="mailto:{profile["about_me"]["email"]}">
-              <img src="assets/cards/btn_email.svg" width="138" height="35" alt="Email Me" />
+              <img src="assets/cards/btn_email.svg" width="138" height="40" alt="Email Me" />
             </a>
           </td>
           <td width="14">&nbsp;</td>
           <td width="138" align="center">
             <a href="{profile["about_me"]["resume_url"]}">
-              <img src="assets/cards/btn_resume.svg" width="138" height="35" alt="Resume" />
+              <img src="assets/cards/btn_resume.svg" width="138" height="40" alt="Resume" />
             </a>
           </td>
         </tr>
       </table>
-      <img src="assets/cards/tech_stack.svg" width="290" height="480" style="display: block; margin-bottom: 15px;" />
-      <img src="assets/cards/principles.svg" width="290" height="290" style="display: block; margin-bottom: 15px;" />
-      <img src="assets/cards/currently_building.svg" width="290" height="240" style="display: block;" />
+      <img src="assets/cards/tech_stack.svg" width="290" height="540" style="display: block; margin-bottom: 15px;" />
+      <img src="assets/cards/principles.svg" width="290" height="320" style="display: block; margin-bottom: 15px;" />
+      <img src="assets/cards/currently_building.svg" width="290" height="330" style="display: block;" />
     </td>
     <!-- GRID SPACER -->
     <td width="30">&nbsp;</td>
     <!-- RIGHT COLUMN (What I Build, Featured Projects, Analytics, Upcoming) -->
     <td width="520" valign="top">
-      <img src="assets/cards/what_i_build.svg" width="510" height="240" style="display: block; margin-bottom: 15px;" />
+      <img src="assets/cards/what_i_build.svg" width="510" height="320" style="display: block; margin-bottom: 15px;" />
       <!-- Featured Projects (Fully Clickable) -->
       <h3 style="font-family: 'Outfit', sans-serif; color: #2c1e1e; font-size: 15px; font-weight: 700; margin-top: 0; margin-bottom: 10px; padding: 0;">🚀 Featured Projects</h3>
-      {"".join([f'''<a href="{project["url"]}"><img src="assets/cards/project_{idx}.svg" width="510" height="180" style="display: block; margin-bottom: 10px;" alt="{project["name"]}" /></a>''' for idx, project in enumerate(profile["featured_projects"])])}
+      {"".join([f'''<a href="{project["url"]}"><img src="assets/cards/project_{idx}.svg" width="510" height="190" style="display: block; margin-bottom: 10px;" alt="{project["name"]}" /></a>''' for idx, project in enumerate(profile["featured_projects"])])}
       <table width="510" border="0" cellpadding="0" cellspacing="0" style="margin-top: 5px; margin-bottom: 20px;">
         <tr>
           <td align="right">
@@ -878,7 +878,7 @@ readme_template = f"""<!-- CUSTOM THEME HEADER BANNER -->
         <tr>
           <td colspan="3" style="padding-top: 10px;">
             <a href="{profile["about_me"]["github_url"]}">
-              <img src="https://streak-stats.demolab.com?user={profile["about_me"]["github_url"].split('/')[-1]}&amp;theme=default&amp;background=fffdfa&amp;border=e5dacf&amp;stroke=b05a30&amp;ring=b05a30&amp;fire=b05a30&amp;currStreakNum=2c1e1e&amp;sideNums=3c2f2f&amp;sideLabels=7a6a65&amp;dates=9c8b86&amp;border_radius=8" width="510" height="240" alt="Streak Stats" />
+              <img src="https://streak-stats.demolab.com?user={profile["about_me"]["github_url"].split('/')[-1]}&amp;theme=default&amp;background=fffdfa&amp;border=e5dacf&amp;stroke=b05a30&amp;ring=b05a30&amp;fire=b05a30&amp;currStreakNum=2c1e1e&amp;sideNums=3c2f2f&amp;sideLabels=7a6a65&amp;dates=9c8b86&amp;border_radius=8" width="510" height="330" alt="Streak Stats" />
             </a>
           </td>
         </tr>
@@ -888,7 +888,7 @@ readme_template = f"""<!-- CUSTOM THEME HEADER BANNER -->
           </td>
         </tr>
       </table>
-      <img src="assets/cards/upcoming_projects.svg" width="510" height="180" style="display: block; margin-bottom: 15px;" />
+      <img src="assets/cards/upcoming_projects.svg" width="510" height="210" style="display: block; margin-bottom: 15px;" />
       <!-- Clickable Connect Social Icons -->
       <table width="510" border="0" cellpadding="0" cellspacing="0" style="margin-top: 10px;">
         <tr>

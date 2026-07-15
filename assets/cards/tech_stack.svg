@@ -1,6 +1,6 @@
-<svg fill="none" viewBox="0 0 290 440" width="290" height="440" xmlns="http://www.w3.org/2000/svg">
-  <foreignObject width="100%" height="100%">
-    <div xmlns="http://www.w3.org/1999/xhtml">
+<svg fill="none" viewBox="0 0 290 540" width="290" height="540" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject x="0" y="0" width="290" height="540">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 290px; height: 540px; box-sizing: border-box;">
       <style>
         
 @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&amp;family=Inter:wght@300;400;500;600;700&amp;family=Outfit:wght@400;500;600;700;800&amp;family=Courier+Prime&amp;display=swap');
@@ -27,7 +27,7 @@ h1, h2, h3, h4, h5, h6 {
   height: 100%;
 }
 .card-title {
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
   margin-bottom: 16px;
   display: flex;
@@ -41,9 +41,9 @@ h1, h2, h3, h4, h5, h6 {
 <style>
   .tech-table { display: flex; flex-direction: column; gap: 14px; }
   .tech-row { display: flex; flex-direction: column; gap: 6px; }
-  .tech-label { font-size: 10px; font-weight: 700; color: #7a6a65; text-transform: uppercase; letter-spacing: 0.5px; }
+  .tech-label { font-size: 13px; font-weight: 700; color: #7a6a65; text-transform: uppercase; letter-spacing: 0.5px; }
   .tech-icons { display: flex; flex-wrap: wrap; gap: 8px; }
-  .tech-icon { width: 24px; height: 24px; border-radius: 4px; }
+  .tech-icon { width: 30px; height: 30px; border-radius: 4px; }
 </style>
 <div class="card">
   <h2 class="card-title">🛠️ Tech Stack</h2>

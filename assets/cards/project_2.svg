@@ -1,6 +1,6 @@
-<svg fill="none" viewBox="0 0 510 160" width="510" height="160" xmlns="http://www.w3.org/2000/svg">
-  <foreignObject width="100%" height="100%">
-    <div xmlns="http://www.w3.org/1999/xhtml">
+<svg fill="none" viewBox="0 0 510 190" width="510" height="190" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject x="0" y="0" width="510" height="190">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 510px; height: 190px; box-sizing: border-box;">
       <style>
         
 @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&amp;family=Inter:wght@300;400;500;600;700&amp;family=Outfit:wght@400;500;600;700;800&amp;family=Courier+Prime&amp;display=swap');
@@ -27,7 +27,7 @@ h1, h2, h3, h4, h5, h6 {
   height: 100%;
 }
 .card-title {
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
   margin-bottom: 16px;
   display: flex;
@@ -46,7 +46,7 @@ h1, h2, h3, h4, h5, h6 {
         padding: 14px;
         display: flex;
         gap: 14px;
-        height: 135px;
+        height: 190px;
         box-sizing: border-box;
       }
       .project-icon-box {
@@ -62,13 +62,13 @@ h1, h2, h3, h4, h5, h6 {
       .project-icon-box svg { width: 16px; height: 16px; }
       .project-content { flex: 1; }
       .project-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-      .project-name { font-size: 12.5px; font-weight: 700; color: #2c1e1e; }
+      .project-name { font-size: 16px; font-weight: 700; color: #2c1e1e; }
       .badge { font-size: 8.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
       .badge-production { background-color: #e2f0d9; color: #385723; border: 1px solid #c5e0b4; }
       .badge-inprogress { background-color: #fff2cc; color: #7f6000; border: 1px solid #ffe599; }
-      .project-desc { font-size: 11px; line-height: 1.4; color: #5a4a42; margin: 0 0 10px 0; }
+      .project-desc { font-size: 14px; line-height: 1.4; color: #5a4a42; margin: 0 0 10px 0; }
       .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-      .project-tags span { font-family: 'Courier Prime', monospace; font-size: 9.5px; background-color: #f4ebe1; color: #5a4a42; border: 1px solid #e5dacf; border-radius: 4px; padding: 1px 5px; }
+      .project-tags span { font-family: 'Courier Prime', monospace; font-size: 12px; background-color: #f4ebe1; color: #5a4a42; border: 1px solid #e5dacf; border-radius: 4px; padding: 1px 5px; }
     </style>
     <div class="project-item">
       <div class="project-icon-box">
@@ -76,11 +76,11 @@ h1, h2, h3, h4, h5, h6 {
       </div>
       <div class="project-content">
         <div class="project-header-row">
-          <span class="project-name">Notification Queue Service</span>
-          <span class="badge badge-inprogress">In Progress</span>
+          <span class="project-name">Endpoint Observability Platform</span>
+          <span class="badge badge-inprogress">In progress</span>
         </div>
-        <p class="project-desc">Reliable notification delivery with retries, scheduling, priority queues, idempotency keys and Dead Letter Queue.</p>
-        <div class="project-tags"><span>Go</span><span>PostgreSQL</span><span>Redis</span><span>gRPC</span><span>Docker</span></div>
+        <p class="project-desc">Real-time endpoint monitoring with Prometheus, Grafana, FastAPI and React dashboard for metrics, alerts and failure analytics.</p>
+        <div class="project-tags"><span>Prometheus</span><span>Grafana</span><span>FastAPI</span><span>React</span><span>Docker</span></div>
       </div>
     </div>
     

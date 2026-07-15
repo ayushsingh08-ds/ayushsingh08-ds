@@ -1,6 +1,6 @@
-<svg fill="none" viewBox="0 0 510 160" width="510" height="160" xmlns="http://www.w3.org/2000/svg">
-  <foreignObject width="100%" height="100%">
-    <div xmlns="http://www.w3.org/1999/xhtml">
+<svg fill="none" viewBox="0 0 510 210" width="510" height="210" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject x="0" y="0" width="510" height="210">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 510px; height: 210px; box-sizing: border-box;">
       <style>
         
 @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&amp;family=Inter:wght@300;400;500;600;700&amp;family=Outfit:wght@400;500;600;700;800&amp;family=Courier+Prime&amp;display=swap');
@@ -27,7 +27,7 @@ h1, h2, h3, h4, h5, h6 {
   height: 100%;
 }
 .card-title {
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
   margin-bottom: 16px;
   display: flex;
@@ -42,8 +42,8 @@ h1, h2, h3, h4, h5, h6 {
   .upcoming-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
   .upcoming-list li { display: flex; gap: 10px; align-items: flex-start; }
   .upcoming-bullet { width: 6px; height: 6px; border-radius: 50%; background-color: #b05a30; margin-top: 5px; flex-shrink: 0; }
-  .upcoming-list li strong { font-size: 12px; font-weight: 600; color: #2c1e1e; }
-  .upcoming-sub { font-size: 10px; color: #7a6a65; margin-top: 2px; }
+  .upcoming-list li strong { font-size: 15px; font-weight: 600; color: #2c1e1e; }
+  .upcoming-sub { font-size: 12px; color: #7a6a65; margin-top: 2px; }
 </style>
 <div class="card">
   <h2 class="card-title">📦 Upcoming Projects</h2>

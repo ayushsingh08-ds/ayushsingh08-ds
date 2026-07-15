@@ -1,6 +1,6 @@
-<svg fill="none" viewBox="0 0 510 200" width="510" height="200" xmlns="http://www.w3.org/2000/svg">
-  <foreignObject width="100%" height="100%">
-    <div xmlns="http://www.w3.org/1999/xhtml">
+<svg fill="none" viewBox="0 0 510 330" width="510" height="330" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject x="0" y="0" width="510" height="330">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 510px; height: 330px; box-sizing: border-box;">
       <style>
         
 @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&amp;family=Inter:wght@300;400;500;600;700&amp;family=Outfit:wght@400;500;600;700;800&amp;family=Courier+Prime&amp;display=swap');
@@ -27,7 +27,7 @@ h1, h2, h3, h4, h5, h6 {
   height: 100%;
 }
 .card-title {
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
   margin-bottom: 16px;
   display: flex;
@@ -39,14 +39,14 @@ h1, h2, h3, h4, h5, h6 {
       </style>
       
 <style>
-  .what-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .what-card { background-color: #fffdfa; border: 1px solid #e5dacf; border-radius: 8px; padding: 12px; }
-  .what-header { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
-  .what-icon { width: 16px; height: 16px; flex-shrink: 0; }
-  .what-title { font-size: 11px; font-weight: 700; color: #2c1e1e; }
-  .what-desc { font-size: 9.5px; line-height: 1.4; color: #7a6a65; margin: 0; }
+  .what-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .what-card { background-color: #fffdfa; border: 1px solid #e5dacf; border-radius: 8px; padding: 12px; min-height: 110px; box-sizing: border-box; }
+  .what-header { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+  .what-icon { width: 18px; height: 18px; flex-shrink: 0; }
+  .what-title { font-size: 14.5px; font-weight: 700; color: #2c1e1e; }
+  .what-desc { font-size: 12.5px; line-height: 1.5; color: #7a6a65; margin: 0; }
 </style>
-<div class="card">
+<div class="card" style="height: 330px; box-sizing: border-box;">
   <h2 class="card-title">💻 What I Build</h2>
   <div class="what-grid">
     

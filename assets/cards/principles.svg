@@ -1,6 +1,6 @@
-<svg fill="none" viewBox="0 0 290 290" width="290" height="290" xmlns="http://www.w3.org/2000/svg">
-  <foreignObject width="100%" height="100%">
-    <div xmlns="http://www.w3.org/1999/xhtml">
+<svg fill="none" viewBox="0 0 290 320" width="290" height="320" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject x="0" y="0" width="290" height="320">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 290px; height: 320px; box-sizing: border-box;">
       <style>
         
 @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&amp;family=Inter:wght@300;400;500;600;700&amp;family=Outfit:wght@400;500;600;700;800&amp;family=Courier+Prime&amp;display=swap');
@@ -27,7 +27,7 @@ h1, h2, h3, h4, h5, h6 {
   height: 100%;
 }
 .card-title {
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
   margin-bottom: 16px;
   display: flex;
@@ -41,7 +41,7 @@ h1, h2, h3, h4, h5, h6 {
 <style>
   .principles-list { display: flex; flex-direction: column; gap: 12px; }
   .principle-item { display: flex; align-items: flex-start; gap: 8px; }
-  .principle-item span { font-size: 12px; line-height: 1.4; font-weight: 500; color: #3c2f2f; }
+  .principle-item span { font-size: 15.5px; line-height: 1.4; font-weight: 500; color: #3c2f2f; }
   .checkmark { width: 14px; height: 14px; margin-top: 2px; flex-shrink: 0; }
   .coffee-stain { position: absolute; right: -30px; bottom: -30px; width: 110px; height: 110px; border: 3px solid rgba(139, 90, 43, 0.08); border-radius: 50%; pointer-events: none; }
   .coffee-stain-inner { position: absolute; right: -24px; bottom: -24px; width: 98px; height: 98px; border: 1px solid rgba(139, 90, 43, 0.05); border-radius: 50%; pointer-events: none; }
