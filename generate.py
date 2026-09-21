@@ -18,11 +18,13 @@ fallback is always visible in the committed files:
 
 Layout model
 ------------
-The page has exactly one content axis. ``GRID`` is the width of a full-width
-block; every other width is derived from it and pairs/triples/quads sum to less
-than ``GRID`` so a row never wraps on a normal desktop window. Cards are always
-centred as a group (``<p align="center">``), never one-by-one, so section
-headings and cards share the same axis.
+The page has exactly one content axis and one arrangement: every block is a
+single image of width ``GRID`` on its own centred line. Multi-column structure
+lives inside the cards (two or four internal columns), never in the flow of the
+page, because a row of two images is a width-dependent arrangement -- it either
+wraps or overflows once the reader's column is narrower than the row. Text rows
+(the section nav and the contact strip) are links rather than images, so they
+wrap wherever the window needs them to.
 
 GitHub rendering notes (all of them load-bearing):
 
@@ -88,30 +90,30 @@ EMAIL = profile["about_me"]["email"]
 RESUME_URL = profile["about_me"]["resume_url"]
 
 # ----------------- Layout grid -----------------
-# Full-width block, then the widths of rows of 2 and 4 cards. The gaps between
-# images in a row are real text nodes (&nbsp;), and each row is sized so that the
-# row plus its gaps adds up to GRID -- the rows therefore share the same left and
-# right edges as the full-width cards. On a narrower window a row wraps instead
-# of shrinking (GitHub gives images max-width: 100%, so a wrapped card still
-# fills the column), which is the intended small-screen behaviour.
+# Every block on this page is ONE full-width image on its own line. That is the
+# whole layout, and it is deliberate: GitHub gives images `max-width: 100%`, so a
+# single card always fits the column and scales with it, on any window.
+#
+# Nothing is placed two-to-a-line any more. Two images need a real text node
+# between them to keep them from touching, and the only way to control that gap is
+# a non-breaking space -- which makes the pair one unbreakable unit. On a column
+# narrower than the pair the row then overflows the page instead of wrapping: the
+# right-hand card is clipped off the edge and the overflow drags every other
+# block sideways with it. Half-width pairs were the single fragile thing in this
+# layout, so the multi-column look now lives INSIDE the cards (two or four
+# internal columns) where it cannot depend on the reader's window width.
 GRID = 850
-PAIR_W = 419  # 419 + 419 + 11px of gaps = 849
-QUAD_W = 203  # 203 * 4 + 35px of gaps = 847
-ROW_GAP = "&nbsp;&nbsp;&nbsp;"
 
 CARD_SIZES = {
     "header": (GRID, 88),
-    "nav": (QUAD_W, 38),
     "hero": (GRID, 240),
-    "action": (PAIR_W, 56),
+    "action": (GRID, 56),
     "info": (GRID, 112),
     "about": (GRID, 196),
     "stack": (GRID, 146),
-    "principles": (PAIR_W, 232),
-    "building": (PAIR_W, 232),
+    "principles_building": (GRID, 232),
     "project": (GRID, 128),
-    "gh_stats": (PAIR_W, 196),
-    "gh_langs": (PAIR_W, 196),
+    "analytics": (GRID, 196),
     "contrib": (GRID, 212),
     "next": (GRID, 96),
     "closing": (GRID, 106),
@@ -369,38 +371,39 @@ save_svg("header.svg", *CARD_SIZES["header"], header_content)
 
 
 # =====================================================================
-# 02 -- Navigation buttons (rendered once, reused by the contact strip)
+# 02 -- Navigation and contact links (drawn by GitHub, not by this script)
 # =====================================================================
-def button_content(label):
-    """A hairline button, used for both the section nav and the contact strip."""
-    return (
-        '<div style="width: 100%; height: 100%; background-color: {surface};'
-        " border: 1px solid {border}; border-radius: 8px; display: flex;"
-        " align-items: center; justify-content: center; font-family: 'Courier Prime',"
-        ' monospace; font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase;'
-        ' color: #6f6259;">{label}</div>'
-    ).format(surface=SURFACE, border=BORDER, label=label)
-
-
+# These were hairline button images, four to a line. Four images cannot be made
+# to fit one line at every window width, and when a row does not fit it either
+# wraps into a ragged 3 + 1 or overflows the column. Links are text, so they wrap
+# wherever the reader's window needs them to, they pick up GitHub's own theme
+# colours, and a screen reader and a keyboard user can both reach them.
 NAV_ITEMS = [
-    ("nav_about.svg", "About", "#about"),
-    ("nav_stack.svg", "Tech stack", "#tech-stack"),
-    ("nav_projects.svg", "Projects", "#featured-projects"),
-    ("nav_analytics.svg", "Analytics", "#github-analytics"),
+    ("About", "#about"),
+    ("Tech Stack", "#tech-stack"),
+    ("Featured Projects", "#featured-projects"),
+    ("GitHub Analytics", "#github-analytics"),
 ]
-
-for filename, label, _href in NAV_ITEMS:
-    save_svg(filename, *CARD_SIZES["nav"], button_content(label))
 
 CONTACT_ITEMS = [
-    ("contact_github.svg", "GitHub", GITHUB_URL),
-    ("contact_linkedin.svg", "LinkedIn", profile["about_me"]["linkedin_url"]),
-    ("contact_email.svg", "Email", "mailto:" + EMAIL),
-    ("contact_resume.svg", "Resume", RESUME_URL),
+    ("GitHub", GITHUB_URL),
+    ("LinkedIn", profile["about_me"]["linkedin_url"]),
+    ("Email", "mailto:" + EMAIL),
+    ("Resume", RESUME_URL),
 ]
 
-for filename, label, _href in CONTACT_ITEMS:
-    save_svg(filename, *CARD_SIZES["nav"], button_content(label))
+LINK_SEPARATOR = " · "
+
+
+def link_row(items):
+    """A centred row of links.
+
+    The separator between two links is ordinary text, so the line can break
+    there: the row wraps on a narrow window instead of overflowing it.
+    """
+    return '<p align="center">%s</p>' % LINK_SEPARATOR.join(
+        '<a href="%s">%s</a>' % (href, label) for label, href in items
+    )
 
 
 # =====================================================================
@@ -634,13 +637,6 @@ principle_rows = "".join(
     for index, item in enumerate(profile["principles"])
 )
 
-principles_content = """
-<div class="card">
-  %(head)s
-  %(rows)s
-</div>
-""" % {"head": head("Engineering principles"), "rows": principle_rows}
-save_svg("principles.svg", *CARD_SIZES["principles"], principles_content)
 
 # The bars are the owner's own estimates from profile.json, not something this
 # build can verify against the repositories, so the card says so. Anything the
@@ -668,13 +664,36 @@ building_items = "".join(
     for item in profile["currently_building"]
 )
 
-building_content = """
+# Both columns live in one card. As two half-width images they could clip on a
+# narrow column (see the layout notes at the top); as two internal columns they
+# always sit side by side, at any width, and still share the page's left and
+# right edges with every other block.
+principles_building_content = """
 <div class="card">
-  %(head)s
-  %(items)s
+  <div style="display: flex; gap: 30px;">
+    <div style="width: 372px;">
+      %(principles_head)s
+      %(principles)s
+    </div>
+    <div style="flex: 1; min-width: 0; border-left: 1px solid %(border_soft)s;
+                padding-left: 30px;">
+      %(building_head)s
+      %(building)s
+    </div>
+  </div>
 </div>
-""" % {"head": head("Currently building", "self-assessed"), "items": building_items}
-save_svg("building.svg", *CARD_SIZES["building"], building_content)
+""" % {
+    "border_soft": BORDER_SOFT,
+    "principles_head": head("Engineering principles"),
+    "principles": principle_rows,
+    "building_head": head("Currently building", "self-assessed"),
+    "building": building_items,
+}
+save_svg(
+    "principles_building.svg",
+    *CARD_SIZES["principles_building"],
+    principles_building_content
+)
 
 # Planned work, labelled as planned: the brief for this page (and honesty) is
 # that nothing here is presented as finished.
@@ -949,8 +968,10 @@ stats_source = (
     else "snapshot"
 )
 
-gh_stats_content = """
-<div class="card">
+# Stats and languages share one card for the same reason the principles and
+# current work do: two half-width images are a width-dependent row.
+stats_content = """
+<div style="width: 372px;">
   %(head)s
   <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">%(tiles)s</div>
 </div>
@@ -958,7 +979,6 @@ gh_stats_content = """
     "head": head("GitHub stats", stats_source),
     "tiles": stat_tiles,
 }
-save_svg("gh_stats.svg", *CARD_SIZES["gh_stats"], gh_stats_content)
 
 # --- Languages card -------------------------------------------------
 max_repos = max(language["repos"] for language in GITHUB_STATS["languages"]) or 1
@@ -987,16 +1007,27 @@ lang_rows = "".join(
 )
 
 langs_total = GITHUB_STATS.get("language_count") or len(GITHUB_STATS["languages"])
-gh_langs_content = """
-<div class="card">
+langs_content = """
+<div style="flex: 1; min-width: 0; border-left: 1px solid %(border_soft)s;
+            padding-left: 30px;">
   %(head)s
   <div>%(rows)s</div>
 </div>
 """ % {
+    "border_soft": BORDER_SOFT,
     "head": head("Top languages", "top %d of %d" % (len(GITHUB_STATS["languages"]), langs_total)),
     "rows": lang_rows,
 }
-save_svg("gh_langs.svg", *CARD_SIZES["gh_langs"], gh_langs_content)
+
+analytics_content = """
+<div class="card">
+  <div style="display: flex; gap: 30px;">
+    %(stats)s
+    %(langs)s
+  </div>
+</div>
+""" % {"stats": stats_content, "langs": langs_content}
+save_svg("analytics.svg", *CARD_SIZES["analytics"], analytics_content)
 
 
 # --- Contribution calendar ------------------------------------------
@@ -1139,7 +1170,6 @@ def plain(text):
 ALT_TEXT = {
     "header": "%(name)s — %(role)s %(email)s"
     % {"name": profile["name"], "role": profile["role"], "email": EMAIL},
-    "nav": "Section navigation: about, tech stack, featured projects and GitHub analytics",
     "hero": "%(name)s: %(role)s Focus: %(focus)s. %(quote)s"
     % {
         "name": profile["name"],
@@ -1160,25 +1190,21 @@ ALT_TEXT = {
         profile["about_me"]["fun_fact"],
     ),
     "stack": "Tech stack by category: %s" % tech_names,
-    "principles": "Engineering principles: "
-    + " ".join(as_sentence(item) for item in profile["principles"]),
-    "building": "Currently building (self-assessed progress): "
+    "principles_building": "Engineering principles: "
+    + " ".join(as_sentence(item) for item in profile["principles"])
+    + " Currently building, self-assessed progress: "
     + "; ".join("%s %d%%" % (item["name"], item["percentage"]) for item in profile["currently_building"]),
     "next": "Planned, not started: "
     + "; ".join("%s %s" % (item["name"], item["desc"]) for item in profile["upcoming_projects"]),
-    "stats": "GitHub stats for %s: %d public repositories, %d stars, %d followers and %d "
-    "languages, from the GitHub REST API" % (
+    "analytics": "GitHub stats for %s: %d public repositories, %d stars, %d followers and %d "
+    "languages, from the GitHub REST API. Top %d languages by repository count: %s"
+    % (
         GITHUB_USER,
         GITHUB_STATS["public_repos"],
         GITHUB_STATS["stars"],
         GITHUB_STATS["followers"],
         langs_total,
-    ),
-    "top_langs": "Top %d of %d languages across %s's public repositories by repository count: %s"
-    % (
         len(GITHUB_STATS["languages"]),
-        langs_total,
-        GITHUB_USER,
         ", ".join("%s (%d)" % (l["name"], l["repos"]) for l in GITHUB_STATS["languages"]),
     ),
     "contrib": "Contribution calendar for %s: %s contributions between %s and %s"
@@ -1210,9 +1236,9 @@ def card_image(filename, width, alt, href=None):
     return '<a href="%s">%s</a>' % (href, markup) if href else markup
 
 
-def row(*cards):
-    """One line, centred: the wrapper that keeps cards off each other's lines."""
-    return '<p align="center">%s</p>' % ROW_GAP.join(cards)
+def row(card):
+    """One card, centred, on a line of its own -- the page's only arrangement."""
+    return '<p align="center">%s</p>' % card
 
 
 PROJECT_ROWS = [
@@ -1235,29 +1261,21 @@ README_BLOCKS = [
     # on each heading and strips the prefix at runtime, so `#featured-projects`
     # resolves to the heading further down.
     "<!-- Section navigation. -->",
-    row(
-        *[
-            card_image(
-                filename,
-                CARD_SIZES["nav"][0],
-                "Jump to the %s section" % label.lower(),
-                href=href,
-            )
-            for filename, label, href in NAV_ITEMS
-        ]
-    ),
+    link_row(NAV_ITEMS),
     "<!-- Hero. -->",
     row(card_image("hero.svg", GRID, ALT_TEXT["hero"])),
+    # One action per line rather than two side by side: each is a single image,
+    # so it can never be clipped by a narrow column.
     "<!-- Primary and secondary action. -->",
     row(
         card_image(
             "action_email.svg",
-            PAIR_W,
+            GRID,
             ALT_TEXT["action_email"],
             href="mailto:" + EMAIL,
-        ),
-        card_image("action_resume.svg", PAIR_W, ALT_TEXT["action_resume"], href=RESUME_URL),
+        )
     ),
+    row(card_image("action_resume.svg", GRID, ALT_TEXT["action_resume"], href=RESUME_URL)),
     # Four balanced columns inside one card, so they are always four columns on
     # one row and can never wrap into a ragged 3 + 1.
     "<!-- Profile at a glance. -->",
@@ -1266,31 +1284,21 @@ README_BLOCKS = [
     row(card_image("about.svg", GRID, ALT_TEXT["about"])),
     '<h2 align="center">Tech Stack</h2>',
     row(card_image("stack.svg", GRID, ALT_TEXT["stack"])),
-    "<!-- Principles beside current work: two half-width cards rather than two "
-    "narrow ones stacked in the middle of the page. -->",
-    row(
-        card_image("principles.svg", PAIR_W, ALT_TEXT["principles"]),
-        card_image("building.svg", PAIR_W, ALT_TEXT["building"]),
-    ),
-    "<!-- Planned work, one row, labelled as planned. -->",
+    # Principles and current work sit side by side INSIDE one card, so the two
+    # columns are a property of the drawing rather than of the reader's window.
+    "<!-- Principles beside current work. -->",
+    row(card_image("principles_building.svg", GRID, ALT_TEXT["principles_building"])),
+    "<!-- Planned work, labelled as planned. -->",
     row(card_image("next.svg", GRID, ALT_TEXT["next"])),
     '<h2 align="center">Featured Projects</h2>',
     *PROJECT_ROWS,
     '<p align="center"><a href="%s?tab=repositories">View all repositories &rarr;</a></p>' % GITHUB_URL,
     '<h2 align="center">GitHub Analytics</h2>',
-    row(
-        card_image("gh_stats.svg", PAIR_W, ALT_TEXT["stats"]),
-        card_image("gh_langs.svg", PAIR_W, ALT_TEXT["top_langs"]),
-    ),
+    row(card_image("analytics.svg", GRID, ALT_TEXT["analytics"])),
     row(card_image("contrib.svg", GRID, ALT_TEXT["contrib"])),
     "<!-- Closing. -->",
     row(card_image("closing.svg", GRID, ALT_TEXT["closing"])),
-    row(
-        *[
-            card_image(filename, CARD_SIZES["nav"][0], label, href=href)
-            for filename, label, href in CONTACT_ITEMS
-        ]
-    ),
+    link_row(CONTACT_ITEMS),
 ]
 
 readme = "\n\n".join(README_BLOCKS) + "\n"

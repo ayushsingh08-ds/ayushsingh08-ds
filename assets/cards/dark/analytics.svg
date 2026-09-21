@@ -1,6 +1,6 @@
-<svg fill="none" viewBox="0 0 419 196" width="419" height="196" xmlns="http://www.w3.org/2000/svg">
-  <foreignObject x="0" y="0" width="419" height="196">
-    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 419px; height: 196px; box-sizing: border-box;">
+<svg fill="none" viewBox="0 0 850 196" width="850" height="196" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject x="0" y="0" width="850" height="196">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 850px; height: 196px; box-sizing: border-box;">
       <style>
         @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;family=Inter:wght@400;500;600&amp;family=Outfit:wght@500;600&amp;display=swap');
 body { font-family: 'Inter', sans-serif; color: #c9d1d9; margin: 0; padding: 0;
@@ -28,6 +28,40 @@ body { font-family: 'Inter', sans-serif; color: #c9d1d9; margin: 0; padding: 0;
       </style>
       
 <div class="card">
+  <div style="display: flex; gap: 30px;">
+    
+<div style="width: 372px;">
+  <div class="head"><span class="label">GitHub stats</span><span class="rule"></span><span class="label">REST API · 2026-09-21</span></div>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+    <div style="background-color: #21262d; border: 1px solid #30363d; border-radius: 8px;
+                padding: 10px 12px;">
+      <div class="name" style="font-size: 20px; color: #f0f6fc;">23</div>
+      <div class="label" style="font-size: 9.5px; margin-top: 4px;">Repositories</div>
+    </div>
+    
+    <div style="background-color: #21262d; border: 1px solid #30363d; border-radius: 8px;
+                padding: 10px 12px;">
+      <div class="name" style="font-size: 20px; color: #f0f6fc;">105</div>
+      <div class="label" style="font-size: 9.5px; margin-top: 4px;">Stars</div>
+    </div>
+    
+    <div style="background-color: #21262d; border: 1px solid #30363d; border-radius: 8px;
+                padding: 10px 12px;">
+      <div class="name" style="font-size: 20px; color: #f0f6fc;">38</div>
+      <div class="label" style="font-size: 9.5px; margin-top: 4px;">Followers</div>
+    </div>
+    
+    <div style="background-color: #21262d; border: 1px solid #30363d; border-radius: 8px;
+                padding: 10px 12px;">
+      <div class="name" style="font-size: 20px; color: #f0f6fc;">8</div>
+      <div class="label" style="font-size: 9.5px; margin-top: 4px;">Languages</div>
+    </div>
+    </div>
+</div>
+
+    
+<div style="flex: 1; min-width: 0; border-left: 1px solid #21262d;
+            padding-left: 30px;">
   <div class="head"><span class="label">Top languages</span><span class="rule"></span><span class="label">top 5 of 8</span></div>
   <div>
     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
@@ -90,6 +124,9 @@ body { font-family: 'Inter', sans-serif; color: #c9d1d9; margin: 0; padding: 0;
                    color: #8b949e;">2</span>
     </div>
     </div>
+</div>
+
+  </div>
 </div>
 
     </div>

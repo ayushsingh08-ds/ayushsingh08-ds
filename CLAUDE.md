@@ -38,29 +38,42 @@ silently broken images (see "Bugs this project has already hit"). The `scratch/`
 checks are run by hand; nothing in CI depends on them.
 
 After regenerating, run `check_readme.py` and re-measure `qc.html`; the expected
-output is 27 images in rows of `1 4 1 2 1 1 1 2 1 1 1 1 1 1 2 1 1 4`, zero
-overflow issues and 12–35px of bottom slack per card.
+output is 17 images, all 850px wide, one per line, zero overflow issues and 7–24px
+of bottom slack per card.
 
 ## Design system
 
-One content axis. `GRID = 850` is the width of a full-width block; rows are
-sized so that row + gaps also equals `GRID`, which is why every block in the
-published page shares the same left and right edge:
+One content axis, one arrangement: **every block is a single 850px image on its
+own centred line** (`GRID = 850`). Multi-column structure lives *inside* the cards
+(the at-a-glance, principles/current-work and stats/languages cards each hold two
+or four internal columns), never in the flow of the page.
 
-| row | card width | row total |
-|---|---|---|
-| single | 850 | 850 |
-| pair | 419 | ~849 |
-| quad | 203 | ~847 |
+That is not a stylistic preference, it is the fix for this page's worst bug (see
+below): two images on one line must be separated by a non-breaking space to keep
+control of the gap, and a non-breaking space makes the row unbreakable. On a
+column narrower than the row the pair then overflows the page instead of wrapping
+— the right-hand card is clipped off the edge and the page-wide overflow drags
+the centred cards out of alignment with it. A single image can never do that:
+GitHub gives images `max-width: 100%`, so one card always fits the column and
+scales with it, at any window width. Verified in the preview at column widths
+980 → 320px: zero overflowing images, zero horizontal page scroll.
 
 Tokens live at the top of `generate.py`: warm off-white surface `#fffdfa`,
 hairline border `#e5dacf`, charcoal ink `#2c1e1e`, muted `#7a6a65`, single
 terracotta accent `#b05a30`. Type: Outfit (display), Inter (body), Courier Prime
 (uppercase labels, indices, chips). Radii: 10px cards, 8px buttons, 4px chips.
 
-Section order: header (monogram/name/contact) → nav row → hero → CTAs →
-at-a-glance grid → About → Tech Stack → principles | currently building → Next →
-Featured Projects → GitHub Analytics → closing → contact row.
+Section order: header (monogram/name/contact) → nav links → hero → Email CTA →
+resume CTA → at-a-glance grid → About → Tech Stack → principles + currently
+building (one card, two columns) → Next → Featured Projects → GitHub Analytics
+(stats + languages in one card, then the calendar) → closing → contact links.
+
+Two rows are *links, not images*: the section nav (About · Tech Stack · Featured
+Projects · GitHub Analytics) and the contact strip at the bottom. They are text
+so they wrap wherever the reader's window needs them to, they inherit GitHub's
+link colours in either theme, and they stay keyboard- and screen-reader
+reachable. The Email / View resume CTAs are still drawn cards (one per line,
+each wrapped in its own `<a>`), and the separator between two links is ` · `.
 
 ### Two themes, one geometry
 
@@ -89,10 +102,12 @@ Rules that keep the pair honest:
 
 ## GitHub rendering constraints (all load-bearing)
 
-1. **Every card image sits inside its own `<p align="center">` on one line.** A
-   line holding one complete tag is a CommonMark HTML block (type 7), emitted
-   *without* a wrapping `<p>`; bare `<img>` lines then flow inline and cards
-   share rows. Do not "tidy" those paragraphs away.
+1. **Every card image sits inside its own `<p align="center">`, one card per
+   line, and that is the whole layout.** A line holding one complete tag is a
+   CommonMark HTML block (type 7), emitted *without* a wrapping `<p>`; bare
+   `<img>` lines then flow inline and cards share rows. Do not "tidy" those
+   paragraphs away, and do not put a second image on a line: see the layout notes
+   above and bug 5 below.
 2. **Only `src`, `width` and `alt` survive sanitising.** No inline styles, no
    `height` attribute (a fixed height plus the host's `max-width: 100%` squashes
    the image on narrow viewports). Cards scale proportionally instead.
@@ -108,9 +123,10 @@ Rules that keep the pair honest:
    removes `github-readme-stats.vercel.app` and `streak-stats.demolab.com`
    whenever those deployments hiccup, which is what emptied the analytics section
    once. Analytics are fetched at build time and drawn locally.
-6. Rows wrap below ~852px of column width (that is fine and intended: a wrapped
-   card still fills the column). The GitHub profile column is `container-lg`
-   (max-width 1012px), so a normal desktop window renders every row as designed.
+6. The GitHub profile column is `container-lg` (max-width 1012px, ~980px of
+   content). Cards are 850px there and scale down when the window is narrower;
+   nothing depends on the column being any particular width, so the published
+   page matches the preview in a 1000px window and in a 500px one.
 7. **Theme-aware images use `<picture>` + `prefers-color-scheme`**, per GitHub's
    own announcement of the feature. `srcset` is written repository-relative, the
    same shape as `src`, and GitHub rewrites it the same way -- confirmed on the
@@ -160,6 +176,17 @@ Rules that keep the pair honest:
 4. HTML entities in card content (`&middot;`) made 7 cards unparseable XML, and an
    unclosed `<img>` broke an 8th; both were invisible in the source and in a
    local render until measured in a browser → hence the XML validation step.
+5. **Half-width pairs clipped off the right edge of the published page.** Pairs
+   (CTAs, principles|building, stats|languages) were 419px images joined by
+   `&nbsp;&nbsp;&nbsp;`. A non-breaking space is not a line-break opportunity, so
+   on a column narrower than the ~851px row the pair could not wrap: it
+   overflowed, the second card was cut off, and the resulting page-wide
+   horizontal scroll pulled the centred full-width cards out of line too — the
+   published page did not match the preview. Measured in the preview (with the
+   column forced to 780px): before the fix the affected rows overflowed the
+   column; after it, zero images overflow at 980/860/780/640/480/320px. Hence the
+   rule "one image per line" and `check_readme.py`'s no-`&nbsp;` and
+   no-two-images-per-line assertions.
 
 ## Verification performed (2026-09-21)
 
@@ -183,6 +210,10 @@ Rules that keep the pair honest:
 | theme switching | preview's Auto/Light/Dark buttons | forcing dark makes the browser load the dark source; forced light returns the light `<img>` |
 | published anchors | nav hrefs vs heading permalink ids | `about`, `tech-stack`, `featured-projects`, `github-analytics` all resolve |
 | published assets | 27 raw `/raw/main/assets/cards/*.svg` URLs with `-L` | 27/27 → 200 (after the `/raw/` → raw.githubusercontent redirect) |
+| **layout fix: rows removed** | `python generate.py` then `scratch/check_readme.py` | 17 cards (light + dark), 17 `<picture>` blocks, image widths all 850, no `&nbsp;`, no two-image line, no unused card on disk |
+| layout fix: overflow | preview: every image's box vs the column at 980/860/780/640/480/320px | 0 overflowing images and 0 horizontal page scroll at every width (the preview column is now capped at 980px like GitHub's and shrinks with the window) |
+| layout fix: card content | `scratch/qc.html` + `preview_evaluate(window.qc(1))` | 34/34 cards (17 light + 17 dark), no clipped content, 7–24px bottom slack (7px is the merged principles/current-work card) |
+| layout fix: theme page colour | preview in a dark-scheme host, `getComputedStyle(body).backgroundColor` | `rgb(13, 17, 23)`; the preview page now follows the scheme instead of showing dark cards on white |
 
 ## Unverified / open issues
 
@@ -200,6 +231,15 @@ Rules that keep the pair honest:
   own `<a>` in `generate.py`.
 - Cards are images: on a phone the smallest card text (9–10.5px at 850px wide)
   scales to ~4–5px. A `<picture>` + `media` variant per card is the fix.
+- The layout fix above is verified locally and in the preview, not on the
+  published page: the live check (17 `<picture>` blocks, no `&nbsp;`, one image
+  per block, dark `srcset` rewritten) has to wait for a push.
+- `prefers-color-scheme` follows the *reader's OS*, while GitHub's light/dark
+  setting is GitHub's own. A reader whose OS is dark but who picks GitHub's light
+  theme therefore gets dark cards on a light page (GitHub's documented behaviour
+  for theme-aware images, not something this repo can override). The
+  `#gh-dark-mode-only` fragment convention was the earlier, superseded
+  mechanism; it never appears in a served page any more.
 - Contributions are read by parsing `github.com/users/<user>/contributions`. GitHub
   can change that markup at any time; the failure mode is a cached calendar (and,
   with no cache at all, an empty card), never a broken image.

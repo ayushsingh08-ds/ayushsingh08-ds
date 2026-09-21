@@ -1,6 +1,6 @@
-<svg fill="none" viewBox="0 0 419 232" width="419" height="232" xmlns="http://www.w3.org/2000/svg">
-  <foreignObject x="0" y="0" width="419" height="232">
-    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 419px; height: 232px; box-sizing: border-box;">
+<svg fill="none" viewBox="0 0 850 232" width="850" height="232" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject x="0" y="0" width="850" height="232">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 850px; height: 232px; box-sizing: border-box;">
       <style>
         @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;family=Inter:wght@400;500;600&amp;family=Outfit:wght@500;600&amp;display=swap');
 body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
@@ -28,8 +28,10 @@ body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
       </style>
       
 <div class="card">
-  <div class="head"><span class="label">Engineering principles</span><span class="rule"></span></div>
-  
+  <div style="display: flex; gap: 30px;">
+    <div style="width: 372px;">
+      <div class="head"><span class="label">Engineering principles</span><span class="rule"></span></div>
+      
     <div style="display: flex; gap: 12px; align-items: baseline; padding: 7px 0;
                 ">
       <span class="mono" style="font-size: 10px; color: #b05a30;">01</span>
@@ -60,6 +62,49 @@ body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
       <span style="font-size: 13.5px; line-height: 1.4; color: #3c2f2f;">Simple architectures scale better.</span>
     </div>
     
+    </div>
+    <div style="flex: 1; min-width: 0; border-left: 1px solid #efe6da;
+                padding-left: 30px;">
+      <div class="head"><span class="label">Currently building</span><span class="rule"></span><span class="label">self-assessed</span></div>
+      
+    <div style="margin-bottom: 30px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <span style="font-size: 13px; font-weight: 500; color: #3c2f2f;">Distributed Cache with RYW Consistency</span>
+        <span class="mono" style="font-size: 10.5px; color: #9c8b86;">90%</span>
+      </div>
+      <div style="height: 6px; background-color: #f0e7db; border-radius: 3px; margin-top: 8px;
+                  overflow: hidden;">
+        <div style="height: 100%; width: 90%; background-color: #b05a30;
+                    border-radius: 3px;"></div>
+      </div>
+    </div>
+    
+    <div style="margin-bottom: 30px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <span style="font-size: 13px; font-weight: 500; color: #3c2f2f;">Lakehouse Gold Layer &amp; Data Contracts</span>
+        <span class="mono" style="font-size: 10.5px; color: #9c8b86;">70%</span>
+      </div>
+      <div style="height: 6px; background-color: #f0e7db; border-radius: 3px; margin-top: 8px;
+                  overflow: hidden;">
+        <div style="height: 100%; width: 70%; background-color: #b05a30;
+                    border-radius: 3px;"></div>
+      </div>
+    </div>
+    
+    <div style="margin-bottom: 30px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <span style="font-size: 13px; font-weight: 500; color: #3c2f2f;">LLM Gateway Smart Routing</span>
+        <span class="mono" style="font-size: 10.5px; color: #9c8b86;">60%</span>
+      </div>
+      <div style="height: 6px; background-color: #f0e7db; border-radius: 3px; margin-top: 8px;
+                  overflow: hidden;">
+        <div style="height: 100%; width: 60%; background-color: #b05a30;
+                    border-radius: 3px;"></div>
+      </div>
+    </div>
+    
+    </div>
+  </div>
 </div>
 
     </div>

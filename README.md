@@ -6,7 +6,7 @@
 
 <!-- Section navigation. -->
 
-<p align="center"><a href="#about"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/nav_about.svg"><img src="assets/cards/nav_about.svg" width="203" alt="Jump to the about section"></picture></a>&nbsp;&nbsp;&nbsp;<a href="#tech-stack"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/nav_stack.svg"><img src="assets/cards/nav_stack.svg" width="203" alt="Jump to the tech stack section"></picture></a>&nbsp;&nbsp;&nbsp;<a href="#featured-projects"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/nav_projects.svg"><img src="assets/cards/nav_projects.svg" width="203" alt="Jump to the projects section"></picture></a>&nbsp;&nbsp;&nbsp;<a href="#github-analytics"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/nav_analytics.svg"><img src="assets/cards/nav_analytics.svg" width="203" alt="Jump to the analytics section"></picture></a></p>
+<p align="center"><a href="#about">About</a> · <a href="#tech-stack">Tech Stack</a> · <a href="#featured-projects">Featured Projects</a> · <a href="#github-analytics">GitHub Analytics</a></p>
 
 <!-- Hero. -->
 
@@ -14,7 +14,9 @@
 
 <!-- Primary and secondary action. -->
 
-<p align="center"><a href="mailto:ayushsingh2005811@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/action_email.svg"><img src="assets/cards/action_email.svg" width="419" alt="Email me at ayushsingh2005811@gmail.com"></picture></a>&nbsp;&nbsp;&nbsp;<a href="https://drive.google.com/file/d/1ZtA7NnBvqgq2d3lZ_0J9q3f2qWJ1-T5X/view?usp=sharing"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/action_resume.svg"><img src="assets/cards/action_resume.svg" width="419" alt="Open my resume"></picture></a></p>
+<p align="center"><a href="mailto:ayushsingh2005811@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/action_email.svg"><img src="assets/cards/action_email.svg" width="850" alt="Email me at ayushsingh2005811@gmail.com"></picture></a></p>
+
+<p align="center"><a href="https://drive.google.com/file/d/1ZtA7NnBvqgq2d3lZ_0J9q3f2qWJ1-T5X/view?usp=sharing"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/action_resume.svg"><img src="assets/cards/action_resume.svg" width="850" alt="Open my resume"></picture></a></p>
 
 <!-- Profile at a glance. -->
 
@@ -28,11 +30,11 @@
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/stack.svg"><img src="assets/cards/stack.svg" width="850" alt="Tech stack by category: Go, Java, Python, C++, JavaScript, Kafka, gRPC, RabbitMQ, Redis, Spark, Airflow, Google Cloud, PostgreSQL, MySQL, MongoDB, AWS, Docker, Kubernetes, Terraform, Prometheus, Grafana, Git, GitHub, Linux, VS Code, IntelliJ"></picture></p>
 
-<!-- Principles beside current work: two half-width cards rather than two narrow ones stacked in the middle of the page. -->
+<!-- Principles beside current work. -->
 
-<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/principles.svg"><img src="assets/cards/principles.svg" width="419" alt="Engineering principles: Build for failure first. Prefer observability over assumptions. Measure before optimizing. Automate repetitive work. Simple architectures scale better."></picture>&nbsp;&nbsp;&nbsp;<picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/building.svg"><img src="assets/cards/building.svg" width="419" alt="Currently building (self-assessed progress): Distributed Cache with RYW Consistency 90%; Lakehouse Gold Layer &amp; Data Contracts 70%; LLM Gateway Smart Routing 60%"></picture></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/principles_building.svg"><img src="assets/cards/principles_building.svg" width="850" alt="Engineering principles: Build for failure first. Prefer observability over assumptions. Measure before optimizing. Automate repetitive work. Simple architectures scale better. Currently building, self-assessed progress: Distributed Cache with RYW Consistency 90%; Lakehouse Gold Layer &amp; Data Contracts 70%; LLM Gateway Smart Routing 60%"></picture></p>
 
-<!-- Planned work, one row, labelled as planned. -->
+<!-- Planned work, labelled as planned. -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/next.svg"><img src="assets/cards/next.svg" width="850" alt="Planned, not started: Feed Ranking Engine with Distributed Scoring &amp; Cache Coherence; Carbon-Aware LLM Scheduling promoting the mock carbon signal to real grid intensity data"></picture></p>
 
@@ -52,12 +54,12 @@
 
 <h2 align="center">GitHub Analytics</h2>
 
-<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/gh_stats.svg"><img src="assets/cards/gh_stats.svg" width="419" alt="GitHub stats for ayushsingh08-ds: 23 public repositories, 105 stars, 38 followers and 8 languages, from the GitHub REST API"></picture>&nbsp;&nbsp;&nbsp;<picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/gh_langs.svg"><img src="assets/cards/gh_langs.svg" width="419" alt="Top 5 of 8 languages across ayushsingh08-ds's public repositories by repository count: Python (8), JavaScript (3), HTML (3), TypeScript (2), Jupyter Notebook (2)"></picture></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/analytics.svg"><img src="assets/cards/analytics.svg" width="850" alt="GitHub stats for ayushsingh08-ds: 23 public repositories, 105 stars, 38 followers and 8 languages, from the GitHub REST API. Top 5 languages by repository count: Python (8), JavaScript (3), HTML (3), TypeScript (2), Jupyter Notebook (2)"></picture></p>
 
-<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/contrib.svg"><img src="assets/cards/contrib.svg" width="850" alt="Contribution calendar for ayushsingh08-ds: 159 contributions between 2025-09-21 and 2026-09-21"></picture></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/contrib.svg"><img src="assets/cards/contrib.svg" width="850" alt="Contribution calendar for ayushsingh08-ds: 160 contributions between 2025-09-21 and 2026-09-21"></picture></p>
 
 <!-- Closing. -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/closing.svg"><img src="assets/cards/closing.svg" width="850" alt="Let’s build something meaningful — always open to collaboration, new opportunities and interesting technical conversations"></picture></p>
 
-<p align="center"><a href="https://github.com/ayushsingh08-ds"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/contact_github.svg"><img src="assets/cards/contact_github.svg" width="203" alt="GitHub"></picture></a>&nbsp;&nbsp;&nbsp;<a href="https://www.linkedin.com/in/ayush-singh-b7760a224/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/contact_linkedin.svg"><img src="assets/cards/contact_linkedin.svg" width="203" alt="LinkedIn"></picture></a>&nbsp;&nbsp;&nbsp;<a href="mailto:ayushsingh2005811@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/contact_email.svg"><img src="assets/cards/contact_email.svg" width="203" alt="Email"></picture></a>&nbsp;&nbsp;&nbsp;<a href="https://drive.google.com/file/d/1ZtA7NnBvqgq2d3lZ_0J9q3f2qWJ1-T5X/view?usp=sharing"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/contact_resume.svg"><img src="assets/cards/contact_resume.svg" width="203" alt="Resume"></picture></a></p>
+<p align="center"><a href="https://github.com/ayushsingh08-ds">GitHub</a> · <a href="https://www.linkedin.com/in/ayush-singh-b7760a224/">LinkedIn</a> · <a href="mailto:ayushsingh2005811@gmail.com">Email</a> · <a href="https://drive.google.com/file/d/1ZtA7NnBvqgq2d3lZ_0J9q3f2qWJ1-T5X/view?usp=sharing">Resume</a></p>
