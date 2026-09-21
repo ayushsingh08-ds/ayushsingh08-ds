@@ -1,0 +1,67 @@
+<svg fill="none" viewBox="0 0 419 232" width="419" height="232" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject x="0" y="0" width="419" height="232">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 419px; height: 232px; box-sizing: border-box;">
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;family=Inter:wght@400;500;600&amp;family=Outfit:wght@500;600&amp;display=swap');
+body { font-family: 'Inter', sans-serif; color: #c9d1d9; margin: 0; padding: 0;
+       background-color: transparent; }
+* { box-sizing: border-box; }
+.card { width: 100%; height: 100%; background-color: #161b22;
+        border: 1px solid #30363d; border-radius: 10px; padding: 18px 20px; }
+.label { font-family: 'Courier Prime', monospace; font-size: 10.5px;
+         letter-spacing: 0.14em; text-transform: uppercase; color: #7d8590; }
+.mono { font-family: 'Courier Prime', monospace; }
+.rule { flex: 1; height: 1px; background-color: #30363d; }
+.head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.name { font-family: 'Outfit', sans-serif; font-weight: 600; letter-spacing: -0.01em; }
+.chip { font-family: 'Courier Prime', monospace; font-size: 10.5px;
+        color: #8b949e; background-color: #21262d; border: 1px solid #30363d;
+        border-radius: 4px; padding: 2px 6px; }
+.highlight-text { color: #e08d63; font-weight: 600; }
+.pill { font-family: 'Courier Prime', monospace; font-size: 9.5px;
+        letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px;
+        border-radius: 999px; border: 1px solid; white-space: nowrap; }
+.pill-done { color: #7ee787; background-color: #152418; border-color: #2b4a33; }
+.pill-wip { color: #e8a569; background-color: #2b1f12; border-color: #4d3620; }
+
+        
+      </style>
+      
+<div class="card">
+  <div class="head"><span class="label">Engineering principles</span><span class="rule"></span></div>
+  
+    <div style="display: flex; gap: 12px; align-items: baseline; padding: 7px 0;
+                ">
+      <span class="mono" style="font-size: 10px; color: #e08d63;">01</span>
+      <span style="font-size: 13.5px; line-height: 1.4; color: #c9d1d9;">Build for failure first.</span>
+    </div>
+    
+    <div style="display: flex; gap: 12px; align-items: baseline; padding: 7px 0;
+                border-top: 1px solid #21262d;">
+      <span class="mono" style="font-size: 10px; color: #e08d63;">02</span>
+      <span style="font-size: 13.5px; line-height: 1.4; color: #c9d1d9;">Prefer observability over assumptions.</span>
+    </div>
+    
+    <div style="display: flex; gap: 12px; align-items: baseline; padding: 7px 0;
+                border-top: 1px solid #21262d;">
+      <span class="mono" style="font-size: 10px; color: #e08d63;">03</span>
+      <span style="font-size: 13.5px; line-height: 1.4; color: #c9d1d9;">Measure before optimizing.</span>
+    </div>
+    
+    <div style="display: flex; gap: 12px; align-items: baseline; padding: 7px 0;
+                border-top: 1px solid #21262d;">
+      <span class="mono" style="font-size: 10px; color: #e08d63;">04</span>
+      <span style="font-size: 13.5px; line-height: 1.4; color: #c9d1d9;">Automate repetitive work.</span>
+    </div>
+    
+    <div style="display: flex; gap: 12px; align-items: baseline; padding: 7px 0;
+                border-top: 1px solid #21262d;">
+      <span class="mono" style="font-size: 10px; color: #e08d63;">05</span>
+      <span style="font-size: 13.5px; line-height: 1.4; color: #c9d1d9;">Simple architectures scale better.</span>
+    </div>
+    
+</div>
+
+    </div>
+  </foreignObject>
+</svg>

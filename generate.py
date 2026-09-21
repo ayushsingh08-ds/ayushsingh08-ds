@@ -48,10 +48,12 @@ WORKSPACE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROFILE_JSON = os.path.join(WORKSPACE_DIR, "profile.json")
 BASE64_ICONS_JSON = os.path.join(WORKSPACE_DIR, "assets", "base64_icons.json")
 CARDS_DIR = os.path.join(WORKSPACE_DIR, "assets", "cards")
+DARK_DIR = os.path.join(CARDS_DIR, "dark")
 GITHUB_STATS_JSON = os.path.join(WORKSPACE_DIR, "assets", "github_stats.json")
 CONTRIBUTIONS_JSON = os.path.join(WORKSPACE_DIR, "assets", "contributions.json")
 
 os.makedirs(CARDS_DIR, exist_ok=True)
+os.makedirs(DARK_DIR, exist_ok=True)
 
 # ----------------- Content -----------------
 with open(PROFILE_JSON, "r", encoding="utf-8") as f:
@@ -129,8 +131,81 @@ MUTED = "#7a6a65"
 FAINT = "#9c8b86"
 ACCENT = "#b05a30"
 
+# Text on the filled primary button. This has the same value as SURFACE_TINT in
+# spirit but is its own token, because in the dark theme the tile stays dark
+# while the button text must invert (see DARK_COLORS below).
+BUTTON_TEXT = "#fdf9f3"
+
 # Contribution heatmap ramp: empty cell up to the accent itself.
 LEVEL_COLORS = ["#f2ebe1", "#ecd6c1", "#dcae86", "#c47c4c", "#a8542c"]
+
+# ----------------- Dark theme -----------------
+# Every card is compiled twice: the cream original in assets/cards/ and a
+# GitHub-dark counterpart in assets/cards/dark/. The dark variant is produced by
+# mapping the palette below rather than by drawing the cards again -- the two
+# themes differ in colour only, and a mapping keeps the geometry from ever
+# drifting apart between them.
+#
+# The surfaces, borders and text greys are GitHub's own dark tokens
+# (#0d1117 canvas, #161b22 surface, #30363d border, #e6edf3 / #c9d1d9 / #8b949e
+# text); the accent stays terracotta, brightened so it still carries on a dark
+# surface. Every colour a card uses must appear here: an unmapped one fails the
+# build, because an unmapped colour is a light-mode colour leaking into the dark
+# cards.
+DARK_COLORS = {
+    # surfaces and lines
+    "#fffdfa": "#161b22",  # card surface
+    "#faf6f0": "#21262d",  # monogram tile
+    "#f7f1e8": "#21262d",  # stat tiles, chips
+    "#f2ebe1": "#21262d",  # interior hairlines, empty calendar cell
+    "#efe6da": "#21262d",  # soft column dividers
+    "#f0e7db": "#21262d",  # progress bar and language bar tracks
+    "#e5dacf": "#30363d",  # card border
+    "#eadfd2": "#30363d",  # chip and stat tile borders
+    "#ded3c6": "#30363d",  # secondary button border
+    # text
+    "#241c17": "#f0f6fc",  # display ink
+    "#2c1e1e": "#e6edf3",  # headings, and the filled primary button
+    "#3c2f2f": "#c9d1d9",  # row text
+    "#4a3f39": "#c9d1d9",  # body text
+    "#5a4a42": "#8b949e",  # secondary text (descriptions, hero role)
+    "#6f6259": "#8b949e",  # chip and button labels
+    "#7a6a65": "#8b949e",  # muted text
+    "#9c8b86": "#7d8590",  # faint labels
+    "#fdf9f3": "#0d1117",  # text on the filled primary button
+    "#c9b8a8": "#57606a",  # arrow on the filled primary button
+    # accent
+    "#b05a30": "#e08d63",
+    # status pills
+    "#5c6b46": "#7ee787",
+    "#f1f3e8": "#152418",
+    "#dde2cf": "#2b4a33",
+    "#96602f": "#e8a569",
+    "#faf0e4": "#2b1f12",
+    "#eeddc9": "#4d3620",
+    # contribution calendar ramp
+    "#ecd6c1": "#3d2a1e",
+    "#dcae86": "#6b3f26",
+    "#c47c4c": "#9c5527",
+    "#a8542c": "#cf7a45",
+}
+
+HEX_COLOR = re.compile(r"#[0-9a-fA-F]{6}")
+UNMAPPED_COLORS = set()
+
+
+def to_dark(svg):
+    """Swap every palette colour for its dark counterpart."""
+
+    def swap(match):
+        light = match.group(0).lower()
+        dark = DARK_COLORS.get(light)
+        if dark is None:
+            UNMAPPED_COLORS.add(light)
+            return match.group(0)
+        return dark
+
+    return HEX_COLOR.sub(swap, svg)
 
 FONT_IMPORT = (
     "@import url('https://fonts.googleapis.com/css2?"
@@ -175,8 +250,7 @@ body { font-family: 'Inter', sans-serif; color: %(body)s; margin: 0; padding: 0;
 
 
 def save_svg(filename, width, height, content, extra_css=""):
-    """Write one card. Every card is a fixed-size foreignObject document."""
-    filepath = os.path.join(CARDS_DIR, filename)
+    """Write one card, in both themes. Every card is a fixed-size foreignObject."""
     svg = """<svg fill="none" viewBox="0 0 %(w)d %(h)d" width="%(w)d" height="%(h)d" xmlns="http://www.w3.org/2000/svg">
   <foreignObject x="0" y="0" width="%(w)d" height="%(h)d">
     <div xmlns="http://www.w3.org/1999/xhtml" style="width: %(w)dpx; height: %(h)dpx; box-sizing: border-box;">
@@ -194,9 +268,11 @@ def save_svg(filename, width, height, content, extra_css=""):
         "extra": extra_css,
         "content": content,
     }
-    with open(filepath, "w", encoding="utf-8") as sf:
+    with open(os.path.join(CARDS_DIR, filename), "w", encoding="utf-8") as sf:
         sf.write(svg)
-    print("Compiled: %s" % filename)
+    with open(os.path.join(DARK_DIR, filename), "w", encoding="utf-8") as sf:
+        sf.write(to_dark(svg))
+    print("Compiled: %s (light + dark)" % filename)
 
 
 def head(label, note=""):
@@ -384,7 +460,8 @@ save_svg("hero.svg", *CARD_SIZES["hero"], hero_content)
 def action_content(label, trailing, primary):
     if primary:
         style = (
-            "background-color: %s; border: 1px solid %s; color: #f7f1e8;" % (INK, INK)
+            "background-color: %s; border: 1px solid %s; color: %s;"
+            % (INK, INK, BUTTON_TEXT)
         )
         trailing_color = "#c9b8a8"
     else:
@@ -1115,135 +1192,140 @@ ALT_TEXT = {
     "opportunities and interesting technical conversations",
 }
 
-PROJECT_LINKS = "\n\n".join(
-    '<p align="center"><a href="%s"><img src="assets/cards/project_%d.svg" width="%d" '
-    'alt="%s — %s Status: %s."></a></p>'
-    % (
-        project["url"],
-        idx,
-        CARD_SIZES["project"][0],
-        project["name"],
-        as_sentence(project["desc"]),
-        project["status"],
+# ----------------- README assembly -----------------
+def card_image(filename, width, alt, href=None):
+    """One card, in whichever theme the reader uses.
+
+    `<picture>` with `prefers-color-scheme` is the mechanism GitHub documents
+    for theme-aware images. The `<img>` inside it is not only the light image:
+    it is the fallback, so if a host ignores `<picture>` the cream card is what
+    renders. Both files are local to this repository -- the dark variant is not
+    an external service, so it cannot rot the way the old analytics cards did.
+    """
+    markup = (
+        '<picture><source media="(prefers-color-scheme: dark)" '
+        'srcset="assets/cards/dark/%s"><img src="assets/cards/%s" width="%d" '
+        'alt="%s"></picture>' % (filename, filename, width, alt)
+    )
+    return '<a href="%s">%s</a>' % (href, markup) if href else markup
+
+
+def row(*cards):
+    """One line, centred: the wrapper that keeps cards off each other's lines."""
+    return '<p align="center">%s</p>' % ROW_GAP.join(cards)
+
+
+PROJECT_ROWS = [
+    row(
+        card_image(
+            "project_%d.svg" % idx,
+            CARD_SIZES["project"][0],
+            "%s — %s Status: %s." % (project["name"], as_sentence(project["desc"]), project["status"]),
+            href=project["url"],
+        )
     )
     for idx, project in enumerate(profile["featured_projects"])
-)
+]
 
-NAV_LINKS = ROW_GAP.join(
-    '<a href="%s"><img src="assets/cards/%s" width="%d" '
-    'alt="Jump to the %s section"></a>' % (href, filename, CARD_SIZES["nav"][0], label.lower())
-    for filename, label, href in NAV_ITEMS
-)
+README_BLOCKS = [
+    "<!-- Generated by generate.py from profile.json -- edit those, not this file. -->",
+    "<!-- Header: monogram, name, contact meta. -->",
+    row(card_image("header.svg", CARD_SIZES["header"][0], ALT_TEXT["header"])),
+    # Real in-page links, not decoration: GitHub emits `id="user-content-<slug>"`
+    # on each heading and strips the prefix at runtime, so `#featured-projects`
+    # resolves to the heading further down.
+    "<!-- Section navigation. -->",
+    row(
+        *[
+            card_image(
+                filename,
+                CARD_SIZES["nav"][0],
+                "Jump to the %s section" % label.lower(),
+                href=href,
+            )
+            for filename, label, href in NAV_ITEMS
+        ]
+    ),
+    "<!-- Hero. -->",
+    row(card_image("hero.svg", GRID, ALT_TEXT["hero"])),
+    "<!-- Primary and secondary action. -->",
+    row(
+        card_image(
+            "action_email.svg",
+            PAIR_W,
+            ALT_TEXT["action_email"],
+            href="mailto:" + EMAIL,
+        ),
+        card_image("action_resume.svg", PAIR_W, ALT_TEXT["action_resume"], href=RESUME_URL),
+    ),
+    # Four balanced columns inside one card, so they are always four columns on
+    # one row and can never wrap into a ragged 3 + 1.
+    "<!-- Profile at a glance. -->",
+    row(card_image("info.svg", GRID, ALT_TEXT["info"])),
+    '<h2 align="center">About</h2>',
+    row(card_image("about.svg", GRID, ALT_TEXT["about"])),
+    '<h2 align="center">Tech Stack</h2>',
+    row(card_image("stack.svg", GRID, ALT_TEXT["stack"])),
+    "<!-- Principles beside current work: two half-width cards rather than two "
+    "narrow ones stacked in the middle of the page. -->",
+    row(
+        card_image("principles.svg", PAIR_W, ALT_TEXT["principles"]),
+        card_image("building.svg", PAIR_W, ALT_TEXT["building"]),
+    ),
+    "<!-- Planned work, one row, labelled as planned. -->",
+    row(card_image("next.svg", GRID, ALT_TEXT["next"])),
+    '<h2 align="center">Featured Projects</h2>',
+    *PROJECT_ROWS,
+    '<p align="center"><a href="%s?tab=repositories">View all repositories &rarr;</a></p>' % GITHUB_URL,
+    '<h2 align="center">GitHub Analytics</h2>',
+    row(
+        card_image("gh_stats.svg", PAIR_W, ALT_TEXT["stats"]),
+        card_image("gh_langs.svg", PAIR_W, ALT_TEXT["top_langs"]),
+    ),
+    row(card_image("contrib.svg", GRID, ALT_TEXT["contrib"])),
+    "<!-- Closing. -->",
+    row(card_image("closing.svg", GRID, ALT_TEXT["closing"])),
+    row(
+        *[
+            card_image(filename, CARD_SIZES["nav"][0], label, href=href)
+            for filename, label, href in CONTACT_ITEMS
+        ]
+    ),
+]
 
-CONTACT_LINKS = ROW_GAP.join(
-    '<a href="%s"><img src="assets/cards/%s" width="%d" alt="%s"></a>'
-    % (href, filename, CARD_SIZES["nav"][0], label)
-    for filename, label, href in CONTACT_ITEMS
-)
-
-
-# =====================================================================
-# 13 -- README.md
-# =====================================================================
-readme_template = """<!-- Generated by generate.py from profile.json -- edit those, not this file. -->
-
-<!-- Header: monogram, name, contact meta. -->
-<p align="center"><img src="assets/cards/header.svg" width="{header_w}" alt="{alt_header}"></p>
-
-<!-- Section navigation. Real in-page links, not decoration: GitHub emits
-     `id="user-content-<slug>"` on every heading and strips the prefix at runtime,
-     so `#featured-projects` resolves to the heading below. -->
-<p align="center">{nav}</p>
-
-<!-- Hero. -->
-<p align="center"><img src="assets/cards/hero.svg" width="{grid}" alt="{alt_hero}"></p>
-
-<!-- Primary and secondary action. -->
-<p align="center"><a href="mailto:{email}"><img src="assets/cards/action_email.svg" width="{pair_w}" alt="{alt_email}"></a>{gap}<a href="{resume}"><img src="assets/cards/action_resume.svg" width="{pair_w}" alt="{alt_resume}"></a></p>
-
-<!-- Profile at a glance: four balanced columns inside one card, so they are
-     always four columns on one row and can never wrap into a ragged 3 + 1. -->
-<p align="center"><img src="assets/cards/info.svg" width="{grid}" alt="{alt_info}"></p>
-
-<h2 align="center">About</h2>
-
-<p align="center"><img src="assets/cards/about.svg" width="{grid}" alt="{alt_about}"></p>
-
-<h2 align="center">Tech Stack</h2>
-
-<p align="center"><img src="assets/cards/stack.svg" width="{grid}" alt="{alt_stack}"></p>
-
-<!-- Principles beside current work: two half-width cards rather than two narrow
-     ones stacked in the middle of the page. -->
-<p align="center"><img src="assets/cards/principles.svg" width="{pair_w}" alt="{alt_principles}">{gap}<img src="assets/cards/building.svg" width="{pair_w}" alt="{alt_building}"></p>
-
-<!-- Planned work, one row, labelled as planned. -->
-<p align="center"><img src="assets/cards/next.svg" width="{grid}" alt="{alt_next}"></p>
-
-<h2 align="center">Featured Projects</h2>
-
-{projects}
-
-<p align="center"><a href="{github}?tab=repositories">View all repositories &rarr;</a></p>
-
-<h2 align="center">GitHub Analytics</h2>
-
-<p align="center"><img src="assets/cards/gh_stats.svg" width="{pair_w}" alt="{alt_stats}">{gap}<img src="assets/cards/gh_langs.svg" width="{pair_w}" alt="{alt_langs}"></p>
-
-<p align="center"><img src="assets/cards/contrib.svg" width="{grid}" alt="{alt_contrib}"></p>
-
-<!-- Closing. -->
-<p align="center"><img src="assets/cards/closing.svg" width="{grid}" alt="{alt_closing}"></p>
-
-<p align="center">{contacts}</p>
-""".format(
-    header_w=CARD_SIZES["header"][0],
-    grid=GRID,
-    pair_w=PAIR_W,
-    gap=ROW_GAP,
-    email=EMAIL,
-    resume=RESUME_URL,
-    github=GITHUB_URL,
-    nav=NAV_LINKS,
-    projects=PROJECT_LINKS,
-    contacts=CONTACT_LINKS,
-    alt_header=ALT_TEXT["header"],
-    alt_hero=ALT_TEXT["hero"],
-    alt_email=ALT_TEXT["action_email"],
-    alt_resume=ALT_TEXT["action_resume"],
-    alt_info=ALT_TEXT["info"],
-    alt_about=ALT_TEXT["about"],
-    alt_stack=ALT_TEXT["stack"],
-    alt_principles=ALT_TEXT["principles"],
-    alt_building=ALT_TEXT["building"],
-    alt_next=ALT_TEXT["next"],
-    alt_stats=ALT_TEXT["stats"],
-    alt_langs=ALT_TEXT["top_langs"],
-    alt_contrib=ALT_TEXT["contrib"],
-    alt_closing=ALT_TEXT["closing"],
-)
+readme = "\n\n".join(README_BLOCKS) + "\n"
 
 # ----------------- Card validation -----------------
 # Every card is an XML document, and a browser silently drops an SVG it cannot
 # parse -- so a stray HTML-only entity (&middot;, &rarr;) or an unclosed <img>
 # publishes a blank space with no warning anywhere. Both shipped once; this
-# fails the build instead, before README.md is written.
+# fails the build instead, before README.md is written. The same run also checks
+# that the dark theme covers every colour a card actually uses.
 INVALID_CARDS = []
-for card_name in sorted(os.listdir(CARDS_DIR)):
-    if not card_name.endswith(".svg"):
-        continue
-    try:
-        xml.etree.ElementTree.parse(os.path.join(CARDS_DIR, card_name))
-    except xml.etree.ElementTree.ParseError as exc:
-        INVALID_CARDS.append("%s: %s" % (card_name, exc))
+for directory in (CARDS_DIR, DARK_DIR):
+    for card_name in sorted(os.listdir(directory)):
+        if not card_name.endswith(".svg"):
+            continue
+        path = os.path.join(directory, card_name)
+        try:
+            xml.etree.ElementTree.parse(path)
+        except xml.etree.ElementTree.ParseError as exc:
+            INVALID_CARDS.append("%s: %s" % (os.path.relpath(path, CARDS_DIR), exc))
 if INVALID_CARDS:
     for problem in INVALID_CARDS:
         print("INVALID CARD: %s" % problem)
     raise SystemExit("Refusing to write README.md: %d card(s) are not valid XML" % len(INVALID_CARDS))
-print("Validated: every card is well-formed XML")
+if UNMAPPED_COLORS:
+    for colour in sorted(UNMAPPED_COLORS):
+        print("UNMAPPED COLOUR: %s -- no dark counterpart" % colour)
+    raise SystemExit("Refusing to write README.md: %d colour(s) missing from DARK_COLORS" % len(UNMAPPED_COLORS))
+print(
+    "Validated: %d cards (light + dark) are well-formed XML and every colour has a dark counterpart"
+    % (2 * len([n for n in os.listdir(CARDS_DIR) if n.endswith('.svg')]))
+)
 
 README_MD = os.path.join(WORKSPACE_DIR, "README.md")
 with open(README_MD, "w", encoding="utf-8") as rf:
-    rf.write(readme_template)
+    rf.write(readme)
 
 print("SUCCESS: cards written and README.md generated!")

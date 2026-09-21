@@ -13,6 +13,7 @@ and writes `README.md` plus every image the README displays.
 profile.json          content (name, role, about, stack, projects, ...)  <- edit this
 generate.py           geometry + the whole page, compiled from profile.json
 assets/cards/*.svg    generated cards -- never hand-edit, regenerated wholesale
+assets/cards/dark/*.svg  the same cards mapped to GitHub's dark palette
 assets/base64_icons.json  offline icon set (tech-stack chips)
 assets/github_stats.json  fetched stats cache (audit record: source/auth/dates)
 assets/contributions.json fetched 12-month contribution calendar cache
@@ -61,6 +62,31 @@ Section order: header (monogram/name/contact) → nav row → hero → CTAs →
 at-a-glance grid → About → Tech Stack → principles | currently building → Next →
 Featured Projects → GitHub Analytics → closing → contact row.
 
+### Two themes, one geometry
+
+Every card is compiled twice: the cream original and a GitHub-dark counterpart
+in `assets/cards/dark/`, produced by mapping the palette through
+`DARK_COLORS` in `generate.py` rather than by drawing the cards again — the two
+themes differ in colour only, so the geometry cannot drift. Dark surfaces,
+borders and text greys are GitHub's own tokens (`#161b22` surface, `#30363d`
+border, `#e6edf3`/`#c9d1d9`/`#8b949e`/`#7d8590` text); the accent stays
+terracotta, brightened to `#e08d63` so it still carries on a dark surface.
+
+The README offers both with `<picture><source media="(prefers-color-scheme:
+dark)" srcset="assets/cards/dark/X.svg"><img src="assets/cards/X.svg" …>` —the
+mechanism GitHub documents for theme-aware images. The inner `<img>` is the
+light image *and* the fallback for any host that ignores `<picture>`.
+
+Rules that keep the pair honest:
+
+* **Any colour a card uses must be in `DARK_COLORS`.** An unmapped colour aborts
+  the build — otherwise it would leak into the dark cards as a bright patch.
+* `BUTTON_TEXT` (`#fdf9f3`) exists only so the mapping stays 1:1: the primary
+  button's text is a distinct token from `SURFACE_TINT`, because on dark the tile
+  stays dark while the button text inverts to `#0d1117`.
+* `scratch/check_readme.py` asserts that each light/dark pair has identical
+  `viewBox`/`width`/`height`, so the two themes cannot silently diverge.
+
 ## GitHub rendering constraints (all load-bearing)
 
 1. **Every card image sits inside its own `<p align="center">` on one line.** A
@@ -85,6 +111,12 @@ Featured Projects → GitHub Analytics → closing → contact row.
 6. Rows wrap below ~852px of column width (that is fine and intended: a wrapped
    card still fills the column). The GitHub profile column is `container-lg`
    (max-width 1012px), so a normal desktop window renders every row as designed.
+7. **Theme-aware images use `<picture>` + `prefers-color-scheme`**, per GitHub's
+   own announcement of the feature. `srcset` is written as a repository-relative
+   path, the same shape as `src`; GitHub rewrites relative `srcset` the way it
+   rewrites `src` (that rewrite initially shipped broken in 2022 and was fixed).
+   This is the one part of the theme work that cannot be checked from here — see
+   "Unverified / open issues".
 
 ## Decisions taken (and why)
 
@@ -145,6 +177,10 @@ Featured Projects → GitHub Analytics → closing → contact row.
 | link check | `curl -o /dev/null -w '%{http_code}'` | 6/6 GitHub URLs 200; LinkedIn 999 (bot block, unchanged from before); resume link dead |
 | copy accuracy | every card's numbers traced to `profile.json` or the fetches | see "Unverified / open" |
 | **published page** (after commit `5f5704a`) | `curl https://github.com/ayushsingh08-ds` | 27 images, 19 image paragraphs with counts `1 4 1 2 1 1 1 2 1 1 1 1 1 1 0 2 1 1 4`, no external image, no table |
+| dark theme geometry | `python scratch/check_readme.py` | 27 light + 27 dark cards, 27 `<picture>` blocks, every pair identical in size, rows unchanged |
+| dark theme rendering | preview: draw each data URI to a canvas and sample pixels | hero/card corner samples `#fffdfa`+`#e5dacf` in light, `#161b22`+`#30363d` in dark |
+| dark theme layout | `scratch/qc.html` (now measures both sets) | 54/54 cards, no clipped content, 17px minimum bottom slack |
+| theme switching | preview's Auto/Light/Dark buttons | forcing dark makes the browser load the dark source; forced light returns the light `<img>` |
 | published anchors | nav hrefs vs heading permalink ids | `about`, `tech-stack`, `featured-projects`, `github-analytics` all resolve |
 | published assets | 27 raw `/raw/main/assets/cards/*.svg` URLs with `-L` | 27/27 → 200 (after the `/raw/` → raw.githubusercontent redirect) |
 
@@ -164,15 +200,19 @@ Featured Projects → GitHub Analytics → closing → contact row.
   own `<a>` in `generate.py`.
 - Cards are images: on a phone the smallest card text (9–10.5px at 850px wide)
   scales to ~4–5px. A `<picture>` + `media` variant per card is the fix.
+- **Unverified until the next push: relative `srcset` rewriting.** The dark
+  variants are referenced with repository-relative paths, like `src`. If GitHub
+  does not rewrite them, dark-mode readers get a broken image instead of the dark
+  card (light mode is unaffected, because the `<img src>` stays verified). Check
+  the served markup for `srcset="/ayushsingh08-ds/ayushsingh08-ds/raw/main/..."`
+  after deploying; if it is still relative, switch `card_image()` in
+  `generate.py` to the root-absolute form `/owner/repo/raw/main/…` and rebuild.
 - Contributions are read by parsing `github.com/users/<user>/contributions`. GitHub
   can change that markup at any time; the failure mode is a cached calendar (and,
   with no cache at all, an empty card), never a broken image.
 - Cards use `foreignObject` + `@import` Google Fonts — the combination GitHub's
   SVG proxy and Safari handle least reliably. If a font ever fails, the card
   falls back to a system font and reflows inside its fixed box.
-- Dark mode: cards are cream on any background, which reads as a printed page
-  rather than adapting. A `prefers-color-scheme: dark` card set would need
-  `<picture>` support per card.
 - A local build records `"auth": "anonymous"` in `assets/github_stats.json` while
   CI records `"token"` — that one-line diff is the audit record, not drift.
 - Unused leftovers: `assets/header_background_optimized.jpg`, `profile-3d-contrib/`

@@ -1,0 +1,45 @@
+<svg fill="none" viewBox="0 0 850 128" width="850" height="128" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject x="0" y="0" width="850" height="128">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 850px; height: 128px; box-sizing: border-box;">
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;family=Inter:wght@400;500;600&amp;family=Outfit:wght@500;600&amp;display=swap');
+body { font-family: 'Inter', sans-serif; color: #c9d1d9; margin: 0; padding: 0;
+       background-color: transparent; }
+* { box-sizing: border-box; }
+.card { width: 100%; height: 100%; background-color: #161b22;
+        border: 1px solid #30363d; border-radius: 10px; padding: 18px 20px; }
+.label { font-family: 'Courier Prime', monospace; font-size: 10.5px;
+         letter-spacing: 0.14em; text-transform: uppercase; color: #7d8590; }
+.mono { font-family: 'Courier Prime', monospace; }
+.rule { flex: 1; height: 1px; background-color: #30363d; }
+.head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.name { font-family: 'Outfit', sans-serif; font-weight: 600; letter-spacing: -0.01em; }
+.chip { font-family: 'Courier Prime', monospace; font-size: 10.5px;
+        color: #8b949e; background-color: #21262d; border: 1px solid #30363d;
+        border-radius: 4px; padding: 2px 6px; }
+.highlight-text { color: #e08d63; font-weight: 600; }
+.pill { font-family: 'Courier Prime', monospace; font-size: 9.5px;
+        letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px;
+        border-radius: 999px; border: 1px solid; white-space: nowrap; }
+.pill-done { color: #7ee787; background-color: #152418; border-color: #2b4a33; }
+.pill-wip { color: #e8a569; background-color: #2b1f12; border-color: #4d3620; }
+
+        
+      </style>
+      
+    <div class="card">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span class="mono" style="font-size: 10.5px; color: #e08d63;">05</span>
+        <span class="name" style="font-size: 15.5px; color: #e6edf3;">Edge-Cloud Predictive Maintenance</span>
+        <span class="rule"></span>
+        <span class="pill pill-done">Done</span>
+      </div>
+      <div style="font-size: 12.5px; line-height: 1.45; color: #8b949e; margin: 9px 0 10px;">
+        Research-backed smart-factory framework: CNN-LSTM remaining-useful-life estimation (RMSE 57.29), a SimPy digital twin and a Flutter dashboard for routing-aware what-if analysis.
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip">CNN-LSTM</span><span class="chip">SimPy</span><span class="chip">Flutter</span><span class="chip">FastAPI</span><span class="chip">SQLite</span></div>
+    </div>
+    
+    </div>
+  </foreignObject>
+</svg>
