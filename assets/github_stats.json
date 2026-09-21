@@ -1,6 +1,6 @@
 {
   "source": "api",
-  "auth": "token",
+  "auth": "anonymous",
   "fetched_at": "2026-09-21",
   "checked_at": "2026-09-21",
   "public_repos": 23,

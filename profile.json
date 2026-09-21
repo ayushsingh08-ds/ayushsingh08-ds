@@ -1,13 +1,18 @@
 {
   "name": "Ayush Singh",
   "role": "Building reliable distributed systems, streaming data infrastructure, and backend platforms.",
-  "academic": "Final-year Computer Science student passionate about Distributed Systems • Backend Engineering • Data Infrastructure",
+  "kicker": "Final-year Computer Science · Bengaluru, India",
   "quote": {
     "lines": [
       "I enjoy designing systems that continue to work under failure.",
       "I turn ideas into <span class=\"highlight-text\">production-grade systems</span>."
     ]
   },
+  "focus": [
+    "Distributed Systems",
+    "Backend Engineering",
+    "Data Infrastructure"
+  ],
   "about_me": {
     "text": "I build systems that are reliable, scalable and observable. My interests lie in distributed systems, streaming pipelines, backend platforms and automation.",
     "exploring": "System Design, Cloud, and High Performance Systems",
@@ -24,36 +29,30 @@
       "go",
       "java",
       "python",
-      "javascript",
       "cplusplus",
-      "postgresql"
+      "javascript"
     ],
     "distributed": [
       "apachekafka",
       "grpc",
-      "redis",
-      "docker",
       "rabbitmq",
-      "kubernetes"
+      "redis"
     ],
     "data_streaming": [
       "apachespark",
       "apacheairflow",
-      "googlecloud",
-      "kubernetes"
+      "googlecloud"
     ],
     "databases": [
       "postgresql",
-      "redis",
-      "mongodb",
-      "mysql"
+      "mysql",
+      "mongodb"
     ],
     "cloud_devops": [
       "amazonwebservices",
-      "kubernetes",
       "docker",
-      "terraform",
-      "prometheus"
+      "kubernetes",
+      "terraform"
     ],
     "observability": [
       "prometheus",
@@ -86,24 +85,6 @@
     {
       "name": "LLM Gateway Smart Routing",
       "percentage": 60
-    }
-  ],
-  "what_i_build": [
-    {
-      "title": "Distributed Systems",
-      "desc": "Message brokers, ordering, consensus, concurrency, persistence, fault tolerance"
-    },
-    {
-      "title": "Streaming Infra",
-      "desc": "Kafka, Spark, Airflow, ETL/ELT, real-time ingestion, data pipelines"
-    },
-    {
-      "title": "Backend Platforms",
-      "desc": "APIs, microservices, storage, caching, auth, rate limiting"
-    },
-    {
-      "title": "Reliability Eng.",
-      "desc": "Retries, DLQ, chaos testing, load testing, monitoring, alerts, observability"
     }
   ],
   "featured_projects": [

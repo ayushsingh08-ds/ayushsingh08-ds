@@ -1,0 +1,60 @@
+<svg fill="none" viewBox="0 0 850 112" width="850" height="112" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject x="0" y="0" width="850" height="112">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 850px; height: 112px; box-sizing: border-box;">
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;family=Inter:wght@400;500;600&amp;family=Outfit:wght@500;600&amp;display=swap');
+body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
+       background-color: transparent; }
+* { box-sizing: border-box; }
+.card { width: 100%; height: 100%; background-color: #fffdfa;
+        border: 1px solid #e5dacf; border-radius: 10px; padding: 18px 20px; }
+.label { font-family: 'Courier Prime', monospace; font-size: 10.5px;
+         letter-spacing: 0.14em; text-transform: uppercase; color: #9c8b86; }
+.mono { font-family: 'Courier Prime', monospace; }
+.rule { flex: 1; height: 1px; background-color: #e5dacf; }
+.head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.name { font-family: 'Outfit', sans-serif; font-weight: 600; letter-spacing: -0.01em; }
+.chip { font-family: 'Courier Prime', monospace; font-size: 10.5px;
+        color: #6f6259; background-color: #f7f1e8; border: 1px solid #eadfd2;
+        border-radius: 4px; padding: 2px 6px; }
+.highlight-text { color: #b05a30; font-weight: 600; }
+.pill { font-family: 'Courier Prime', monospace; font-size: 9.5px;
+        letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px;
+        border-radius: 999px; border: 1px solid; white-space: nowrap; }
+.pill-done { color: #5c6b46; background-color: #f1f3e8; border-color: #dde2cf; }
+.pill-wip { color: #96602f; background-color: #faf0e4; border-color: #eeddc9; }
+
+        
+      </style>
+      <div class="card" style="display: flex;">
+    <div style="flex: 1 1 0; min-width: 0; padding: 0 16px; border-left: 1px solid #efe6da;
+                padding-left: 0; border-left: none;">
+      <div class="label">Education</div>
+      <div style="font-size: 13px; font-weight: 600; color: #2c1e1e; margin-top: 7px;">B.Tech CSE (Data Science)</div>
+      <div style="font-size: 11.5px; color: #7a6a65; margin-top: 3px;">Dayananda Sagar University</div>
+    </div>
+    
+    <div style="flex: 1 1 0; min-width: 0; padding: 0 16px; border-left: 1px solid #efe6da;
+                ">
+      <div class="label">Location</div>
+      <div style="font-size: 13px; font-weight: 600; color: #2c1e1e; margin-top: 7px;">Bengaluru, India</div>
+      <div style="font-size: 11.5px; color: #7a6a65; margin-top: 3px;">IST (UTC+5:30) · remote-friendly</div>
+    </div>
+    
+    <div style="flex: 1 1 0; min-width: 0; padding: 0 16px; border-left: 1px solid #efe6da;
+                ">
+      <div class="label">Open to</div>
+      <div style="font-size: 13px; font-weight: 600; color: #2c1e1e; margin-top: 7px;">SDE · Data Engineering</div>
+      <div style="font-size: 11.5px; color: #7a6a65; margin-top: 3px;">Backend · Infrastructure</div>
+    </div>
+    
+    <div style="flex: 1 1 0; min-width: 0; padding: 0 16px; border-left: 1px solid #efe6da;
+                padding-right: 0;">
+      <div class="label">Connection</div>
+      <div style="font-size: 13px; font-weight: 600; color: #2c1e1e; margin-top: 7px;">Open to collaboration</div>
+      <div style="font-size: 11.5px; color: #7a6a65; margin-top: 3px;">Reach me by email</div>
+    </div>
+    </div>
+    </div>
+  </foreignObject>
+</svg>

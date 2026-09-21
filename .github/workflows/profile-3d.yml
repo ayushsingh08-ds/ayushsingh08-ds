@@ -1,4 +1,4 @@
-name: GitHub-Profile-3D-Contrib
+name: Compile profile README
 
 on:
   schedule: # 03:00 JST == 18:00 UTC
@@ -15,15 +15,16 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: generate-github-profile-3d-contrib
+    name: compile-profile-readme
 
     steps:
       - uses: actions/checkout@v3
-      - uses: yoshi389111/github-profile-3d-contrib@0.7.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          USERNAME: ${{ github.repository_owner }}
-      
+
+      # The isometric contribution graph (yoshi389111/github-profile-3d-contrib)
+      # and the local profile-3d-contrib/*.svg it produced used to be part of the
+      # README. They are replaced by assets/cards/contrib.svg, a locally drawn
+      # 12-month calendar in the same palette as every other card, so nothing in
+      # the README depends on a prebuilt asset any more.
       - name: Set up Python
         uses: actions/setup-python@v4
         with:

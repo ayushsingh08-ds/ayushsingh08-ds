@@ -1,6 +1,6 @@
-<svg fill="none" viewBox="0 0 850 128" width="850" height="128" xmlns="http://www.w3.org/2000/svg">
-  <foreignObject x="0" y="0" width="850" height="128">
-    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 850px; height: 128px; box-sizing: border-box;">
+<svg fill="none" viewBox="0 0 203 38" width="203" height="38" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject x="0" y="0" width="203" height="38">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 203px; height: 38px; box-sizing: border-box;">
       <style>
         @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;family=Inter:wght@400;500;600&amp;family=Outfit:wght@500;600&amp;display=swap');
 body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
@@ -26,20 +26,7 @@ body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
 
         
       </style>
-      
-    <div class="card">
-      <div style="display: flex; align-items: center; gap: 14px;">
-        <span class="mono" style="font-size: 10.5px; color: #b05a30;">03</span>
-        <span class="name" style="font-size: 15.5px; color: #2c1e1e;">Financial Market Lakehouse</span>
-        <span class="rule"></span>
-        <span class="pill pill-done">Done</span>
-      </div>
-      <div style="font-size: 12.5px; line-height: 1.45; color: #5a4a42; margin: 9px 0 10px;">
-        Medallion-architecture (Bronze to Gold) market data platform: Airflow orchestration, a DuckDB warehouse, dbt models and Great Expectations quality gates, all reproducible locally.
-      </div>
-      <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip">Airflow</span><span class="chip">dbt</span><span class="chip">DuckDB</span><span class="chip">Great Expectations</span><span class="chip">Docker</span></div>
-    </div>
-    
+      <div style="width: 100%; height: 100%; background-color: #fffdfa; border: 1px solid #e5dacf; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Courier Prime', monospace; font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #6f6259;">Tech stack</div>
     </div>
   </foreignObject>
 </svg>

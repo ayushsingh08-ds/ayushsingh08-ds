@@ -1,87 +1,43 @@
-<svg fill="none" viewBox="0 0 510 190" width="510" height="190" xmlns="http://www.w3.org/2000/svg">
-  <foreignObject x="0" y="0" width="510" height="190">
-    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 510px; height: 190px; box-sizing: border-box;">
+<svg fill="none" viewBox="0 0 850 128" width="850" height="128" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject x="0" y="0" width="850" height="128">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 850px; height: 128px; box-sizing: border-box;">
       <style>
-        
-@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&amp;family=Inter:wght@300;400;500;600;700&amp;family=Outfit:wght@400;500;600;700;800&amp;family=Courier+Prime&amp;display=swap');
-body {
-  font-family: 'Inter', sans-serif;
-  color: #3c2f2f;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  background-color: transparent;
-}
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Outfit', sans-serif;
-  color: #2c1e1e;
-  margin: 0;
-}
-.card {
-  background-color: #fffdfa;
-  border: 1px solid #e5dacf;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(139, 115, 85, 0.05);
-  box-sizing: border-box;
-  height: 100%;
-}
-.card-title {
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: #2c1e1e;
-}
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;family=Inter:wght@400;500;600&amp;family=Outfit:wght@500;600&amp;display=swap');
+body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
+       background-color: transparent; }
+* { box-sizing: border-box; }
+.card { width: 100%; height: 100%; background-color: #fffdfa;
+        border: 1px solid #e5dacf; border-radius: 10px; padding: 18px 20px; }
+.label { font-family: 'Courier Prime', monospace; font-size: 10.5px;
+         letter-spacing: 0.14em; text-transform: uppercase; color: #9c8b86; }
+.mono { font-family: 'Courier Prime', monospace; }
+.rule { flex: 1; height: 1px; background-color: #e5dacf; }
+.head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.name { font-family: 'Outfit', sans-serif; font-weight: 600; letter-spacing: -0.01em; }
+.chip { font-family: 'Courier Prime', monospace; font-size: 10.5px;
+        color: #6f6259; background-color: #f7f1e8; border: 1px solid #eadfd2;
+        border-radius: 4px; padding: 2px 6px; }
+.highlight-text { color: #b05a30; font-weight: 600; }
+.pill { font-family: 'Courier Prime', monospace; font-size: 9.5px;
+        letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px;
+        border-radius: 999px; border: 1px solid; white-space: nowrap; }
+.pill-done { color: #5c6b46; background-color: #f1f3e8; border-color: #dde2cf; }
+.pill-wip { color: #96602f; background-color: #faf0e4; border-color: #eeddc9; }
 
+        
       </style>
       
-    <style>
-      .project-item {
-        background-color: #fffdfa;
-        border: 1px solid #e5dacf;
-        border-radius: 8px;
-        padding: 14px;
-        display: flex;
-        gap: 14px;
-        height: 190px;
-        box-sizing: border-box;
-      }
-      .project-icon-box {
-        width: 32px;
-        height: 32px;
-        border-radius: 6px;
-        background-color: #3c2f2f;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-      }
-      .project-icon-box svg { width: 16px; height: 16px; }
-      .project-content { flex: 1; }
-      .project-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-      .project-name { font-size: 16px; font-weight: 700; color: #2c1e1e; }
-      .badge { font-size: 8.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
-      .badge-production { background-color: #e2f0d9; color: #385723; border: 1px solid #c5e0b4; }
-      .badge-inprogress { background-color: #fff2cc; color: #7f6000; border: 1px solid #ffe599; }
-      .project-desc { font-size: 14px; line-height: 1.4; color: #5a4a42; margin: 0 0 10px 0; }
-      .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-      .project-tags span { font-family: 'Courier Prime', monospace; font-size: 12px; background-color: #f4ebe1; color: #5a4a42; border: 1px solid #e5dacf; border-radius: 4px; padding: 1px 5px; }
-    </style>
-    <div class="project-item">
-      <div class="project-icon-box">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#fffdfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    <div class="card">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span class="mono" style="font-size: 10.5px; color: #b05a30;">05</span>
+        <span class="name" style="font-size: 15.5px; color: #2c1e1e;">Edge-Cloud Predictive Maintenance</span>
+        <span class="rule"></span>
+        <span class="pill pill-done">Done</span>
       </div>
-      <div class="project-content">
-        <div class="project-header-row">
-          <span class="project-name">Edge-Cloud Predictive Maintenance</span>
-          <span class="badge badge-production">Done</span>
-        </div>
-        <p class="project-desc">Research-backed smart-factory framework: CNN-LSTM remaining-useful-life estimation (RMSE 57.29), a SimPy digital twin and a Flutter dashboard for routing-aware what-if analysis.</p>
-        <div class="project-tags"><span>CNN-LSTM</span><span>SimPy</span><span>Flutter</span><span>FastAPI</span><span>SQLite</span></div>
+      <div style="font-size: 12.5px; line-height: 1.45; color: #5a4a42; margin: 9px 0 10px;">
+        Research-backed smart-factory framework: CNN-LSTM remaining-useful-life estimation (RMSE 57.29), a SimPy digital twin and a Flutter dashboard for routing-aware what-if analysis.
       </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip">CNN-LSTM</span><span class="chip">SimPy</span><span class="chip">Flutter</span><span class="chip">FastAPI</span><span class="chip">SQLite</span></div>
     </div>
     
     </div>

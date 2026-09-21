@@ -1,6 +1,6 @@
-<svg fill="none" viewBox="0 0 850 128" width="850" height="128" xmlns="http://www.w3.org/2000/svg">
-  <foreignObject x="0" y="0" width="850" height="128">
-    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 850px; height: 128px; box-sizing: border-box;">
+<svg fill="none" viewBox="0 0 850 196" width="850" height="196" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject x="0" y="0" width="850" height="196">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 850px; height: 196px; box-sizing: border-box;">
       <style>
         @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;family=Inter:wght@400;500;600&amp;family=Outfit:wght@500;600&amp;display=swap');
 body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
@@ -27,19 +27,27 @@ body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
         
       </style>
       
-    <div class="card">
-      <div style="display: flex; align-items: center; gap: 14px;">
-        <span class="mono" style="font-size: 10.5px; color: #b05a30;">03</span>
-        <span class="name" style="font-size: 15.5px; color: #2c1e1e;">Financial Market Lakehouse</span>
-        <span class="rule"></span>
-        <span class="pill pill-done">Done</span>
-      </div>
-      <div style="font-size: 12.5px; line-height: 1.45; color: #5a4a42; margin: 9px 0 10px;">
-        Medallion-architecture (Bronze to Gold) market data platform: Airflow orchestration, a DuckDB warehouse, dbt models and Great Expectations quality gates, all reproducible locally.
-      </div>
-      <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip">Airflow</span><span class="chip">dbt</span><span class="chip">DuckDB</span><span class="chip">Great Expectations</span><span class="chip">Docker</span></div>
+<div class="card" style="display: flex; gap: 40px;">
+  <div style="width: 468px;">
+    <div style="font-size: 15px; line-height: 1.6; color: #4a3f39;">I build systems that are reliable, scalable and observable. My interests lie in distributed systems, streaming pipelines, backend platforms and automation.</div>
+    <div style="margin-top: 16px; border-left: 2px solid #e5dacf; padding-left: 12px;
+                font-size: 13px; color: #7a6a65;">I drink coffee and write code. Repeat.</div>
+  </div>
+  <div style="flex: 1; border-left: 1px solid #efe6da; padding-left: 28px;">
+    
+    <div style="padding: 12px 0; ">
+      <div class="label">Exploring</div>
+      <div style="font-size: 12.5px; line-height: 1.5; color: #4a3f39; margin-top: 5px;">System Design, Cloud, and High Performance Systems</div>
     </div>
     
+    <div style="padding: 12px 0; border-top: 1px solid #f2ebe1;">
+      <div class="label">Interests</div>
+      <div style="font-size: 12.5px; line-height: 1.5; color: #4a3f39; margin-top: 5px;">Distributed Systems, Observability, Databases, DevOps</div>
+    </div>
+    
+  </div>
+</div>
+
     </div>
   </foreignObject>
 </svg>
