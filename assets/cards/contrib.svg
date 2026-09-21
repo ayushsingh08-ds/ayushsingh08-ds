@@ -28,7 +28,7 @@ body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
       </style>
       
 <div class="card">
-  <div class="head"><span class="label">Contributions</span><span class="rule"></span><span class="label">161 in the last year</span></div>
+  <div class="head"><span class="label">Contributions</span><span class="rule"></span><span class="label">162 in the last year</span></div>
   <div style="position: relative; height: 12px; margin-bottom: 8px;">
     <span class="mono" style="font-size: 9px; color: #9c8b86;"><span style="position: absolute; left: 0px;">Sep</span><span style="position: absolute; left: 60px;">Oct</span><span style="position: absolute; left: 120px;">Nov</span><span style="position: absolute; left: 180px;">Dec</span><span style="position: absolute; left: 240px;">Jan</span><span style="position: absolute; left: 300px;">Feb</span><span style="position: absolute; left: 360px;">Mar</span><span style="position: absolute; left: 420px;">Apr</span><span style="position: absolute; left: 480px;">May</span><span style="position: absolute; left: 555px;">Jun</span><span style="position: absolute; left: 615px;">Jul</span><span style="position: absolute; left: 675px;">Aug</span><span style="position: absolute; left: 750px;">Sep</span></span>
   </div>
