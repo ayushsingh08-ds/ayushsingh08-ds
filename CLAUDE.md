@@ -112,11 +112,10 @@ Rules that keep the pair honest:
    card still fills the column). The GitHub profile column is `container-lg`
    (max-width 1012px), so a normal desktop window renders every row as designed.
 7. **Theme-aware images use `<picture>` + `prefers-color-scheme`**, per GitHub's
-   own announcement of the feature. `srcset` is written as a repository-relative
-   path, the same shape as `src`; GitHub rewrites relative `srcset` the way it
-   rewrites `src` (that rewrite initially shipped broken in 2022 and was fixed).
-   This is the one part of the theme work that cannot be checked from here — see
-   "Unverified / open issues".
+   own announcement of the feature. `srcset` is written repository-relative, the
+   same shape as `src`, and GitHub rewrites it the same way -- confirmed on the
+   live page: all 27 `<source srcset>` values come back as
+   `/ayushsingh08-ds/ayushsingh08-ds/raw/main/assets/cards/dark/*.svg`.
 
 ## Decisions taken (and why)
 
@@ -179,6 +178,7 @@ Rules that keep the pair honest:
 | **published page** (after commit `5f5704a`) | `curl https://github.com/ayushsingh08-ds` | 27 images, 19 image paragraphs with counts `1 4 1 2 1 1 1 2 1 1 1 1 1 1 0 2 1 1 4`, no external image, no table |
 | dark theme geometry | `python scratch/check_readme.py` | 27 light + 27 dark cards, 27 `<picture>` blocks, every pair identical in size, rows unchanged |
 | dark theme rendering | preview: draw each data URI to a canvas and sample pixels | hero/card corner samples `#fffdfa`+`#e5dacf` in light, `#161b22`+`#30363d` in dark |
+| **dark theme published** (after commit `158145f`) | `curl https://github.com/ayushsingh08-ds` | 27 `<picture>` + 27 dark `<source>` survive sanitising; 27 dark and 27 light URLs all 200; a served dark card contains `#161b22` and no `#fffdfa`; rows unchanged (`1 4 1 2 1 1 1 2 1 1 1 1 1 1 0 2 1 1 4`) |
 | dark theme layout | `scratch/qc.html` (now measures both sets) | 54/54 cards, no clipped content, 17px minimum bottom slack |
 | theme switching | preview's Auto/Light/Dark buttons | forcing dark makes the browser load the dark source; forced light returns the light `<img>` |
 | published anchors | nav hrefs vs heading permalink ids | `about`, `tech-stack`, `featured-projects`, `github-analytics` all resolve |
@@ -200,13 +200,6 @@ Rules that keep the pair honest:
   own `<a>` in `generate.py`.
 - Cards are images: on a phone the smallest card text (9–10.5px at 850px wide)
   scales to ~4–5px. A `<picture>` + `media` variant per card is the fix.
-- **Unverified until the next push: relative `srcset` rewriting.** The dark
-  variants are referenced with repository-relative paths, like `src`. If GitHub
-  does not rewrite them, dark-mode readers get a broken image instead of the dark
-  card (light mode is unaffected, because the `<img src>` stays verified). Check
-  the served markup for `srcset="/ayushsingh08-ds/ayushsingh08-ds/raw/main/..."`
-  after deploying; if it is still relative, switch `card_image()` in
-  `generate.py` to the root-absolute form `/owner/repo/raw/main/…` and rebuild.
 - Contributions are read by parsing `github.com/users/<user>/contributions`. GitHub
   can change that markup at any time; the failure mode is a cached calendar (and,
   with no cache at all, an empty card), never a broken image.
