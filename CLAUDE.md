@@ -214,6 +214,9 @@ Rules that keep the pair honest:
 | layout fix: overflow | preview: every image's box vs the column at 980/860/780/640/480/320px | 0 overflowing images and 0 horizontal page scroll at every width (the preview column is now capped at 980px like GitHub's and shrinks with the window) |
 | layout fix: card content | `scratch/qc.html` + `preview_evaluate(window.qc(1))` | 34/34 cards (17 light + 17 dark), no clipped content, 7–24px bottom slack (7px is the merged principles/current-work card) |
 | layout fix: theme page colour | preview in a dark-scheme host, `getComputedStyle(body).backgroundColor` | `rgb(13, 17, 23)`; the preview page now follows the scheme instead of showing dark cards on white |
+| **layout fix published** (after commit `fc0b755`) | `curl https://github.com/ayushsingh08-ds` | 17 `<picture>` + 17 dark `<source>`; image paragraphs `1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 0` — **no paragraph holds two images**, no `&nbsp;` in the markup, no table; the three text link rows serve (section nav, view all repositories, contact strip); headings and all four nav anchors resolve |
+| layout fix: published assets | 17 light + 17 dark `/raw/main/assets/cards/*.svg` URLs with `-L` | 34/34 → 200; a served dark card contains `#161b22` and no `#fffdfa` (proving the dark document, not a stale copy) |
+| layout fix: CI | the daily workflow's own commit `8f178f2` | regenerated the artifacts on the runner from the pushed `generate.py`: one contribution (160 → 161) and the `auth: "token"` audit line, nothing structural |
 
 ## Unverified / open issues
 
@@ -231,9 +234,9 @@ Rules that keep the pair honest:
   own `<a>` in `generate.py`.
 - Cards are images: on a phone the smallest card text (9–10.5px at 850px wide)
   scales to ~4–5px. A `<picture>` + `media` variant per card is the fix.
-- The layout fix above is verified locally and in the preview, not on the
-  published page: the live check (17 `<picture>` blocks, no `&nbsp;`, one image
-  per block, dark `srcset` rewritten) has to wait for a push.
+- GitHub serves the rewritten `src`/`srcset` as *root-relative* paths
+  (`/ayushsingh08-ds/ayushsingh08-ds/raw/main/...`), not absolute URLs. Both forms
+  200; compare against the root-relative shape when checking a live page.
 - `prefers-color-scheme` follows the *reader's OS*, while GitHub's light/dark
   setting is GitHub's own. A reader whose OS is dark but who picks GitHub's light
   theme therefore gets dark cards on a light page (GitHub's documented behaviour
