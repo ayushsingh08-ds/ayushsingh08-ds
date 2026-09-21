@@ -52,16 +52,16 @@ h1, h2, h3, h4, h5, h6 {
 <li>
   <span class="upcoming-bullet"></span>
   <div>
-    <strong>Distributed Rate-Limited Cache Service</strong>
-    <div class="upcoming-sub">with Consistency Guarantees</div>
+    <strong>Feed Ranking Engine</strong>
+    <div class="upcoming-sub">with Distributed Scoring &amp; Cache Coherence</div>
   </div>
 </li>
 
 <li>
   <span class="upcoming-bullet"></span>
   <div>
-    <strong>Feed Ranking Engine</strong>
-    <div class="upcoming-sub">with Distributed Scoring &amp; Cache Coherence</div>
+    <strong>Carbon-Aware LLM Scheduling</strong>
+    <div class="upcoming-sub">promoting the mock carbon signal to real grid intensity data</div>
   </div>
 </li>
 

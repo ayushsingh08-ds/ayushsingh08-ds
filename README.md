@@ -1,118 +1,73 @@
-<!-- CUSTOM THEME HEADER BANNER -->
+<!-- Profile banner -->
 <div align="center">
-  <img src="assets/cards/header.svg" width="850" alt="Hi, I'm Ayush!" />
+
+<img src="assets/cards/header.svg" width="850" alt="Hi, I'm Ayush Singh — Building reliable distributed systems, streaming data infrastructure, and backend platforms.">
+
 </div>
-<!-- INFO BAR CARD ROW -->
-<table width="850" border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 15px; margin-bottom: 15px;">
-  <tr>
-    <td width="200" align="center"><img src="assets/cards/info_1.svg" width="200" height="95" /></td>
-    <td width="16">&nbsp;</td>
-    <td width="200" align="center"><img src="assets/cards/info_2.svg" width="200" height="95" /></td>
-    <td width="16">&nbsp;</td>
-    <td width="200" align="center"><img src="assets/cards/info_3.svg" width="200" height="95" /></td>
-    <td width="16">&nbsp;</td>
-    <td width="200" align="center"><img src="assets/cards/info_4.svg" width="200" height="95" /></td>
-  </tr>
-</table>
-<!-- MAIN GRID (LEFT & RIGHT COLUMNS) -->
-<table width="850" border="0" cellpadding="0" cellspacing="0" align="center">
-  <tr>
-    <!-- LEFT COLUMN (About, Stack, Principles, Progress) -->
-    <td width="300" valign="top">
-      <img src="assets/cards/about_me.svg" width="290" height="380" style="display: block; margin-bottom: 10px;" />
-      <!-- Clickable Action Buttons -->
-      <table width="290" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 15px;">
-        <tr>
-          <td width="138" align="center">
-            <a href="mailto:ayushsingh2005811@gmail.com">
-              <img src="assets/cards/btn_email.svg" width="138" height="40" alt="Email Me" />
-            </a>
-          </td>
-          <td width="14">&nbsp;</td>
-          <td width="138" align="center">
-            <a href="https://drive.google.com/file/d/1ZtA7NnBvqgq2d3lZ_0J9q3f2qWJ1-T5X/view?usp=sharing">
-              <img src="assets/cards/btn_resume.svg" width="138" height="40" alt="Resume" />
-            </a>
-          </td>
-        </tr>
-      </table>
-      <img src="assets/cards/tech_stack.svg" width="290" height="540" style="display: block; margin-bottom: 15px;" />
-      <img src="assets/cards/principles.svg" width="290" height="320" style="display: block; margin-bottom: 15px;" />
-      <img src="assets/cards/currently_building.svg" width="290" height="330" style="display: block;" />
-    </td>
-    <!-- GRID SPACER -->
-    <td width="30">&nbsp;</td>
-    <!-- RIGHT COLUMN (What I Build, Featured Projects, Analytics, Upcoming) -->
-    <td width="520" valign="top">
-      <img src="assets/cards/what_i_build.svg" width="510" height="320" style="display: block; margin-bottom: 15px;" />
-      <!-- Featured Projects (Fully Clickable) -->
-      <h3 style="font-family: 'Outfit', sans-serif; color: #2c1e1e; font-size: 15px; font-weight: 700; margin-top: 0; margin-bottom: 10px; padding: 0;">🚀 Featured Projects</h3>
-      <a href="https://github.com/ayushsingh08-ds/market-stream-ingestion-engine"><img src="assets/cards/project_0.svg" width="510" height="190" style="display: block; margin-bottom: 10px;" alt="Market Stream Ingestion Engine" /></a><a href="https://github.com/ayushsingh08-ds/notification-queue-service-with-reliability-guarantees"><img src="assets/cards/project_1.svg" width="510" height="190" style="display: block; margin-bottom: 10px;" alt="Notification-queue-service" /></a><a href="https://github.com/ayushsingh08-ds/client-mdm-observability-hub"><img src="assets/cards/project_2.svg" width="510" height="190" style="display: block; margin-bottom: 10px;" alt="Endpoint Observability Platform" /></a>
-      <table width="510" border="0" cellpadding="0" cellspacing="0" style="margin-top: 5px; margin-bottom: 20px;">
-        <tr>
-          <td align="right">
-            <a href="https://github.com/ayushsingh08-ds?tab=repositories" style="color: #b05a30; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; text-decoration: none;">
-              View all repositories ➔
-            </a>
-          </td>
-        </tr>
-      </table>
-      <!-- Live Styled GitHub Analytics -->
-      <h3 style="font-family: 'Outfit', sans-serif; color: #2c1e1e; font-size: 15px; font-weight: 700; margin-top: 0; margin-bottom: 10px; padding: 0;">📊 GitHub Analytics</h3>
-      <table width="510" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 15px;">
-        <tr>
-          <td width="250" valign="top">
-            <a href="https://github.com/ayushsingh08-ds">
-              <img src="https://github-readme-stats.vercel.app/api?username=ayushsingh08-ds&amp;show_icons=true&amp;theme=default&amp;bg_color=fffdfa&amp;border_color=e5dacf&amp;title_color=2c1e1e&amp;text_color=3c2f2f&amp;icon_color=b05a30&amp;border_radius=8" width="250" height="170" alt="GitHub Stats" />
-            </a>
-          </td>
-          <td width="10">&nbsp;</td>
-          <td width="250" valign="top">
-            <a href="https://github.com/ayushsingh08-ds">
-              <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ayushsingh08-ds&amp;layout=compact&amp;theme=default&amp;bg_color=fffdfa&amp;border_color=e5dacf&amp;title_color=2c1e1e&amp;text_color=3c2f2f&amp;icon_color=b05a30&amp;border_radius=8" width="250" height="170" alt="Top Languages" />
-            </a>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3" style="padding-top: 10px;">
-            <a href="https://github.com/ayushsingh08-ds">
-              <img src="https://streak-stats.demolab.com?user=ayushsingh08-ds&amp;theme=default&amp;background=fffdfa&amp;border=e5dacf&amp;stroke=b05a30&amp;ring=b05a30&amp;fire=b05a30&amp;currStreakNum=2c1e1e&amp;sideNums=3c2f2f&amp;sideLabels=7a6a65&amp;dates=9c8b86&amp;border_radius=8" width="510" height="330" alt="Streak Stats" />
-            </a>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3" style="padding-top: 10px;" align="center">
-            <img src="./profile-3d-contrib/profile-south-season-animate.svg" width="450" alt="3D Contributions Graph" />
-          </td>
-        </tr>
-      </table>
-      <img src="assets/cards/upcoming_projects.svg" width="510" height="210" style="display: block; margin-bottom: 15px;" />
-      <!-- Clickable Connect Social Icons -->
-      <table width="510" border="0" cellpadding="0" cellspacing="0" style="margin-top: 10px;">
-        <tr>
-          <td width="110">
-            <a href="https://github.com/ayushsingh08-ds">
-              <img src="assets/cards/icon_github.svg" width="110" height="32" alt="GitHub" />
-            </a>
-          </td>
-          <td width="90">&nbsp;</td>
-          <td width="110">
-            <a href="https://www.linkedin.com/in/ayush-singh-b7760a224/">
-              <img src="assets/cards/icon_linkedin.svg" width="110" height="32" alt="LinkedIn" />
-            </a>
-          </td>
-          <td width="90">&nbsp;</td>
-          <td width="110">
-            <a href="mailto:ayushsingh2005811@gmail.com">
-              <img src="assets/cards/icon_email.svg" width="110" height="32" alt="Email" />
-            </a>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<!-- FOOTER DECORATIVE BAR AND STICKY NOTE -->
-<div align="center" style="margin-top: 20px;">
-  <img src="assets/cards/footer.svg" width="850" height="110" alt="Footer Banner" />
+
+<!-- At a glance: education, location, what I'm open to, how to reach me -->
+<div align="center">
+
+<img src="assets/cards/info_1.svg" width="200" alt="Education: B.Tech in Computer Science and Engineering (Data Science) at Dayananda Sagar University"> <img src="assets/cards/info_2.svg" width="200" alt="Location: Bengaluru, India"> <img src="assets/cards/info_3.svg" width="200" alt="Open to: software development engineer, data engineering, backend and infrastructure roles"> <img src="assets/cards/info_4.svg" width="200" alt="Let's connect — always open to new opportunities. Email ayushsingh2005811@gmail.com">
+
+</div>
+
+<!-- About, actions, tech stack, principles, current work -->
+<div align="center">
+
+<img src="assets/cards/about_me.svg" width="290" alt="About Ayush Singh: reliable, scalable and observable systems — distributed systems, streaming pipelines, backend platforms and automation">
+
+<a href="mailto:ayushsingh2005811@gmail.com"><img src="assets/cards/btn_email.svg" width="138" alt="Email me at ayushsingh2005811@gmail.com"></a> <a href="https://drive.google.com/file/d/1ZtA7NnBvqgq2d3lZ_0J9q3f2qWJ1-T5X/view?usp=sharing"><img src="assets/cards/btn_resume.svg" width="138" alt="Open my resume"></a>
+
+<img src="assets/cards/tech_stack.svg" width="290" alt="Tech stack: Go, Java, Python, JavaScript, C++ and PostgreSQL, plus Kafka, gRPC, Redis, Docker, RabbitMQ, Kubernetes, Spark, Airflow, MongoDB, MySQL, AWS, Terraform, Prometheus and Grafana">
+
+<img src="assets/cards/principles.svg" width="290" alt="Engineering principles: Build for failure first. Prefer observability over assumptions. Measure before optimizing. Automate repetitive work. Simple architectures scale better.">
+
+<img src="assets/cards/currently_building.svg" width="290" alt="Currently building: Distributed Cache with RYW Consistency (90%); Lakehouse Gold Layer &amp; Data Contracts (70%); LLM Gateway Smart Routing (60%)">
+
+<img src="assets/cards/what_i_build.svg" width="510" alt="What I build: distributed systems, streaming infra, backend platforms, reliability eng.">
+
+</div>
+
+<h2 align="center">🚀 Featured Projects</h2>
+
+<div align="center">
+
+<a href="https://github.com/ayushsingh08-ds/market-stream-ingestion-engine"><img src="assets/cards/project_0.svg" width="510" alt="Market Stream Ingestion Engine — Real-time order-book ingestion on Redpanda (Kafka) with PySpark Structured Streaming and Delta Lake: strict schema validation, DLQ routing and VWAP over tumbling windows. Status: Done."></a>
+
+<a href="https://github.com/ayushsingh08-ds/notification-queue-service-with-reliability-guarantees"><img src="assets/cards/project_1.svg" width="510" alt="Notification Queue Service — Fault-tolerant Go message broker with per-key ordering, persistence, consumer groups, acks and exactly-once semantics (simulated), plus a load generator and monitoring stack. Status: Done."></a>
+
+<a href="https://github.com/ayushsingh08-ds/financial-market-lakehouse"><img src="assets/cards/project_2.svg" width="510" alt="Financial Market Lakehouse — Medallion-architecture (Bronze to Gold) market data platform: Airflow orchestration, a DuckDB warehouse, dbt models and Great Expectations quality gates, all reproducible locally. Status: Done."></a>
+
+<a href="https://github.com/ayushsingh08-ds/LLM-Efficiency-Engine"><img src="assets/cards/project_3.svg" width="510" alt="Cost &amp; Carbon-Aware LLM Gateway — LLM gateway with semantic caching (Redis exact-match plus Milvus similarity), multi-provider failover and cost-aware routing, backed by an offline benchmark and routing pipeline. Status: In progress."></a>
+
+<a href="https://github.com/ayushsingh08-ds/edge-cloud-predictive-maintenance"><img src="assets/cards/project_4.svg" width="510" alt="Edge-Cloud Predictive Maintenance — Research-backed smart-factory framework: CNN-LSTM remaining-useful-life estimation (RMSE 57.29), a SimPy digital twin and a Flutter dashboard for routing-aware what-if analysis. Status: Done."></a>
+
+<a href="https://github.com/ayushsingh08-ds?tab=repositories">View all repositories ➔</a>
+
+</div>
+
+<h2 align="center">📊 GitHub Analytics</h2>
+
+<div align="center">
+
+<img src="assets/cards/gh_stats.svg" width="510" alt="GitHub stats for ayushsingh08-ds: 23 public repositories, 105 stars and 38 followers">
+
+<img src="assets/cards/gh_langs.svg" width="510" alt="Most used languages across ayushsingh08-ds's public repositories by repository count: Python (8), JavaScript (3), HTML (3), TypeScript (2), Jupyter Notebook (2)">
+
+<a href="https://github.com/ayushsingh08-ds"><img src="https://streak-stats.demolab.com?user=ayushsingh08-ds&amp;theme=default&amp;background=fffdfa&amp;border=e5dacf&amp;stroke=b05a30&amp;ring=b05a30&amp;fire=b05a30&amp;currStreakNum=2c1e1e&amp;sideNums=3c2f2f&amp;sideLabels=7a6a65&amp;dates=9c8b86&amp;border_radius=8" width="510" alt="Contribution streak statistics for ayushsingh08-ds"></a>
+
+<img src="profile-3d-contrib/profile-south-season-animate.svg" width="510" alt="3D isometric graph of ayushsingh08-ds's contribution calendar for the past year">
+
+</div>
+
+<!-- Upcoming work, and where to find me -->
+<div align="center">
+
+<img src="assets/cards/upcoming_projects.svg" width="510" alt="Upcoming projects: Feed Ranking Engine with Distributed Scoring &amp; Cache Coherence; Carbon-Aware LLM Scheduling promoting the mock carbon signal to real grid intensity data">
+
+<a href="https://github.com/ayushsingh08-ds"><img src="assets/cards/icon_github.svg" width="110" alt="GitHub — ayushsingh08-ds"></a> <a href="https://www.linkedin.com/in/ayush-singh-b7760a224/"><img src="assets/cards/icon_linkedin.svg" width="110" alt="LinkedIn — Ayush Singh"></a> <a href="mailto:ayushsingh2005811@gmail.com"><img src="assets/cards/icon_email.svg" width="110" alt="Email me at ayushsingh2005811@gmail.com"></a>
+
+<img src="assets/cards/footer.svg" width="850" alt="Footer: First, solve the problem. Then, write the code. — John Johnson, with a sticky note reading: Code is like humor. When you have to explain it, it is bad.">
+
 </div>

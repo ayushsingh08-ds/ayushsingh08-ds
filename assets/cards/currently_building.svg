@@ -1,6 +1,6 @@
-<svg fill="none" viewBox="0 0 290 270" width="290" height="270" xmlns="http://www.w3.org/2000/svg">
-  <foreignObject x="0" y="0" width="290" height="270">
-    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 290px; height: 270px; box-sizing: border-box;">
+<svg fill="none" viewBox="0 0 290 330" width="290" height="330" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject x="0" y="0" width="290" height="330">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 290px; height: 330px; box-sizing: border-box;">
       <style>
         
 @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&amp;family=Inter:wght@300;400;500;600;700&amp;family=Outfit:wght@400;500;600;700;800&amp;family=Courier+Prime&amp;display=swap');
@@ -49,17 +49,17 @@ h1, h2, h3, h4, h5, h6 {
   
     <div class="progress-container">
       <div class="progress-header">
-        <span>Go Distributed Message Broker</span>
-        <span>100%</span>
+        <span>Distributed Cache with RYW Consistency</span>
+        <span>90%</span>
       </div>
       <div class="progress-bar-bg">
-        <div class="progress-bar-fill" style="background-color: #5b7c56; width: 100%;"></div>
+        <div class="progress-bar-fill" style="background-color: #d48a37; width: 90%;"></div>
       </div>
     </div>
     
     <div class="progress-container">
       <div class="progress-header">
-        <span>Notification Queue Service</span>
+        <span>Lakehouse Gold Layer &amp; Data Contracts</span>
         <span>70%</span>
       </div>
       <div class="progress-bar-bg">
@@ -69,21 +69,11 @@ h1, h2, h3, h4, h5, h6 {
     
     <div class="progress-container">
       <div class="progress-header">
-        <span>Distributed Cache Service</span>
-        <span>20%</span>
+        <span>LLM Gateway Smart Routing</span>
+        <span>60%</span>
       </div>
       <div class="progress-bar-bg">
-        <div class="progress-bar-fill" style="background-color: #3c2f2f; width: 20%;"></div>
-      </div>
-    </div>
-    
-    <div class="progress-container">
-      <div class="progress-header">
-        <span>Feed Ranking Engine</span>
-        <span>0%</span>
-      </div>
-      <div class="progress-bar-bg">
-        <div class="progress-bar-fill" style="background-color: transparent; width: 0%;"></div>
+        <div class="progress-bar-fill" style="background-color: #d48a37; width: 60%;"></div>
       </div>
     </div>
     

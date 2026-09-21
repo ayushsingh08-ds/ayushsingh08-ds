@@ -76,20 +76,16 @@
   ],
   "currently_building": [
     {
-      "name": "Go Distributed Message Broker",
-      "percentage": 100
+      "name": "Distributed Cache with RYW Consistency",
+      "percentage": 90
     },
     {
-      "name": "Notification Queue Service",
+      "name": "Lakehouse Gold Layer & Data Contracts",
       "percentage": 70
     },
     {
-      "name": "Distributed Cache Service",
-      "percentage": 20
-    },
-    {
-      "name": "Feed Ranking Engine",
-      "percentage": 0
+      "name": "LLM Gateway Smart Routing",
+      "percentage": 60
     }
   ],
   "what_i_build": [
@@ -114,11 +110,10 @@
     {
       "name": "Market Stream Ingestion Engine",
       "status": "Done",
-      "desc": "Real-time market data ingestion using Kafka, Spark Structured Streaming & Airflow with schema validation, DLQ and sub-200ms latency.",
+      "desc": "Real-time order-book ingestion on Redpanda (Kafka) with PySpark Structured Streaming and Delta Lake: strict schema validation, DLQ routing and VWAP over tumbling windows.",
       "tags": [
-        "Kafka",
-        "Spark",
-        "Airflow",
+        "Redpanda",
+        "PySpark",
         "Delta Lake",
         "Docker",
         "Python"
@@ -126,40 +121,66 @@
       "url": "https://github.com/ayushsingh08-ds/market-stream-ingestion-engine"
     },
     {
-      "name": "Notification-queue-service",
+      "name": "Notification Queue Service",
       "status": "Done",
-      "desc": "High-performance message broker in Go with per-key ordering, persistence, consumer groups, acks & exactly-once semantics (simulated).",
+      "desc": "Fault-tolerant Go message broker with per-key ordering, persistence, consumer groups, acks and exactly-once semantics (simulated), plus a load generator and monitoring stack.",
       "tags": [
         "Go",
         "gRPC",
         "BoltDB",
-        "Concurrency",
+        "Prometheus",
         "Docker"
       ],
       "url": "https://github.com/ayushsingh08-ds/notification-queue-service-with-reliability-guarantees"
     },
     {
-      "name": "Endpoint Observability Platform",
-      "status": "In progress",
-      "desc": "Real-time endpoint monitoring with Prometheus, Grafana, FastAPI and React dashboard for metrics, alerts and failure analytics.",
+      "name": "Financial Market Lakehouse",
+      "status": "Done",
+      "desc": "Medallion-architecture (Bronze to Gold) market data platform: Airflow orchestration, a DuckDB warehouse, dbt models and Great Expectations quality gates, all reproducible locally.",
       "tags": [
-        "Prometheus",
-        "Grafana",
-        "FastAPI",
-        "React",
+        "Airflow",
+        "dbt",
+        "DuckDB",
+        "Great Expectations",
         "Docker"
       ],
-      "url": "https://github.com/ayushsingh08-ds/client-mdm-observability-hub"
+      "url": "https://github.com/ayushsingh08-ds/financial-market-lakehouse"
+    },
+    {
+      "name": "Cost & Carbon-Aware LLM Gateway",
+      "status": "In progress",
+      "desc": "LLM gateway with semantic caching (Redis exact-match plus Milvus similarity), multi-provider failover and cost-aware routing, backed by an offline benchmark and routing pipeline.",
+      "tags": [
+        "FastAPI",
+        "Redis",
+        "Milvus",
+        "Prometheus",
+        "Python"
+      ],
+      "url": "https://github.com/ayushsingh08-ds/LLM-Efficiency-Engine"
+    },
+    {
+      "name": "Edge-Cloud Predictive Maintenance",
+      "status": "Done",
+      "desc": "Research-backed smart-factory framework: CNN-LSTM remaining-useful-life estimation (RMSE 57.29), a SimPy digital twin and a Flutter dashboard for routing-aware what-if analysis.",
+      "tags": [
+        "CNN-LSTM",
+        "SimPy",
+        "Flutter",
+        "FastAPI",
+        "SQLite"
+      ],
+      "url": "https://github.com/ayushsingh08-ds/edge-cloud-predictive-maintenance"
     }
   ],
   "upcoming_projects": [
     {
-      "name": "Distributed Rate-Limited Cache Service",
-      "desc": "with Consistency Guarantees"
-    },
-    {
       "name": "Feed Ranking Engine",
       "desc": "with Distributed Scoring & Cache Coherence"
+    },
+    {
+      "name": "Carbon-Aware LLM Scheduling",
+      "desc": "promoting the mock carbon signal to real grid intensity data"
     }
   ]
 }

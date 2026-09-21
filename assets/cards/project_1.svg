@@ -76,11 +76,11 @@ h1, h2, h3, h4, h5, h6 {
       </div>
       <div class="project-content">
         <div class="project-header-row">
-          <span class="project-name">Notification-queue-service</span>
-          <span class="badge badge-inprogress">Done</span>
+          <span class="project-name">Notification Queue Service</span>
+          <span class="badge badge-production">Done</span>
         </div>
-        <p class="project-desc">High-performance message broker in Go with per-key ordering, persistence, consumer groups, acks &amp; exactly-once semantics (simulated).</p>
-        <div class="project-tags"><span>Go</span><span>gRPC</span><span>BoltDB</span><span>Concurrency</span><span>Docker</span></div>
+        <p class="project-desc">Fault-tolerant Go message broker with per-key ordering, persistence, consumer groups, acks and exactly-once semantics (simulated), plus a load generator and monitoring stack.</p>
+        <div class="project-tags"><span>Go</span><span>gRPC</span><span>BoltDB</span><span>Prometheus</span><span>Docker</span></div>
       </div>
     </div>
     

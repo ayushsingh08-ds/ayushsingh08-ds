@@ -9,6 +9,9 @@ on:
       - 'generate.py'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -27,6 +30,10 @@ jobs:
           python-version: '3.10'
       
       - name: Run Profile Compiler
+        env:
+          # Authenticates the GitHub stats fetch so the daily build never falls
+          # back to cached numbers because of the 60/hour unauthenticated limit.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python generate.py
       

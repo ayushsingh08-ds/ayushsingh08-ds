@@ -1,0 +1,28 @@
+{
+  "public_repos": 23,
+  "followers": 38,
+  "stars": 105,
+  "languages": [
+    {
+      "name": "Python",
+      "repos": 8
+    },
+    {
+      "name": "JavaScript",
+      "repos": 3
+    },
+    {
+      "name": "HTML",
+      "repos": 3
+    },
+    {
+      "name": "TypeScript",
+      "repos": 2
+    },
+    {
+      "name": "Jupyter Notebook",
+      "repos": 2
+    }
+  ],
+  "fetched_at": "2026-09-21"
+}

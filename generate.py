@@ -1,10 +1,30 @@
 import os
 import json
 import base64
+import collections
+import datetime
 import re
 import urllib.request
 
-# Fetch LinkedIn Icon and base64-encode it
+# The devicon LinkedIn glyph, embedded as the fallback for the fetch below. The
+# fetch returns "" whenever the CDN is unreachable, and that empty string used to
+# be written straight into icon_linkedin.svg — a silently broken image in the
+# published README, produced by any build without network access.
+LINKEDIN_ICON_SVG = (
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">'
+    '<path fill="#0076b2" d="M116 3H12a8.91 8.91 0 00-9 8.8v104.42a8.91 8.91 0 009 8.78h104a8.93 8.93 0 009-8.81V11.77A8.93 8.93 0 00116 3z"/>'
+    '<path fill="#fff" d="M21.06 48.73h18.11V107H21.06zm9.06-29a10.5 10.5 0 11-10.5 10.49 10.5 10.5 0 0110.5-10.49M50.53 48.73h17.36v8h.24c2.42-4.58 8.32-9.41 17.13-9.41C103.6 47.28 107 59.35 107 75v32H88.89V78.65c0-6.75-.12-15.44-9.41-15.44s-10.87 7.36-10.87 15V107H50.53z"/>'
+    '</svg>'
+)
+
+
+def as_data_uri(svg_str):
+    return "data:image/svg+xml;base64," + base64.b64encode(svg_str.encode('utf-8')).decode('utf-8')
+
+
+# Fetch the LinkedIn Icon, falling back to the embedded copy so the card is
+# always complete. The fallback is the same glyph, so an offline build and an
+# online build produce identical bytes.
 def fetch_linkedin_icon():
     url = "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg"
     try:
@@ -15,11 +35,11 @@ def fetch_linkedin_icon():
                 svg_str = svg_content.decode('utf-8')
                 svg_str = re.sub(r'<\?xml.*?\?>', '', svg_str)
                 svg_str = re.sub(r'<!--.*?-->', '', svg_str, flags=re.DOTALL)
-                b64_data = base64.b64encode(svg_str.encode('utf-8')).decode('utf-8')
-                return f"data:image/svg+xml;base64,{b64_data}"
+                return as_data_uri(svg_str.strip())
     except Exception as e:
-        print(f"Error fetching LinkedIn icon: {e}")
-    return ""
+        print(f"Warning: LinkedIn icon fetch failed ({e}); using the embedded copy")
+    return as_data_uri(LINKEDIN_ICON_SVG)
+
 
 linkedin_b64 = fetch_linkedin_icon()
 
@@ -106,6 +126,49 @@ h1, h2, h3, h4, h5, h6 {
   color: #2c1e1e;
 }
 """
+
+# ----------------- Card Geometry -----------------
+# Single source of truth for every card's intrinsic size. save_svg() and the
+# README template both read from here, so a rendered <img> can never disagree
+# with the viewBox of the file it points at.
+CARD_SIZES = {
+    "header": (850, 380),
+    "info": (200, 95),
+    "about_me": (290, 380),
+    "btn": (138, 40),
+    "tech_stack": (290, 540),
+    "principles": (290, 320),
+    "currently_building": (290, 330),
+    "what_i_build": (510, 330),
+    "project": (510, 190),
+    "upcoming_projects": (510, 210),
+    "icon": (110, 32),
+    "footer": (850, 110),
+    "gh_stats": (510, 210),
+    "gh_langs": (510, 210),
+}
+
+# Flattened aliases so the README template can reference sizes without nesting
+# quotes inside the f-string expressions.
+#
+# Only widths are pinned in the markup. A fixed `height` attribute combined with
+# the host's `max-width: 100%` squashes an image on narrow viewports (GitHub's
+# markdown body is ~830px on desktop), so cards are rendered at their design
+# width and scale proportionally from there.
+HEADER_W = CARD_SIZES["header"][0]
+INFO_W, INFO_H = CARD_SIZES["info"]
+ABOUT_W = CARD_SIZES["about_me"][0]
+BTN_W = CARD_SIZES["btn"][0]
+TECH_W = CARD_SIZES["tech_stack"][0]
+PRINCIPLES_W = CARD_SIZES["principles"][0]
+BUILD_W = CARD_SIZES["currently_building"][0]
+WHAT_W, WHAT_H = CARD_SIZES["what_i_build"]
+PROJECT_W, PROJECT_H = CARD_SIZES["project"]
+UPCOMING_W = CARD_SIZES["upcoming_projects"][0]
+ICON_W = CARD_SIZES["icon"][0]
+FOOTER_W = CARD_SIZES["footer"][0]
+GH_STATS = CARD_SIZES["gh_stats"]
+GH_LANGS = CARD_SIZES["gh_langs"]
 
 def save_svg(filename, width, height, content):
     filepath = os.path.join(CARDS_DIR, filename)
@@ -217,11 +280,11 @@ header_content = f"""
   </div>
 </div>
 """
-save_svg("header.svg", 850, 380, header_content)
+save_svg("header.svg", *CARD_SIZES["header"], header_content)
 
 # ----------------- 2. Info Cards (Separate SVGs) -----------------
 # Card 1: Graduation
-save_svg("info_1.svg", 200, 95, f"""
+save_svg("info_1.svg", *CARD_SIZES["info"], f"""
 <style>
   .info-box {{
     background-color: #fffdfa;
@@ -231,7 +294,7 @@ save_svg("info_1.svg", 200, 95, f"""
     display: flex;
     align-items: center;
     gap: 10px;
-    height: 95px;
+    height: {INFO_H}px;
     box-sizing: border-box;
   }}
   .info-icon {{ width: 25px; height: 25px; flex-shrink: 0; }}
@@ -249,7 +312,7 @@ save_svg("info_1.svg", 200, 95, f"""
 """)
 
 # Card 2: Location
-save_svg("info_2.svg", 200, 95, f"""
+save_svg("info_2.svg", *CARD_SIZES["info"], f"""
 <style>
   .info-box {{
     background-color: #fffdfa;
@@ -259,7 +322,7 @@ save_svg("info_2.svg", 200, 95, f"""
     display: flex;
     align-items: center;
     gap: 10px;
-    height: 95px;
+    height: {INFO_H}px;
     box-sizing: border-box;
   }}
   .info-icon {{ width: 25px; height: 25px; flex-shrink: 0; }}
@@ -277,7 +340,7 @@ save_svg("info_2.svg", 200, 95, f"""
 """)
 
 # Card 3: Open to
-save_svg("info_3.svg", 200, 95, f"""
+save_svg("info_3.svg", *CARD_SIZES["info"], f"""
 <style>
   .info-box {{
     background-color: #fffdfa;
@@ -287,7 +350,7 @@ save_svg("info_3.svg", 200, 95, f"""
     display: flex;
     align-items: center;
     gap: 10px;
-    height: 95px;
+    height: {INFO_H}px;
     box-sizing: border-box;
   }}
   .info-icon {{ width: 25px; height: 25px; flex-shrink: 0; }}
@@ -305,7 +368,7 @@ save_svg("info_3.svg", 200, 95, f"""
 """)
 
 # Card 4: Let's Connect
-save_svg("info_4.svg", 200, 95, f"""
+save_svg("info_4.svg", *CARD_SIZES["info"], f"""
 <style>
   .info-box {{
     background-color: #fffdfa;
@@ -315,7 +378,7 @@ save_svg("info_4.svg", 200, 95, f"""
     display: flex;
     align-items: center;
     gap: 10px;
-    height: 95px;
+    height: {INFO_H}px;
     box-sizing: border-box;
   }}
   .info-icon {{ width: 25px; height: 25px; flex-shrink: 0; }}
@@ -353,10 +416,10 @@ about_me_content = f"""
   </ul>
 </div>
 """
-save_svg("about_me.svg", 290, 380, about_me_content)
+save_svg("about_me.svg", *CARD_SIZES["about_me"], about_me_content)
 
 # ----------------- 4. Action Buttons -----------------
-save_svg("btn_email.svg", 138, 40, """
+save_svg("btn_email.svg", *CARD_SIZES["btn"], """
 <style>
   .btn {
     width: 138px;
@@ -380,7 +443,7 @@ save_svg("btn_email.svg", 138, 40, """
 </div>
 """)
 
-save_svg("btn_resume.svg", 138, 40, """
+save_svg("btn_resume.svg", *CARD_SIZES["btn"], """
 <style>
   .btn {
     width: 138px;
@@ -454,7 +517,7 @@ tech_stack_content = f"""
   </div>
 </div>
 """
-save_svg("tech_stack.svg", 290, 540, tech_stack_content)
+save_svg("tech_stack.svg", *CARD_SIZES["tech_stack"], tech_stack_content)
 
 # ----------------- 6. Engineering Principles SVG -----------------
 principles_items = "".join([f"""
@@ -482,7 +545,7 @@ principles_content = f"""
   <div class="coffee-stain-inner"></div>
 </div>
 """
-save_svg("principles.svg", 290, 320, principles_content)
+save_svg("principles.svg", *CARD_SIZES["principles"], principles_content)
 
 # ----------------- 7. Currently Building SVG -----------------
 progress_items = []
@@ -514,7 +577,7 @@ currently_building_content = f"""
   {"".join(progress_items)}
 </div>
 """
-save_svg("currently_building.svg", 290, 270, currently_building_content)
+save_svg("currently_building.svg", *CARD_SIZES["currently_building"], currently_building_content)
 
 # ----------------- 8. What I Build SVG -----------------
 what_items = []
@@ -547,14 +610,14 @@ what_i_build_content = f"""
   .what-title {{ font-size: 14.5px; font-weight: 700; color: #2c1e1e; }}
   .what-desc {{ font-size: 12.5px; line-height: 1.5; color: #7a6a65; margin: 0; }}
 </style>
-<div class="card" style="height: 330px; box-sizing: border-box;">
+<div class="card" style="height: {WHAT_H}px; box-sizing: border-box;">
   <h2 class="card-title">💻 What I Build</h2>
   <div class="what-grid">
     {"".join(what_items)}
   </div>
 </div>
 """
-save_svg("what_i_build.svg", 510, 330, what_i_build_content)
+save_svg("what_i_build.svg", *CARD_SIZES["what_i_build"], what_i_build_content)
 
 # ----------------- 9. Featured Projects (Separate Clickable Cards) -----------------
 project_icons = [
@@ -564,8 +627,16 @@ project_icons = [
     '<rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>'
 ]
 
+# Finished work previously got the in-progress badge, because only the literal
+# status "Production" was treated as green.
+COMPLETE_STATUSES = {"production", "done", "complete", "completed", "shipped"}
+
 for idx, project in enumerate(profile["featured_projects"]):
-    badge_cls = "badge-production" if project["status"] == "Production" else "badge-inprogress"
+    badge_cls = (
+        "badge-production"
+        if project["status"].strip().lower() in COMPLETE_STATUSES
+        else "badge-inprogress"
+    )
     tags_html = "".join([f"<span>{tag}</span>" for tag in project["tags"]])
     icon_d = project_icons[idx % len(project_icons)]
     
@@ -578,7 +649,7 @@ for idx, project in enumerate(profile["featured_projects"]):
         padding: 14px;
         display: flex;
         gap: 14px;
-        height: 190px;
+        height: {PROJECT_H}px;
         box-sizing: border-box;
       }}
       .project-icon-box {{
@@ -616,7 +687,7 @@ for idx, project in enumerate(profile["featured_projects"]):
       </div>
     </div>
     """
-    save_svg(f"project_{idx}.svg", 510, 190, project_card_content)
+    save_svg(f"project_{idx}.svg", *CARD_SIZES["project"], project_card_content)
 
 # ----------------- 10. Upcoming Projects SVG -----------------
 upcoming_items = "".join([f"""
@@ -644,10 +715,10 @@ upcoming_content = f"""
   </ul>
 </div>
 """
-save_svg("upcoming_projects.svg", 510, 210, upcoming_content)
+save_svg("upcoming_projects.svg", *CARD_SIZES["upcoming_projects"], upcoming_content)
 
 # ----------------- 11. Social & Connect Buttons -----------------
-save_svg("icon_github.svg", 110, 32, f"""
+save_svg("icon_github.svg", *CARD_SIZES["icon"], f"""
 <style>
   .icon-box {{
     background-color: #fffdfa;
@@ -672,7 +743,7 @@ save_svg("icon_github.svg", 110, 32, f"""
 </div>
 """)
 
-save_svg("icon_linkedin.svg", 110, 32, f"""
+save_svg("icon_linkedin.svg", *CARD_SIZES["icon"], f"""
 <style>
   .icon-box {{
     background-color: #fffdfa;
@@ -697,7 +768,7 @@ save_svg("icon_linkedin.svg", 110, 32, f"""
 </div>
 """)
 
-save_svg("icon_email.svg", 110, 32, """
+save_svg("icon_email.svg", *CARD_SIZES["icon"], """
 <style>
   .icon-box {
     background-color: #fffdfa;
@@ -723,7 +794,7 @@ save_svg("icon_email.svg", 110, 32, """
 """)
 
 # ----------------- 12. Footer Quote & Sticky Note -----------------
-save_svg("footer.svg", 850, 110, """
+save_svg("footer.svg", *CARD_SIZES["footer"], """
 <style>
   .footer-container {
     width: 850px;
@@ -798,125 +869,325 @@ save_svg("footer.svg", 850, 110, """
 </div>
 """)
 
+# ----------------- Derived profile constants -----------------
+GITHUB_URL = profile["about_me"]["github_url"]
+GITHUB_USER = GITHUB_URL.split("/")[-1]
+
+# ----------------- 13. GitHub analytics (rendered locally) -----------------
+# These numbers used to be two images served by github-readme-stats.vercel.app.
+# That is a third-party deployment with no uptime guarantee: when it was paused
+# the entire analytics section rendered as broken images, alt text and all. The
+# numbers are fetched here instead, cached beside the other assets, and drawn as
+# local SVGs in the same theme as every other card, so the README only ever
+# depends on this repository.
+GITHUB_STATS_JSON = os.path.join(WORKSPACE_DIR, "assets", "github_stats.json")
+
+# Used when there is no cache and no network, so a build still produces a
+# complete README. Refreshed values are written to GITHUB_STATS_JSON.
+DEFAULT_GITHUB_STATS = {
+    "public_repos": 23,
+    "followers": 38,
+    "stars": 105,
+    "languages": [
+        {"name": "Python", "repos": 8},
+        {"name": "JavaScript", "repos": 3},
+        {"name": "HTML", "repos": 3},
+        {"name": "TypeScript", "repos": 2},
+        {"name": "Jupyter Notebook", "repos": 2},
+    ],
+    "fetched_at": "",
+}
+
+
+def fetch_github_stats():
+    """Refresh repository stats from the GitHub API, falling back to the cache."""
+    cached = {}
+    if os.path.exists(GITHUB_STATS_JSON):
+        with open(GITHUB_STATS_JSON, "r", encoding="utf-8") as cf:
+            cached = json.load(cf)
+
+    token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
+    headers = {
+        "User-Agent": "ayushsingh08-ds-profile-generator",
+        "Accept": "application/vnd.github+json",
+    }
+    if token:
+        headers["Authorization"] = "Bearer " + token
+
+    def api_get(url):
+        request = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(request, timeout=10) as response:
+            return json.loads(response.read().decode("utf-8"))
+
+    try:
+        user = api_get("https://api.github.com/users/" + GITHUB_USER)
+        repos = [
+            repo
+            for repo in api_get(
+                "https://api.github.com/users/%s/repos?per_page=100&sort=pushed" % GITHUB_USER
+            )
+            if not repo["fork"]
+        ]
+        languages = collections.Counter(repo["language"] for repo in repos if repo["language"])
+        stats = {
+            "public_repos": user["public_repos"],
+            "followers": user["followers"],
+            "stars": sum(repo["stargazers_count"] for repo in repos),
+            "languages": [
+                {"name": name, "repos": count} for name, count in languages.most_common(5)
+            ],
+            "fetched_at": datetime.date.today().isoformat(),
+        }
+        with open(GITHUB_STATS_JSON, "w", encoding="utf-8") as sf:
+            json.dump(stats, sf, indent=2)
+            sf.write("\n")
+        print("GitHub stats refreshed (%s)" % stats["fetched_at"])
+        return stats
+    except Exception as exc:
+        print("Warning: GitHub stats fetch failed (%s)" % exc)
+        if cached:
+            print("Using cached stats from %s" % (cached.get("fetched_at") or "an earlier build"))
+        return cached or DEFAULT_GITHUB_STATS
+
+
+GITHUB_STATS = fetch_github_stats()
+
+stat_tiles = "".join(
+    """
+    <div class="stat-tile">
+      <div class="stat-value">%s</div>
+      <div class="stat-label">%s</div>
+    </div>
+    """
+    % (value, label)
+    for value, label in [
+        (GITHUB_STATS["public_repos"], "Public repositories"),
+        (GITHUB_STATS["stars"], "Stars earned"),
+        (GITHUB_STATS["followers"], "Followers"),
+        (len(GITHUB_STATS["languages"]), "Languages used"),
+    ]
+)
+
+stats_footer = (
+    "Updated %s" % GITHUB_STATS["fetched_at"]
+    if GITHUB_STATS.get("fetched_at")
+    else "Snapshot stats"
+)
+
+gh_stats_content = f"""
+<style>
+  .card-title {{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }}
+  .card-note {{ font-size: 11px; font-weight: 500; color: #9c8b86; }}
+  .stat-grid {{ display: flex; gap: 10px; }}
+  .stat-tile {{
+    flex: 1;
+    background-color: #f4ebe1;
+    border: 1px solid #e5dacf;
+    border-radius: 8px;
+    padding: 12px 8px;
+    text-align: center;
+  }}
+  .stat-value {{
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: #2c1e1e;
+  }}
+  .stat-label {{ font-size: 11px; color: #7a6a65; margin-top: 3px; }}
+  .stat-foot {{ margin-top: 14px; font-size: 10.5px; color: #9c8b86; text-align: center; }}
+</style>
+<div class="card" style="height: {GH_STATS[1]}px; box-sizing: border-box;">
+  <h2 class="card-title">📊 GitHub Stats <span class="card-note">github.com/{GITHUB_USER}</span></h2>
+  <div class="stat-grid">{stat_tiles}
+  </div>
+  <div class="stat-foot">{stats_footer}</div>
+</div>
+"""
+save_svg("gh_stats.svg", *GH_STATS, gh_stats_content)
+
+max_repos = max(language["repos"] for language in GITHUB_STATS["languages"]) or 1
+lang_rows = "".join(
+    """
+    <div class="lang-row">
+      <span class="lang-name">{name}</span>
+      <span class="lang-track"><span class="lang-fill" style="width: {width}%"></span></span>
+      <span class="lang-count">{repos}</span>
+    </div>
+    """.format(name=language["name"], width=round(100 * language["repos"] / max_repos), repos=language["repos"])
+    for language in GITHUB_STATS["languages"]
+)
+
+gh_langs_content = f"""
+<style>
+  .card-note {{ font-size: 11px; font-weight: 500; color: #9c8b86; }}
+  .lang-row {{ display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }}
+  .lang-name {{ width: 110px; font-size: 12.5px; color: #3c2f2f; }}
+  .lang-track {{
+    flex: 1;
+    height: 9px;
+    background-color: #e5dacf;
+    border-radius: 4.5px;
+    overflow: hidden;
+  }}
+  .lang-fill {{ display: block; height: 100%; background-color: #b05a30; border-radius: 4.5px; }}
+  .lang-count {{
+    width: 26px;
+    text-align: right;
+    font-family: 'Courier Prime', monospace;
+    font-size: 11.5px;
+    color: #7a6a65;
+  }}
+</style>
+<div class="card" style="height: {GH_LANGS[1]}px; box-sizing: border-box;">
+  <h2 class="card-title">🧩 Top Languages <span class="card-note">repositories per language</span></h2>
+  <div>{lang_rows}
+  </div>
+</div>
+"""
+save_svg("gh_langs.svg", *GH_LANGS, gh_langs_content)
+
+# ----------------- 14. Alt text for every card -----------------
+# Assembled from profile.json wherever the card's content is drawn from it, so
+# the accessible description cannot drift from the data it describes. The
+# at-a-glance cards and the footer are rendered from literals in this file, so
+# their descriptions are literals here too.
+
+
+def as_sentence(text):
+    """Normalise a profile.json fragment so alt text reads as whole sentences."""
+    text = text.strip()
+    return text if text.endswith((".", "!", "?")) else text + "."
+
+
+ALT_TEXT = {
+    "header": f"Hi, I'm {profile['name']} — {profile['role']}",
+    "info_1": "Education: B.Tech in Computer Science and Engineering (Data Science) at Dayananda Sagar University",
+    "info_2": "Location: Bengaluru, India",
+    "info_3": "Open to: software development engineer, data engineering, backend and infrastructure roles",
+    "info_4": f"Let's connect — always open to new opportunities. Email {profile['about_me']['email']}",
+    # Alt text is read aloud in full, so these stay short: the cards themselves
+    # are the detail, the description is the summary.
+    "about_me": (
+        f"About {profile['name']}: reliable, scalable and observable systems — "
+        f"distributed systems, streaming pipelines, backend platforms and automation"
+    ),
+    "btn_email": f"Email me at {profile['about_me']['email']}",
+    "btn_resume": "Open my resume",
+    "tech_stack": (
+        "Tech stack: Go, Java, Python, JavaScript, C++ and PostgreSQL, plus Kafka, gRPC, "
+        "Redis, Docker, RabbitMQ, Kubernetes, Spark, Airflow, MongoDB, MySQL, AWS, "
+        "Terraform, Prometheus and Grafana"
+    ),
+    "principles": "Engineering principles: "
+    + " ".join(as_sentence(item) for item in profile["principles"]),
+    "currently_building": "Currently building: " + "; ".join(
+        "%s (%d%%)" % (item["name"], item["percentage"])
+        for item in profile["currently_building"]
+    ),
+    "what_i_build": "What I build: "
+    + ", ".join(item["title"].lower() for item in profile["what_i_build"]),
+    "upcoming_projects": "Upcoming projects: " + "; ".join(
+        "%s %s" % (item["name"], item["desc"]) for item in profile["upcoming_projects"]
+    ),
+    "stats": (
+        f"GitHub stats for {GITHUB_USER}: "
+        f"{GITHUB_STATS['public_repos']} public repositories, "
+        f"{GITHUB_STATS['stars']} stars and {GITHUB_STATS['followers']} followers"
+    ),
+    "top_langs": "Most used languages across %s's public repositories by repository count: %s"
+    % (
+        GITHUB_USER,
+        ", ".join("%s (%d)" % (l["name"], l["repos"]) for l in GITHUB_STATS["languages"]),
+    ),
+    "streak": f"Contribution streak statistics for {GITHUB_USER}",
+    "contrib_3d": f"3D isometric graph of {GITHUB_USER}'s contribution calendar for the past year",
+    "footer": (
+        "Footer: First, solve the problem. Then, write the code. — John Johnson, "
+        "with a sticky note reading: Code is like humor. When you have to explain it, it is bad."
+    ),
+}
+
+# Each featured project is its own paragraph, so the cards keep the same
+# vertical rhythm as the rest of the page instead of butting together.
+PROJECT_LINKS = "\n\n".join(
+    f'<a href="{project["url"]}">'
+    f'<img src="assets/cards/project_{idx}.svg" width="{PROJECT_W}" '
+    f'alt="{project["name"]} — {as_sentence(project["desc"])} Status: {project["status"]}.">'
+    f'</a>'
+    for idx, project in enumerate(profile["featured_projects"])
+)
+
 # ----------------- README.md Generator -----------------
 
-readme_template = f"""<!-- CUSTOM THEME HEADER BANNER -->
+readme_template = f"""<!-- Profile banner -->
 <div align="center">
-  <img src="assets/cards/header.svg" width="850" alt="Hi, I'm Ayush!" />
+
+<img src="assets/cards/header.svg" width="{HEADER_W}" alt="{ALT_TEXT["header"]}">
+
 </div>
-<!-- INFO BAR CARD ROW -->
-<table width="850" border="0" cellpadding="0" cellspacing="0" align="center" style="margin-top: 15px; margin-bottom: 15px;">
-  <tr>
-    <td width="200" align="center"><img src="assets/cards/info_1.svg" width="200" height="95" /></td>
-    <td width="16">&nbsp;</td>
-    <td width="200" align="center"><img src="assets/cards/info_2.svg" width="200" height="95" /></td>
-    <td width="16">&nbsp;</td>
-    <td width="200" align="center"><img src="assets/cards/info_3.svg" width="200" height="95" /></td>
-    <td width="16">&nbsp;</td>
-    <td width="200" align="center"><img src="assets/cards/info_4.svg" width="200" height="95" /></td>
-  </tr>
-</table>
-<!-- MAIN GRID (LEFT & RIGHT COLUMNS) -->
-<table width="850" border="0" cellpadding="0" cellspacing="0" align="center">
-  <tr>
-    <!-- LEFT COLUMN (About, Stack, Principles, Progress) -->
-    <td width="300" valign="top">
-      <img src="assets/cards/about_me.svg" width="290" height="380" style="display: block; margin-bottom: 10px;" />
-      <!-- Clickable Action Buttons -->
-      <table width="290" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 15px;">
-        <tr>
-          <td width="138" align="center">
-            <a href="mailto:{profile["about_me"]["email"]}">
-              <img src="assets/cards/btn_email.svg" width="138" height="40" alt="Email Me" />
-            </a>
-          </td>
-          <td width="14">&nbsp;</td>
-          <td width="138" align="center">
-            <a href="{profile["about_me"]["resume_url"]}">
-              <img src="assets/cards/btn_resume.svg" width="138" height="40" alt="Resume" />
-            </a>
-          </td>
-        </tr>
-      </table>
-      <img src="assets/cards/tech_stack.svg" width="290" height="540" style="display: block; margin-bottom: 15px;" />
-      <img src="assets/cards/principles.svg" width="290" height="320" style="display: block; margin-bottom: 15px;" />
-      <img src="assets/cards/currently_building.svg" width="290" height="330" style="display: block;" />
-    </td>
-    <!-- GRID SPACER -->
-    <td width="30">&nbsp;</td>
-    <!-- RIGHT COLUMN (What I Build, Featured Projects, Analytics, Upcoming) -->
-    <td width="520" valign="top">
-      <img src="assets/cards/what_i_build.svg" width="510" height="320" style="display: block; margin-bottom: 15px;" />
-      <!-- Featured Projects (Fully Clickable) -->
-      <h3 style="font-family: 'Outfit', sans-serif; color: #2c1e1e; font-size: 15px; font-weight: 700; margin-top: 0; margin-bottom: 10px; padding: 0;">🚀 Featured Projects</h3>
-      {"".join([f'''<a href="{project["url"]}"><img src="assets/cards/project_{idx}.svg" width="510" height="190" style="display: block; margin-bottom: 10px;" alt="{project["name"]}" /></a>''' for idx, project in enumerate(profile["featured_projects"])])}
-      <table width="510" border="0" cellpadding="0" cellspacing="0" style="margin-top: 5px; margin-bottom: 20px;">
-        <tr>
-          <td align="right">
-            <a href="https://github.com/{profile["about_me"]["github_url"].split('/')[-1]}?tab=repositories" style="color: #b05a30; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; text-decoration: none;">
-              View all repositories ➔
-            </a>
-          </td>
-        </tr>
-      </table>
-      <!-- Live Styled GitHub Analytics -->
-      <h3 style="font-family: 'Outfit', sans-serif; color: #2c1e1e; font-size: 15px; font-weight: 700; margin-top: 0; margin-bottom: 10px; padding: 0;">📊 GitHub Analytics</h3>
-      <table width="510" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 15px;">
-        <tr>
-          <td width="250" valign="top">
-            <a href="{profile["about_me"]["github_url"]}">
-              <img src="https://github-readme-stats.vercel.app/api?username={profile["about_me"]["github_url"].split('/')[-1]}&amp;show_icons=true&amp;theme=default&amp;bg_color=fffdfa&amp;border_color=e5dacf&amp;title_color=2c1e1e&amp;text_color=3c2f2f&amp;icon_color=b05a30&amp;border_radius=8" width="250" height="170" alt="GitHub Stats" />
-            </a>
-          </td>
-          <td width="10">&nbsp;</td>
-          <td width="250" valign="top">
-            <a href="{profile["about_me"]["github_url"]}">
-              <img src="https://github-readme-stats.vercel.app/api/top-langs/?username={profile["about_me"]["github_url"].split('/')[-1]}&amp;layout=compact&amp;theme=default&amp;bg_color=fffdfa&amp;border_color=e5dacf&amp;title_color=2c1e1e&amp;text_color=3c2f2f&amp;icon_color=b05a30&amp;border_radius=8" width="250" height="170" alt="Top Languages" />
-            </a>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3" style="padding-top: 10px;">
-            <a href="{profile["about_me"]["github_url"]}">
-              <img src="https://streak-stats.demolab.com?user={profile["about_me"]["github_url"].split('/')[-1]}&amp;theme=default&amp;background=fffdfa&amp;border=e5dacf&amp;stroke=b05a30&amp;ring=b05a30&amp;fire=b05a30&amp;currStreakNum=2c1e1e&amp;sideNums=3c2f2f&amp;sideLabels=7a6a65&amp;dates=9c8b86&amp;border_radius=8" width="510" height="330" alt="Streak Stats" />
-            </a>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3" style="padding-top: 10px;" align="center">
-            <img src="./profile-3d-contrib/profile-south-season-animate.svg" width="450" alt="3D Contributions Graph" />
-          </td>
-        </tr>
-      </table>
-      <img src="assets/cards/upcoming_projects.svg" width="510" height="210" style="display: block; margin-bottom: 15px;" />
-      <!-- Clickable Connect Social Icons -->
-      <table width="510" border="0" cellpadding="0" cellspacing="0" style="margin-top: 10px;">
-        <tr>
-          <td width="110">
-            <a href="{profile["about_me"]["github_url"]}">
-              <img src="assets/cards/icon_github.svg" width="110" height="32" alt="GitHub" />
-            </a>
-          </td>
-          <td width="90">&nbsp;</td>
-          <td width="110">
-            <a href="{profile["about_me"]["linkedin_url"]}">
-              <img src="assets/cards/icon_linkedin.svg" width="110" height="32" alt="LinkedIn" />
-            </a>
-          </td>
-          <td width="90">&nbsp;</td>
-          <td width="110">
-            <a href="mailto:{profile["about_me"]["email"]}">
-              <img src="assets/cards/icon_email.svg" width="110" height="32" alt="Email" />
-            </a>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<!-- FOOTER DECORATIVE BAR AND STICKY NOTE -->
-<div align="center" style="margin-top: 20px;">
-  <img src="assets/cards/footer.svg" width="850" height="110" alt="Footer Banner" />
+
+<!-- At a glance: education, location, what I'm open to, how to reach me -->
+<div align="center">
+
+<img src="assets/cards/info_1.svg" width="{INFO_W}" alt="{ALT_TEXT["info_1"]}"> <img src="assets/cards/info_2.svg" width="{INFO_W}" alt="{ALT_TEXT["info_2"]}"> <img src="assets/cards/info_3.svg" width="{INFO_W}" alt="{ALT_TEXT["info_3"]}"> <img src="assets/cards/info_4.svg" width="{INFO_W}" alt="{ALT_TEXT["info_4"]}">
+
+</div>
+
+<!-- About, actions, tech stack, principles, current work -->
+<div align="center">
+
+<img src="assets/cards/about_me.svg" width="{ABOUT_W}" alt="{ALT_TEXT["about_me"]}">
+
+<a href="mailto:{profile["about_me"]["email"]}"><img src="assets/cards/btn_email.svg" width="{BTN_W}" alt="{ALT_TEXT["btn_email"]}"></a> <a href="{profile["about_me"]["resume_url"]}"><img src="assets/cards/btn_resume.svg" width="{BTN_W}" alt="{ALT_TEXT["btn_resume"]}"></a>
+
+<img src="assets/cards/tech_stack.svg" width="{TECH_W}" alt="{ALT_TEXT["tech_stack"]}">
+
+<img src="assets/cards/principles.svg" width="{PRINCIPLES_W}" alt="{ALT_TEXT["principles"]}">
+
+<img src="assets/cards/currently_building.svg" width="{BUILD_W}" alt="{ALT_TEXT["currently_building"]}">
+
+<img src="assets/cards/what_i_build.svg" width="{WHAT_W}" alt="{ALT_TEXT["what_i_build"]}">
+
+</div>
+
+<h2 align="center">🚀 Featured Projects</h2>
+
+<div align="center">
+
+{PROJECT_LINKS}
+
+<a href="https://github.com/{GITHUB_USER}?tab=repositories">View all repositories ➔</a>
+
+</div>
+
+<h2 align="center">📊 GitHub Analytics</h2>
+
+<div align="center">
+
+<img src="assets/cards/gh_stats.svg" width="{GH_STATS[0]}" alt="{ALT_TEXT["stats"]}">
+
+<img src="assets/cards/gh_langs.svg" width="{GH_LANGS[0]}" alt="{ALT_TEXT["top_langs"]}">
+
+<a href="{GITHUB_URL}"><img src="https://streak-stats.demolab.com?user={GITHUB_USER}&amp;theme=default&amp;background=fffdfa&amp;border=e5dacf&amp;stroke=b05a30&amp;ring=b05a30&amp;fire=b05a30&amp;currStreakNum=2c1e1e&amp;sideNums=3c2f2f&amp;sideLabels=7a6a65&amp;dates=9c8b86&amp;border_radius=8" width="{WHAT_W}" alt="{ALT_TEXT["streak"]}"></a>
+
+<img src="profile-3d-contrib/profile-south-season-animate.svg" width="{WHAT_W}" alt="{ALT_TEXT["contrib_3d"]}">
+
+</div>
+
+<!-- Upcoming work, and where to find me -->
+<div align="center">
+
+<img src="assets/cards/upcoming_projects.svg" width="{UPCOMING_W}" alt="{ALT_TEXT["upcoming_projects"]}">
+
+<a href="{GITHUB_URL}"><img src="assets/cards/icon_github.svg" width="{ICON_W}" alt="GitHub — {GITHUB_USER}"></a> <a href="{profile["about_me"]["linkedin_url"]}"><img src="assets/cards/icon_linkedin.svg" width="{ICON_W}" alt="LinkedIn — {profile["name"]}"></a> <a href="mailto:{profile["about_me"]["email"]}"><img src="assets/cards/icon_email.svg" width="{ICON_W}" alt="{ALT_TEXT["btn_email"]}"></a>
+
+<img src="assets/cards/footer.svg" width="{FOOTER_W}" alt="{ALT_TEXT["footer"]}">
+
 </div>
 """
 

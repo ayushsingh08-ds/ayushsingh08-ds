@@ -77,10 +77,10 @@ h1, h2, h3, h4, h5, h6 {
       <div class="project-content">
         <div class="project-header-row">
           <span class="project-name">Market Stream Ingestion Engine</span>
-          <span class="badge badge-inprogress">Done</span>
+          <span class="badge badge-production">Done</span>
         </div>
-        <p class="project-desc">Real-time market data ingestion using Kafka, Spark Structured Streaming &amp; Airflow with schema validation, DLQ and sub-200ms latency.</p>
-        <div class="project-tags"><span>Kafka</span><span>Spark</span><span>Airflow</span><span>Delta Lake</span><span>Docker</span><span>Python</span></div>
+        <p class="project-desc">Real-time order-book ingestion on Redpanda (Kafka) with PySpark Structured Streaming and Delta Lake: strict schema validation, DLQ routing and VWAP over tumbling windows.</p>
+        <div class="project-tags"><span>Redpanda</span><span>PySpark</span><span>Delta Lake</span><span>Docker</span><span>Python</span></div>
       </div>
     </div>
     
