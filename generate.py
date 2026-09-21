@@ -885,9 +885,13 @@ GITHUB_STATS_JSON = os.path.join(WORKSPACE_DIR, "assets", "github_stats.json")
 # Used when there is no cache and no network, so a build still produces a
 # complete README. Refreshed values are written to GITHUB_STATS_JSON.
 DEFAULT_GITHUB_STATS = {
+    "source": "default",
+    "auth": "anonymous",
+    "checked_at": "",
     "public_repos": 23,
     "followers": 38,
     "stars": 105,
+    "language_count": 8,
     "languages": [
         {"name": "Python", "repos": 8},
         {"name": "JavaScript", "repos": 3},
@@ -900,7 +904,13 @@ DEFAULT_GITHUB_STATS = {
 
 
 def fetch_github_stats():
-    """Refresh repository stats from the GitHub API, falling back to the cache."""
+    """Refresh repository stats from the GitHub API, falling back to the cache.
+
+    The result records where the numbers came from — "api", "cache" or
+    "default" — and how the attempt was authenticated, and it is written to disk
+    on every run. A build that silently reused stale numbers therefore shows up
+    in the committed file instead of passing unnoticed.
+    """
     cached = {}
     if os.path.exists(GITHUB_STATS_JSON):
         with open(GITHUB_STATS_JSON, "r", encoding="utf-8") as cf:
@@ -919,6 +929,14 @@ def fetch_github_stats():
         with urllib.request.urlopen(request, timeout=10) as response:
             return json.loads(response.read().decode("utf-8"))
 
+    def write(stats):
+        with open(GITHUB_STATS_JSON, "w", encoding="utf-8") as sf:
+            json.dump(stats, sf, indent=2)
+            sf.write("\n")
+
+    today = datetime.date.today().isoformat()
+    auth = "token" if token else "anonymous"
+
     try:
         user = api_get("https://api.github.com/users/" + GITHUB_USER)
         repos = [
@@ -930,24 +948,42 @@ def fetch_github_stats():
         ]
         languages = collections.Counter(repo["language"] for repo in repos if repo["language"])
         stats = {
+            "source": "api",
+            "auth": auth,
+            "fetched_at": today,
+            "checked_at": today,
             "public_repos": user["public_repos"],
             "followers": user["followers"],
             "stars": sum(repo["stargazers_count"] for repo in repos),
+            # Distinct languages across all repositories. Separately from the
+            # five shown on the card: counting the card's own list reported
+            # "Languages used 5", which was simply wrong.
+            "language_count": len(languages),
             "languages": [
                 {"name": name, "repos": count} for name, count in languages.most_common(5)
             ],
-            "fetched_at": datetime.date.today().isoformat(),
         }
-        with open(GITHUB_STATS_JSON, "w", encoding="utf-8") as sf:
-            json.dump(stats, sf, indent=2)
-            sf.write("\n")
-        print("GitHub stats refreshed (%s)" % stats["fetched_at"])
+        write(stats)
+        print(
+            "GitHub stats refreshed from the API (%s, %s)"
+            % (stats["fetched_at"], "with token" if token else "unauthenticated")
+        )
         return stats
     except Exception as exc:
         print("Warning: GitHub stats fetch failed (%s)" % exc)
-        if cached:
-            print("Using cached stats from %s" % (cached.get("fetched_at") or "an earlier build"))
-        return cached or DEFAULT_GITHUB_STATS
+        # Reuse the last refresh, but record that this build fell back so the
+        # committed file says so. fetched_at keeps the data's date; checked_at is
+        # when this build tried.
+        fallback = dict(cached) if cached else dict(DEFAULT_GITHUB_STATS)
+        fallback["source"] = "cache" if cached else "default"
+        fallback["auth"] = auth
+        fallback["checked_at"] = today
+        write(fallback)
+        print(
+            "Using %s stats (data fetched %s) — recorded in %s"
+            % (fallback["source"], fallback.get("fetched_at") or "never", GITHUB_STATS_JSON)
+        )
+        return fallback
 
 
 GITHUB_STATS = fetch_github_stats()
@@ -964,7 +1000,7 @@ stat_tiles = "".join(
         (GITHUB_STATS["public_repos"], "Public repositories"),
         (GITHUB_STATS["stars"], "Stars earned"),
         (GITHUB_STATS["followers"], "Followers"),
-        (len(GITHUB_STATS["languages"]), "Languages used"),
+        (GITHUB_STATS.get("language_count") or len(GITHUB_STATS["languages"]), "Languages used"),
     ]
 )
 
@@ -1022,8 +1058,19 @@ lang_rows = "".join(
     for language in GITHUB_STATS["languages"]
 )
 
+# The card lists only the top languages, while the stats card reports how many
+# the account uses in total. Say which is which, or the two cards read as if
+# they disagree ("8 languages used" above a list of five rows).
+langs_total = GITHUB_STATS.get("language_count") or len(GITHUB_STATS["languages"])
+langs_note = f"top {len(GITHUB_STATS['languages'])} of {langs_total} languages"
+
 gh_langs_content = f"""
 <style>
+  .card-title {{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }}
   .card-note {{ font-size: 11px; font-weight: 500; color: #9c8b86; }}
   .lang-row {{ display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }}
   .lang-name {{ width: 110px; font-size: 12.5px; color: #3c2f2f; }}
@@ -1044,7 +1091,7 @@ gh_langs_content = f"""
   }}
 </style>
 <div class="card" style="height: {GH_LANGS[1]}px; box-sizing: border-box;">
-  <h2 class="card-title">🧩 Top Languages <span class="card-note">repositories per language</span></h2>
+  <h2 class="card-title">🧩 Top Languages <span class="card-note">{langs_note}</span></h2>
   <div>{lang_rows}
   </div>
 </div>
@@ -1099,8 +1146,10 @@ ALT_TEXT = {
         f"{GITHUB_STATS['public_repos']} public repositories, "
         f"{GITHUB_STATS['stars']} stars and {GITHUB_STATS['followers']} followers"
     ),
-    "top_langs": "Most used languages across %s's public repositories by repository count: %s"
+    "top_langs": "Top %d of %d languages across %s's public repositories by repository count: %s"
     % (
+        len(GITHUB_STATS["languages"]),
+        langs_total,
         GITHUB_USER,
         ", ".join("%s (%d)" % (l["name"], l["repos"]) for l in GITHUB_STATS["languages"]),
     ),
@@ -1112,83 +1161,68 @@ ALT_TEXT = {
     ),
 }
 
-# Each featured project is its own paragraph, so the cards keep the same
-# vertical rhythm as the rest of the page instead of butting together.
+# Every image sits inside its own <p align="center"> on a single line. That is
+# deliberate and load-bearing on GitHub: a line holding a single complete tag is
+# a CommonMark HTML block (type 7), which is emitted WITHOUT a wrapping <p>. Bare
+# <img> lines therefore flow inline — cards ended up two per row, bottom-aligned
+# on their shared line box, and a row of four broke into 3 + 1. An explicit <p>
+# (type 6, block-level) is what actually puts one card per line.
 PROJECT_LINKS = "\n\n".join(
-    f'<a href="{project["url"]}">'
+    f'<p align="center"><a href="{project["url"]}">'
     f'<img src="assets/cards/project_{idx}.svg" width="{PROJECT_W}" '
     f'alt="{project["name"]} — {as_sentence(project["desc"])} Status: {project["status"]}.">'
-    f'</a>'
+    f'</a></p>'
     for idx, project in enumerate(profile["featured_projects"])
 )
 
 # ----------------- README.md Generator -----------------
 
 readme_template = f"""<!-- Profile banner -->
-<div align="center">
+<p align="center"><img src="assets/cards/header.svg" width="{HEADER_W}" alt="{ALT_TEXT["header"]}"></p>
 
-<img src="assets/cards/header.svg" width="{HEADER_W}" alt="{ALT_TEXT["header"]}">
+<!-- At a glance: education, location, what I'm open to, how to reach me.
+     Two per row: four 200px cards need 836px and the profile column is narrower
+     than that on laptops and in print, so one row of four wrapped 3 + 1. -->
+<p align="center"><img src="assets/cards/info_1.svg" width="{INFO_W}" alt="{ALT_TEXT["info_1"]}"> <img src="assets/cards/info_2.svg" width="{INFO_W}" alt="{ALT_TEXT["info_2"]}"></p>
 
-</div>
+<p align="center"><img src="assets/cards/info_3.svg" width="{INFO_W}" alt="{ALT_TEXT["info_3"]}"> <img src="assets/cards/info_4.svg" width="{INFO_W}" alt="{ALT_TEXT["info_4"]}"></p>
 
-<!-- At a glance: education, location, what I'm open to, how to reach me -->
-<div align="center">
+<!-- About and the two actions -->
+<p align="center"><img src="assets/cards/about_me.svg" width="{ABOUT_W}" alt="{ALT_TEXT["about_me"]}"></p>
 
-<img src="assets/cards/info_1.svg" width="{INFO_W}" alt="{ALT_TEXT["info_1"]}"> <img src="assets/cards/info_2.svg" width="{INFO_W}" alt="{ALT_TEXT["info_2"]}"> <img src="assets/cards/info_3.svg" width="{INFO_W}" alt="{ALT_TEXT["info_3"]}"> <img src="assets/cards/info_4.svg" width="{INFO_W}" alt="{ALT_TEXT["info_4"]}">
+<p align="center"><a href="mailto:{profile["about_me"]["email"]}"><img src="assets/cards/btn_email.svg" width="{BTN_W}" alt="{ALT_TEXT["btn_email"]}"></a> <a href="{profile["about_me"]["resume_url"]}"><img src="assets/cards/btn_resume.svg" width="{BTN_W}" alt="{ALT_TEXT["btn_resume"]}"></a></p>
 
-</div>
+<!-- Stack, principles, current work, what I build -->
+<p align="center"><img src="assets/cards/tech_stack.svg" width="{TECH_W}" alt="{ALT_TEXT["tech_stack"]}"></p>
 
-<!-- About, actions, tech stack, principles, current work -->
-<div align="center">
+<p align="center"><img src="assets/cards/principles.svg" width="{PRINCIPLES_W}" alt="{ALT_TEXT["principles"]}"></p>
 
-<img src="assets/cards/about_me.svg" width="{ABOUT_W}" alt="{ALT_TEXT["about_me"]}">
+<p align="center"><img src="assets/cards/currently_building.svg" width="{BUILD_W}" alt="{ALT_TEXT["currently_building"]}"></p>
 
-<a href="mailto:{profile["about_me"]["email"]}"><img src="assets/cards/btn_email.svg" width="{BTN_W}" alt="{ALT_TEXT["btn_email"]}"></a> <a href="{profile["about_me"]["resume_url"]}"><img src="assets/cards/btn_resume.svg" width="{BTN_W}" alt="{ALT_TEXT["btn_resume"]}"></a>
-
-<img src="assets/cards/tech_stack.svg" width="{TECH_W}" alt="{ALT_TEXT["tech_stack"]}">
-
-<img src="assets/cards/principles.svg" width="{PRINCIPLES_W}" alt="{ALT_TEXT["principles"]}">
-
-<img src="assets/cards/currently_building.svg" width="{BUILD_W}" alt="{ALT_TEXT["currently_building"]}">
-
-<img src="assets/cards/what_i_build.svg" width="{WHAT_W}" alt="{ALT_TEXT["what_i_build"]}">
-
-</div>
+<p align="center"><img src="assets/cards/what_i_build.svg" width="{WHAT_W}" alt="{ALT_TEXT["what_i_build"]}"></p>
 
 <h2 align="center">🚀 Featured Projects</h2>
 
-<div align="center">
-
 {PROJECT_LINKS}
 
-<a href="https://github.com/{GITHUB_USER}?tab=repositories">View all repositories ➔</a>
-
-</div>
+<p align="center"><a href="https://github.com/{GITHUB_USER}?tab=repositories">View all repositories ➔</a></p>
 
 <h2 align="center">📊 GitHub Analytics</h2>
 
-<div align="center">
+<p align="center"><img src="assets/cards/gh_stats.svg" width="{GH_STATS[0]}" alt="{ALT_TEXT["stats"]}"></p>
 
-<img src="assets/cards/gh_stats.svg" width="{GH_STATS[0]}" alt="{ALT_TEXT["stats"]}">
+<p align="center"><img src="assets/cards/gh_langs.svg" width="{GH_LANGS[0]}" alt="{ALT_TEXT["top_langs"]}"></p>
 
-<img src="assets/cards/gh_langs.svg" width="{GH_LANGS[0]}" alt="{ALT_TEXT["top_langs"]}">
+<p align="center"><a href="{GITHUB_URL}"><img src="https://streak-stats.demolab.com?user={GITHUB_USER}&amp;theme=default&amp;background=fffdfa&amp;border=e5dacf&amp;stroke=b05a30&amp;ring=b05a30&amp;fire=b05a30&amp;currStreakNum=2c1e1e&amp;sideNums=3c2f2f&amp;sideLabels=7a6a65&amp;dates=9c8b86&amp;border_radius=8" width="{WHAT_W}" alt="{ALT_TEXT["streak"]}"></a></p>
 
-<a href="{GITHUB_URL}"><img src="https://streak-stats.demolab.com?user={GITHUB_USER}&amp;theme=default&amp;background=fffdfa&amp;border=e5dacf&amp;stroke=b05a30&amp;ring=b05a30&amp;fire=b05a30&amp;currStreakNum=2c1e1e&amp;sideNums=3c2f2f&amp;sideLabels=7a6a65&amp;dates=9c8b86&amp;border_radius=8" width="{WHAT_W}" alt="{ALT_TEXT["streak"]}"></a>
-
-<img src="profile-3d-contrib/profile-south-season-animate.svg" width="{WHAT_W}" alt="{ALT_TEXT["contrib_3d"]}">
-
-</div>
+<p align="center"><img src="profile-3d-contrib/profile-south-season-animate.svg" width="{WHAT_W}" alt="{ALT_TEXT["contrib_3d"]}"></p>
 
 <!-- Upcoming work, and where to find me -->
-<div align="center">
+<p align="center"><img src="assets/cards/upcoming_projects.svg" width="{UPCOMING_W}" alt="{ALT_TEXT["upcoming_projects"]}"></p>
 
-<img src="assets/cards/upcoming_projects.svg" width="{UPCOMING_W}" alt="{ALT_TEXT["upcoming_projects"]}">
+<p align="center"><a href="{GITHUB_URL}"><img src="assets/cards/icon_github.svg" width="{ICON_W}" alt="GitHub — {GITHUB_USER}"></a> <a href="{profile["about_me"]["linkedin_url"]}"><img src="assets/cards/icon_linkedin.svg" width="{ICON_W}" alt="LinkedIn — {profile["name"]}"></a> <a href="mailto:{profile["about_me"]["email"]}"><img src="assets/cards/icon_email.svg" width="{ICON_W}" alt="{ALT_TEXT["btn_email"]}"></a></p>
 
-<a href="{GITHUB_URL}"><img src="assets/cards/icon_github.svg" width="{ICON_W}" alt="GitHub — {GITHUB_USER}"></a> <a href="{profile["about_me"]["linkedin_url"]}"><img src="assets/cards/icon_linkedin.svg" width="{ICON_W}" alt="LinkedIn — {profile["name"]}"></a> <a href="mailto:{profile["about_me"]["email"]}"><img src="assets/cards/icon_email.svg" width="{ICON_W}" alt="{ALT_TEXT["btn_email"]}"></a>
-
-<img src="assets/cards/footer.svg" width="{FOOTER_W}" alt="{ALT_TEXT["footer"]}">
-
-</div>
+<p align="center"><img src="assets/cards/footer.svg" width="{FOOTER_W}" alt="{ALT_TEXT["footer"]}"></p>
 """
 
 # Write compiled output to README.md
