@@ -144,6 +144,9 @@ Featured Projects → GitHub Analytics → closing → contact row.
 | encoding | byte check for `·` `→` `’` in the cards | present as real UTF-8, no entities |
 | link check | `curl -o /dev/null -w '%{http_code}'` | 6/6 GitHub URLs 200; LinkedIn 999 (bot block, unchanged from before); resume link dead |
 | copy accuracy | every card's numbers traced to `profile.json` or the fetches | see "Unverified / open" |
+| **published page** (after commit `5f5704a`) | `curl https://github.com/ayushsingh08-ds` | 27 images, 19 image paragraphs with counts `1 4 1 2 1 1 1 2 1 1 1 1 1 1 0 2 1 1 4`, no external image, no table |
+| published anchors | nav hrefs vs heading permalink ids | `about`, `tech-stack`, `featured-projects`, `github-analytics` all resolve |
+| published assets | 27 raw `/raw/main/assets/cards/*.svg` URLs with `-L` | 27/27 → 200 (after the `/raw/` → raw.githubusercontent redirect) |
 
 ## Unverified / open issues
 
@@ -151,18 +154,22 @@ Featured Projects → GitHub Analytics → closing → contact row.
   Drive file) answers `400 / "Page not found"` for anonymous visitors. It is
   published as-is because only the owner can supply a working URL; fix the value
   in `profile.json` and rebuild.
-- Anchor targets could only be validated against the *previous* deploy's markup
-  (the `user-content-` id pattern). Confirm after the next push that the four nav
-  buttons jump to their sections.
+- Anchors are confirmed on the live page: GitHub renders each heading as
+  `<h2 class="heading-element">Text</h2>` plus a sibling
+  `<a id="user-content-<slug>" class="anchor" href="#<slug>">`, so renaming a
+  heading means renaming the nav item in `NAV_ITEMS` too (or the slug changes).
+- GitHub wraps every image that is not already inside a link in an `<a>` to the
+  card's blob, so unlinked cards are clickable to their source file. Cards that
+  need a specific destination (CTAs, nav, contact, projects) are wrapped in their
+  own `<a>` in `generate.py`.
+- Cards are images: on a phone the smallest card text (9–10.5px at 850px wide)
+  scales to ~4–5px. A `<picture>` + `media` variant per card is the fix.
 - Contributions are read by parsing `github.com/users/<user>/contributions`. GitHub
   can change that markup at any time; the failure mode is a cached calendar (and,
   with no cache at all, an empty card), never a broken image.
 - Cards use `foreignObject` + `@import` Google Fonts — the combination GitHub's
   SVG proxy and Safari handle least reliably. If a font ever fails, the card
   falls back to a system font and reflows inside its fixed box.
-- Mobile legibility: cards scale to the column width, so on a ~380px phone the
-  smallest labels (9–10.5px) become ~4–5px. A `<picture>` + `media` variant per
-  card would fix this (GitHub supports `<picture>`/`srcset`) and is not done.
 - Dark mode: cards are cream on any background, which reads as a printed page
   rather than adapting. A `prefers-color-scheme: dark` card set would need
   `<picture>` support per card.
