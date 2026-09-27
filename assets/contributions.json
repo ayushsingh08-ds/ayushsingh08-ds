@@ -1,48 +1,11 @@
 {
   "source": "github.com/users/ayushsingh08-ds/contributions",
-  "fetched_at": "2026-09-26",
-  "checked_at": "2026-09-26",
-  "total": 162,
-  "start": "2025-09-21",
-  "end": "2026-09-26",
+  "fetched_at": "2026-09-27",
+  "checked_at": "2026-09-27",
+  "total": 158,
+  "start": "2025-09-28",
+  "end": "2026-09-27",
   "columns": [
-    [
-      {
-        "date": "2025-09-21",
-        "level": 1,
-        "count": 2
-      },
-      {
-        "date": "2025-09-22",
-        "level": 0,
-        "count": 0
-      },
-      {
-        "date": "2025-09-23",
-        "level": 0,
-        "count": 0
-      },
-      {
-        "date": "2025-09-24",
-        "level": 1,
-        "count": 2
-      },
-      {
-        "date": "2025-09-25",
-        "level": 0,
-        "count": 0
-      },
-      {
-        "date": "2025-09-26",
-        "level": 0,
-        "count": 0
-      },
-      {
-        "date": "2025-09-27",
-        "level": 0,
-        "count": 0
-      }
-    ],
     [
       {
         "date": "2025-09-28",
@@ -1966,6 +1929,19 @@
         "level": 0,
         "count": 0
       }
+    ],
+    [
+      {
+        "date": "2026-09-27",
+        "level": 0,
+        "count": 0
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
     ]
   ]
 }
