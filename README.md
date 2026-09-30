@@ -56,7 +56,7 @@
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/analytics.svg"><img src="assets/cards/analytics.svg" width="850" alt="GitHub stats for ayushsingh08-ds: 23 public repositories, 106 stars, 38 followers and 8 languages, from the GitHub REST API. Top 5 languages by repository count: Python (8), JavaScript (3), HTML (3), TypeScript (2), Jupyter Notebook (2)"></picture></p>
 
-<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/contrib.svg"><img src="assets/cards/contrib.svg" width="850" alt="Contribution calendar for ayushsingh08-ds: 158 contributions between 2025-09-28 and 2026-09-29"></picture></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/contrib.svg"><img src="assets/cards/contrib.svg" width="850" alt="Contribution calendar for ayushsingh08-ds: 161 contributions between 2025-09-28 and 2026-09-30"></picture></p>
 
 <!-- Closing. -->
 
