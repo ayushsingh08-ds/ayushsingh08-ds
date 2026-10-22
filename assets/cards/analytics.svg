@@ -31,17 +31,17 @@ body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
   <div style="display: flex; gap: 30px;">
     
 <div style="width: 372px;">
-  <div class="head"><span class="label">GitHub stats</span><span class="rule"></span><span class="label">REST API · 2026-10-21</span></div>
+  <div class="head"><span class="label">GitHub stats</span><span class="rule"></span><span class="label">REST API · 2026-10-22</span></div>
   <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
     <div style="background-color: #f7f1e8; border: 1px solid #eadfd2; border-radius: 8px;
                 padding: 10px 12px;">
-      <div class="name" style="font-size: 20px; color: #241c17;">23</div>
+      <div class="name" style="font-size: 20px; color: #241c17;">16</div>
       <div class="label" style="font-size: 9.5px; margin-top: 4px;">Repositories</div>
     </div>
     
     <div style="background-color: #f7f1e8; border: 1px solid #eadfd2; border-radius: 8px;
                 padding: 10px 12px;">
-      <div class="name" style="font-size: 20px; color: #241c17;">109</div>
+      <div class="name" style="font-size: 20px; color: #241c17;">99</div>
       <div class="label" style="font-size: 9.5px; margin-top: 4px;">Stars</div>
     </div>
     
@@ -53,7 +53,7 @@ body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
     
     <div style="background-color: #f7f1e8; border: 1px solid #eadfd2; border-radius: 8px;
                 padding: 10px 12px;">
-      <div class="name" style="font-size: 20px; color: #241c17;">8</div>
+      <div class="name" style="font-size: 20px; color: #241c17;">7</div>
       <div class="label" style="font-size: 9.5px; margin-top: 4px;">Languages</div>
     </div>
     </div>
@@ -62,7 +62,7 @@ body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
     
 <div style="flex: 1; min-width: 0; border-left: 1px solid #efe6da;
             padding-left: 30px;">
-  <div class="head"><span class="label">Top languages</span><span class="rule"></span><span class="label">top 5 of 8</span></div>
+  <div class="head"><span class="label">Top languages</span><span class="rule"></span><span class="label">top 5 of 7</span></div>
   <div>
     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
       <span style="width: 110px; font-size: 11px; color: #3c2f2f; white-space: nowrap;
@@ -73,7 +73,7 @@ body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
                      background-color: #b05a30; border-radius: 3px;"></span>
       </span>
       <span class="mono" style="width: 22px; text-align: right; font-size: 10.5px;
-                   color: #7a6a65;">8</span>
+                   color: #7a6a65;">7</span>
     </div>
     
     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
@@ -81,31 +81,7 @@ body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
                    overflow: hidden;">JavaScript</span>
       <span style="flex: 1; height: 6px; background-color: #f0e7db; border-radius: 3px;
                    overflow: hidden;">
-        <span style="display: block; height: 100%; width: 38%;
-                     background-color: #b05a30; border-radius: 3px;"></span>
-      </span>
-      <span class="mono" style="width: 22px; text-align: right; font-size: 10.5px;
-                   color: #7a6a65;">3</span>
-    </div>
-    
-    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
-      <span style="width: 110px; font-size: 11px; color: #3c2f2f; white-space: nowrap;
-                   overflow: hidden;">HTML</span>
-      <span style="flex: 1; height: 6px; background-color: #f0e7db; border-radius: 3px;
-                   overflow: hidden;">
-        <span style="display: block; height: 100%; width: 38%;
-                     background-color: #b05a30; border-radius: 3px;"></span>
-      </span>
-      <span class="mono" style="width: 22px; text-align: right; font-size: 10.5px;
-                   color: #7a6a65;">3</span>
-    </div>
-    
-    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
-      <span style="width: 110px; font-size: 11px; color: #3c2f2f; white-space: nowrap;
-                   overflow: hidden;">TypeScript</span>
-      <span style="flex: 1; height: 6px; background-color: #f0e7db; border-radius: 3px;
-                   overflow: hidden;">
-        <span style="display: block; height: 100%; width: 25%;
+        <span style="display: block; height: 100%; width: 29%;
                      background-color: #b05a30; border-radius: 3px;"></span>
       </span>
       <span class="mono" style="width: 22px; text-align: right; font-size: 10.5px;
@@ -117,11 +93,35 @@ body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
                    overflow: hidden;">Jupyter Notebook</span>
       <span style="flex: 1; height: 6px; background-color: #f0e7db; border-radius: 3px;
                    overflow: hidden;">
-        <span style="display: block; height: 100%; width: 25%;
+        <span style="display: block; height: 100%; width: 29%;
                      background-color: #b05a30; border-radius: 3px;"></span>
       </span>
       <span class="mono" style="width: 22px; text-align: right; font-size: 10.5px;
                    color: #7a6a65;">2</span>
+    </div>
+    
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+      <span style="width: 110px; font-size: 11px; color: #3c2f2f; white-space: nowrap;
+                   overflow: hidden;">Go</span>
+      <span style="flex: 1; height: 6px; background-color: #f0e7db; border-radius: 3px;
+                   overflow: hidden;">
+        <span style="display: block; height: 100%; width: 14%;
+                     background-color: #b05a30; border-radius: 3px;"></span>
+      </span>
+      <span class="mono" style="width: 22px; text-align: right; font-size: 10.5px;
+                   color: #7a6a65;">1</span>
+    </div>
+    
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+      <span style="width: 110px; font-size: 11px; color: #3c2f2f; white-space: nowrap;
+                   overflow: hidden;">Dart</span>
+      <span style="flex: 1; height: 6px; background-color: #f0e7db; border-radius: 3px;
+                   overflow: hidden;">
+        <span style="display: block; height: 100%; width: 14%;
+                     background-color: #b05a30; border-radius: 3px;"></span>
+      </span>
+      <span class="mono" style="width: 22px; text-align: right; font-size: 10.5px;
+                   color: #7a6a65;">1</span>
     </div>
     </div>
 </div>
