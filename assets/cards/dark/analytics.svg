@@ -31,7 +31,7 @@ body { font-family: 'Inter', sans-serif; color: #c9d1d9; margin: 0; padding: 0;
   <div style="display: flex; gap: 30px;">
     
 <div style="width: 372px;">
-  <div class="head"><span class="label">GitHub stats</span><span class="rule"></span><span class="label">REST API · 2026-10-27</span></div>
+  <div class="head"><span class="label">GitHub stats</span><span class="rule"></span><span class="label">REST API · 2026-10-28</span></div>
   <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
     <div style="background-color: #21262d; border: 1px solid #30363d; border-radius: 8px;
                 padding: 10px 12px;">
@@ -41,7 +41,7 @@ body { font-family: 'Inter', sans-serif; color: #c9d1d9; margin: 0; padding: 0;
     
     <div style="background-color: #21262d; border: 1px solid #30363d; border-radius: 8px;
                 padding: 10px 12px;">
-      <div class="name" style="font-size: 20px; color: #f0f6fc;">101</div>
+      <div class="name" style="font-size: 20px; color: #f0f6fc;">75</div>
       <div class="label" style="font-size: 9.5px; margin-top: 4px;">Stars</div>
     </div>
     
@@ -53,7 +53,7 @@ body { font-family: 'Inter', sans-serif; color: #c9d1d9; margin: 0; padding: 0;
     
     <div style="background-color: #21262d; border: 1px solid #30363d; border-radius: 8px;
                 padding: 10px 12px;">
-      <div class="name" style="font-size: 20px; color: #f0f6fc;">7</div>
+      <div class="name" style="font-size: 20px; color: #f0f6fc;">6</div>
       <div class="label" style="font-size: 9.5px; margin-top: 4px;">Languages</div>
     </div>
     </div>
@@ -62,7 +62,7 @@ body { font-family: 'Inter', sans-serif; color: #c9d1d9; margin: 0; padding: 0;
     
 <div style="flex: 1; min-width: 0; border-left: 1px solid #21262d;
             padding-left: 30px;">
-  <div class="head"><span class="label">Top languages</span><span class="rule"></span><span class="label">top 5 of 7</span></div>
+  <div class="head"><span class="label">Top languages</span><span class="rule"></span><span class="label">top 5 of 6</span></div>
   <div>
     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
       <span style="width: 110px; font-size: 11px; color: #c9d1d9; white-space: nowrap;
@@ -102,7 +102,7 @@ body { font-family: 'Inter', sans-serif; color: #c9d1d9; margin: 0; padding: 0;
     
     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
       <span style="width: 110px; font-size: 11px; color: #c9d1d9; white-space: nowrap;
-                   overflow: hidden;">Go</span>
+                   overflow: hidden;">TypeScript</span>
       <span style="flex: 1; height: 6px; background-color: #21262d; border-radius: 3px;
                    overflow: hidden;">
         <span style="display: block; height: 100%; width: 14%;
@@ -114,7 +114,7 @@ body { font-family: 'Inter', sans-serif; color: #c9d1d9; margin: 0; padding: 0;
     
     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
       <span style="width: 110px; font-size: 11px; color: #c9d1d9; white-space: nowrap;
-                   overflow: hidden;">Dart</span>
+                   overflow: hidden;">Go</span>
       <span style="flex: 1; height: 6px; background-color: #21262d; border-radius: 3px;
                    overflow: hidden;">
         <span style="display: block; height: 100%; width: 14%;
