@@ -54,9 +54,9 @@
 
 <h2 align="center">GitHub Analytics</h2>
 
-<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/analytics.svg"><img src="assets/cards/analytics.svg" width="850" alt="GitHub stats for ayushsingh08-ds: 16 public repositories, 75 stars, 37 followers and 6 languages, from the GitHub REST API. Top 5 languages by repository count: Python (7), JavaScript (2), Jupyter Notebook (2), TypeScript (1), Go (1)"></picture></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/analytics.svg"><img src="assets/cards/analytics.svg" width="850" alt="GitHub stats for ayushsingh08-ds: 16 public repositories, 75 stars, 36 followers and 6 languages, from the GitHub REST API. Top 5 languages by repository count: Python (7), JavaScript (2), Jupyter Notebook (2), TypeScript (1), Go (1)"></picture></p>
 
-<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/contrib.svg"><img src="assets/cards/contrib.svg" width="850" alt="Contribution calendar for ayushsingh08-ds: 252 contributions between 2025-10-26 and 2026-10-29"></picture></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/contrib.svg"><img src="assets/cards/contrib.svg" width="850" alt="Contribution calendar for ayushsingh08-ds: 252 contributions between 2025-10-26 and 2026-10-30"></picture></p>
 
 <!-- Closing. -->
 
