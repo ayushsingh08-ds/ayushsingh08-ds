@@ -1,32 +1,8 @@
-<svg fill="none" viewBox="0 0 850 56" width="850" height="56" xmlns="http://www.w3.org/2000/svg">
-  <foreignObject x="0" y="0" width="850" height="56">
-    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 850px; height: 56px; box-sizing: border-box;">
-      <style>
-        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;family=Inter:wght@400;500;600&amp;family=Outfit:wght@500;600&amp;display=swap');
-body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
-       background-color: transparent; }
-* { box-sizing: border-box; }
-.card { width: 100%; height: 100%; background-color: #fffdfa;
-        border: 1px solid #e5dacf; border-radius: 10px; padding: 18px 20px; }
-.label { font-family: 'Courier Prime', monospace; font-size: 10.5px;
-         letter-spacing: 0.14em; text-transform: uppercase; color: #9c8b86; }
-.mono { font-family: 'Courier Prime', monospace; }
-.rule { flex: 1; height: 1px; background-color: #e5dacf; }
-.head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-.name { font-family: 'Outfit', sans-serif; font-weight: 600; letter-spacing: -0.01em; }
-.chip { font-family: 'Courier Prime', monospace; font-size: 10.5px;
-        color: #6f6259; background-color: #f7f1e8; border: 1px solid #eadfd2;
-        border-radius: 4px; padding: 2px 6px; }
-.highlight-text { color: #b05a30; font-weight: 600; }
-.pill { font-family: 'Courier Prime', monospace; font-size: 9.5px;
-        letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px;
-        border-radius: 999px; border: 1px solid; white-space: nowrap; }
-.pill-done { color: #5c6b46; background-color: #f1f3e8; border-color: #dde2cf; }
-.pill-wip { color: #96602f; background-color: #faf0e4; border-color: #eeddc9; }
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 880 48" width="880" height="48">
 
-        
-      </style>
-      <div style="width: 100%; height: 100%; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; background-color: #2c1e1e; border: 1px solid #2c1e1e; color: #fdf9f3; font-family: 'Courier Prime', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;"><span>Email me</span><span style="color: #c9b8a8;">→</span></div>
-    </div>
-  </foreignObject>
+<rect x="0.5" y="0.5" width="879" height="47" rx="12" fill="#381E1F" stroke="#381E1F" stroke-width="1"/>
+<g transform="translate(22.0, 16.5) scale(0.9375)"><rect x="1.8" y="3.2" width="12.4" height="9.6" rx="1.6" fill="none" stroke="#FAF5EF" stroke-width="1.5"/><path d="M2.2 4l5.8 4.4L13.8 4" fill="none" stroke="#FAF5EF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="48" y="29" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="600" fill="#FAF5EF">Email Me</text>
+<text x="854" y="29" text-anchor="end" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" font-weight="600" fill="#FAF5EF">→</text>
+
 </svg>

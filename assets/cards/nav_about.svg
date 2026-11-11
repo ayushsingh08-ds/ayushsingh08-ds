@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 114 40" width="114" height="40">
+
+    <rect x="0.5" y="0.5" width="113" height="39" rx="12" fill="#381E1F" stroke="#381E1F" stroke-width="1"/>
+    <g transform="translate(29.7, 13.0) scale(0.8750)"><path d="M2 8.5L8 3l6 5.5V14a1 1 0 0 1-1 1H9.5v-4h-3v4H3a1 1 0 0 1-1-1V8.5z" fill="none" stroke="#FAF5EF" stroke-width="1.5" stroke-linejoin="round"/></g>
+    <text x="49.7" y="24.5" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="600" fill="#FAF5EF">About</text>
+    
+</svg>

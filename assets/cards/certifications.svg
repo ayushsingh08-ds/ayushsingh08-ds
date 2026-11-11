@@ -1,82 +1,45 @@
-<svg fill="none" viewBox="0 0 850 233" width="850" height="233" xmlns="http://www.w3.org/2000/svg">
-  <foreignObject x="0" y="0" width="850" height="233">
-    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 850px; height: 233px; box-sizing: border-box;">
-      <style>
-        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;family=Inter:wght@400;500;600&amp;family=Outfit:wght@500;600&amp;display=swap');
-body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
-       background-color: transparent; }
-* { box-sizing: border-box; }
-.card { width: 100%; height: 100%; background-color: #fffdfa;
-        border: 1px solid #e5dacf; border-radius: 10px; padding: 18px 20px; }
-.label { font-family: 'Courier Prime', monospace; font-size: 10.5px;
-         letter-spacing: 0.14em; text-transform: uppercase; color: #9c8b86; }
-.mono { font-family: 'Courier Prime', monospace; }
-.rule { flex: 1; height: 1px; background-color: #e5dacf; }
-.head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-.name { font-family: 'Outfit', sans-serif; font-weight: 600; letter-spacing: -0.01em; }
-.chip { font-family: 'Courier Prime', monospace; font-size: 10.5px;
-        color: #6f6259; background-color: #f7f1e8; border: 1px solid #eadfd2;
-        border-radius: 4px; padding: 2px 6px; }
-.highlight-text { color: #b05a30; font-weight: 600; }
-.pill { font-family: 'Courier Prime', monospace; font-size: 9.5px;
-        letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px;
-        border-radius: 999px; border: 1px solid; white-space: nowrap; }
-.pill-done { color: #5c6b46; background-color: #f1f3e8; border-color: #dde2cf; }
-.pill-wip { color: #96602f; background-color: #faf0e4; border-color: #eeddc9; }
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 880 272" width="880" height="272">
 
-        
-      </style>
-      
-    <div class="card">
-      <div class="head"><span class="label">Certifications</span><span class="rule"></span></div>
-      
-        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
-                    padding: 8px 0; ">
-          <div style="display: flex; align-items: baseline; gap: 12px;">
-            <span class="mono" style="font-size: 10px; color: #b05a30;">01</span>
-            <span style="font-size: 13px; color: #3c2f2f;">OCI Certified Data Science Professional</span>
-          </div>
-          <span class="mono" style="font-size: 10.5px; color: #9c8b86; white-space: nowrap;">Oracle Cloud</span>
-        </div>
-        
-        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
-                    padding: 8px 0; border-top: 1px solid #f2ebe1;">
-          <div style="display: flex; align-items: baseline; gap: 12px;">
-            <span class="mono" style="font-size: 10px; color: #b05a30;">02</span>
-            <span style="font-size: 13px; color: #3c2f2f;">Azure Data Fundamentals (DP-900)</span>
-          </div>
-          <span class="mono" style="font-size: 10.5px; color: #9c8b86; white-space: nowrap;">Microsoft</span>
-        </div>
-        
-        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
-                    padding: 8px 0; border-top: 1px solid #f2ebe1;">
-          <div style="display: flex; align-items: baseline; gap: 12px;">
-            <span class="mono" style="font-size: 10px; color: #b05a30;">03</span>
-            <span style="font-size: 13px; color: #3c2f2f;">Snowflake for Developers</span>
-          </div>
-          <span class="mono" style="font-size: 10.5px; color: #9c8b86; white-space: nowrap;">Snowflake</span>
-        </div>
-        
-        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
-                    padding: 8px 0; border-top: 1px solid #f2ebe1;">
-          <div style="display: flex; align-items: baseline; gap: 12px;">
-            <span class="mono" style="font-size: 10px; color: #b05a30;">04</span>
-            <span style="font-size: 13px; color: #3c2f2f;">Agentforce Service &amp; Prompt Builder</span>
-          </div>
-          <span class="mono" style="font-size: 10.5px; color: #9c8b86; white-space: nowrap;">Salesforce</span>
-        </div>
-        
-        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
-                    padding: 8px 0; border-top: 1px solid #f2ebe1;">
-          <div style="display: flex; align-items: baseline; gap: 12px;">
-            <span class="mono" style="font-size: 10px; color: #b05a30;">05</span>
-            <span style="font-size: 13px; color: #3c2f2f;">Recommender Systems</span>
-          </div>
-          <span class="mono" style="font-size: 10.5px; color: #9c8b86; white-space: nowrap;">NPTEL</span>
-        </div>
-        
-    </div>
+    <rect x="0.5" y="0.5" width="879" height="271" rx="16" fill="#FBF7F2" stroke="#E4D9C8" stroke-width="1"/>
+    <g transform="translate(28.0, 25.0) scale(1.1250)"><circle cx="8" cy="6.5" r="4" fill="none" stroke="#8C2D2D" stroke-width="1.5"/><path d="M5.5 9.8L4.5 14.5 8 13l3.5 1.5-1-4.7" fill="none" stroke="#8C2D2D" stroke-width="1.4" stroke-linejoin="round"/></g>
+    <text x="52" y="42" font-family="'Playfair Display', Georgia, 'Times New Roman', serif" font-size="22" font-weight="700" fill="#231815">Certifications</text>
+    <line x1="196" y1="35" x2="854" y2="35" stroke="#E4D9C8" stroke-width="1"/>
+    <rect x="26" y="62" width="828" height="182" rx="12" fill="#F3ECE2" stroke="#E2D5C5" stroke-width="1"/>
     
-    </div>
-  </foreignObject>
+            
+            <circle cx="53" cy="83" r="9.5" fill="#8C2D2D"/>
+            <text x="53" y="86.5" text-anchor="middle" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="9.5" font-weight="700" fill="#FAF5EF">01</text>
+            <text x="74" y="87" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13.5" font-weight="600" fill="#231815">OCI Certified Data Science Professional</text>
+            <rect x="741" y="72" width="97" height="22" rx="6" fill="#EAE0D3" stroke="#D8CBB8" stroke-width="1"/>
+            <text x="789.5" y="86" text-anchor="middle" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="10.5" font-weight="600" fill="#3A2A25">Oracle Cloud</text>
+            
+            <line x1="42" y1="101" x2="838" y2="101" stroke="#E2D5C5" stroke-width="1"/>
+            <circle cx="53" cy="117" r="9.5" fill="#8C2D2D"/>
+            <text x="53" y="120.5" text-anchor="middle" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="9.5" font-weight="700" fill="#FAF5EF">02</text>
+            <text x="74" y="121" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13.5" font-weight="600" fill="#231815">Azure Data Fundamentals (DP-900)</text>
+            <rect x="760" y="106" width="78" height="22" rx="6" fill="#EAE0D3" stroke="#D8CBB8" stroke-width="1"/>
+            <text x="799.0" y="120" text-anchor="middle" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="10.5" font-weight="600" fill="#3A2A25">Microsoft</text>
+            
+            <line x1="42" y1="135" x2="838" y2="135" stroke="#E2D5C5" stroke-width="1"/>
+            <circle cx="53" cy="151" r="9.5" fill="#8C2D2D"/>
+            <text x="53" y="154.5" text-anchor="middle" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="9.5" font-weight="700" fill="#FAF5EF">03</text>
+            <text x="74" y="155" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13.5" font-weight="600" fill="#231815">Snowflake for Developers</text>
+            <rect x="760" y="140" width="78" height="22" rx="6" fill="#EAE0D3" stroke="#D8CBB8" stroke-width="1"/>
+            <text x="799.0" y="154" text-anchor="middle" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="10.5" font-weight="600" fill="#3A2A25">Snowflake</text>
+            
+            <line x1="42" y1="169" x2="838" y2="169" stroke="#E2D5C5" stroke-width="1"/>
+            <circle cx="53" cy="185" r="9.5" fill="#8C2D2D"/>
+            <text x="53" y="188.5" text-anchor="middle" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="9.5" font-weight="700" fill="#FAF5EF">04</text>
+            <text x="74" y="189" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13.5" font-weight="600" fill="#231815">Agentforce Service &amp; Prompt Builder</text>
+            <rect x="754" y="174" width="84" height="22" rx="6" fill="#EAE0D3" stroke="#D8CBB8" stroke-width="1"/>
+            <text x="796.0" y="188" text-anchor="middle" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="10.5" font-weight="600" fill="#3A2A25">Salesforce</text>
+            
+            <line x1="42" y1="203" x2="838" y2="203" stroke="#E2D5C5" stroke-width="1"/>
+            <circle cx="53" cy="219" r="9.5" fill="#8C2D2D"/>
+            <text x="53" y="222.5" text-anchor="middle" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="9.5" font-weight="700" fill="#FAF5EF">05</text>
+            <text x="74" y="223" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13.5" font-weight="600" fill="#231815">Recommender Systems</text>
+            <rect x="766" y="208" width="72" height="22" rx="6" fill="#EAE0D3" stroke="#D8CBB8" stroke-width="1"/>
+            <text x="802.0" y="222" text-anchor="middle" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="10.5" font-weight="600" fill="#3A2A25">NPTEL</text>
+            
+    
 </svg>

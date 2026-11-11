@@ -1,45 +1,13 @@
-<svg fill="none" viewBox="0 0 850 128" width="850" height="128" xmlns="http://www.w3.org/2000/svg">
-  <foreignObject x="0" y="0" width="850" height="128">
-    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 850px; height: 128px; box-sizing: border-box;">
-      <style>
-        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;family=Inter:wght@400;500;600&amp;family=Outfit:wght@500;600&amp;display=swap');
-body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
-       background-color: transparent; }
-* { box-sizing: border-box; }
-.card { width: 100%; height: 100%; background-color: #fffdfa;
-        border: 1px solid #e5dacf; border-radius: 10px; padding: 18px 20px; }
-.label { font-family: 'Courier Prime', monospace; font-size: 10.5px;
-         letter-spacing: 0.14em; text-transform: uppercase; color: #9c8b86; }
-.mono { font-family: 'Courier Prime', monospace; }
-.rule { flex: 1; height: 1px; background-color: #e5dacf; }
-.head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-.name { font-family: 'Outfit', sans-serif; font-weight: 600; letter-spacing: -0.01em; }
-.chip { font-family: 'Courier Prime', monospace; font-size: 10.5px;
-        color: #6f6259; background-color: #f7f1e8; border: 1px solid #eadfd2;
-        border-radius: 4px; padding: 2px 6px; }
-.highlight-text { color: #b05a30; font-weight: 600; }
-.pill { font-family: 'Courier Prime', monospace; font-size: 9.5px;
-        letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px;
-        border-radius: 999px; border: 1px solid; white-space: nowrap; }
-.pill-done { color: #5c6b46; background-color: #f1f3e8; border-color: #dde2cf; }
-.pill-wip { color: #96602f; background-color: #faf0e4; border-color: #eeddc9; }
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 880 144" width="880" height="144">
 
-        
-      </style>
-      
-    <div class="card">
-      <div style="display: flex; align-items: center; gap: 14px;">
-        <span class="mono" style="font-size: 10.5px; color: #b05a30;">01</span>
-        <span class="name" style="font-size: 15.5px; color: #2c1e1e;">TraceGuard — Incident &amp; Telemetry Engine</span>
-        <span class="rule"></span>
-        <span class="pill pill-done">Done</span>
-      </div>
-      <div style="font-size: 12.5px; line-height: 1.45; color: #5a4a42; margin: 9px 0 10px;">
-        Async FastAPI &amp; SQLAlchemy 2.0 triage backend with Redis ZSET SHA-256 deduplication, PostgreSQL SKIP LOCKED priority queues, pgvector RCA, and Prometheus metrics.
-      </div>
-      <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">PostgreSQL</span><span class="chip">Redis</span><span class="chip">pgvector</span><span class="chip">Prometheus</span></div>
-    </div>
+    <rect x="0.5" y="0.5" width="879" height="143" rx="16" fill="#FBF7F2" stroke="#E4D9C8" stroke-width="1"/>
+    <circle cx="39" cy="34" r="11" fill="#8C2D2D"/>
+    <text x="39" y="37.5" text-anchor="middle" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="10.5" font-weight="700" fill="#FAF5EF">01</text>
+    <text x="60" y="39.5" font-family="'Playfair Display', Georgia, 'Times New Roman', serif" font-size="18" font-weight="700" fill="#231815">TraceGuard — Incident &amp; Telemetry Engine</text>
+    <line x1="477" y1="34" x2="782" y2="34" stroke="#E4D9C8" stroke-width="1"/>
+    <rect x="796" y="23" width="56" height="22" rx="11" fill="#381E1F" stroke="#381E1F" stroke-width="1"/>
+    <text x="824.0" y="37" text-anchor="middle" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="9.5" font-weight="700" letter-spacing="0.8" fill="#FAF5EF">DONE</text>
+    <text x="28" y="66" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" fill="#4A3B36">Async FastAPI &amp; SQLAlchemy 2.0 triage backend with Redis ZSET SHA-256 deduplication, PostgreSQL SKIP LOCKED priority</text><text x="28" y="85" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" fill="#4A3B36">queues, pgvector RCA, and Prometheus metrics.</text>
+    <rect x="28" y="102" width="53" height="24" rx="6" fill="#EAE0D3" stroke="#D8CBB8" stroke-width="1"/><text x="54.5" y="117" text-anchor="middle" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11" font-weight="500" fill="#3A2A25">Python</text><rect x="88" y="102" width="61" height="24" rx="6" fill="#EAE0D3" stroke="#D8CBB8" stroke-width="1"/><text x="118.5" y="117" text-anchor="middle" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11" font-weight="500" fill="#3A2A25">FastAPI</text><rect x="156" y="102" width="83" height="24" rx="6" fill="#EAE0D3" stroke="#D8CBB8" stroke-width="1"/><text x="197.5" y="117" text-anchor="middle" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11" font-weight="500" fill="#3A2A25">PostgreSQL</text><rect x="246" y="102" width="47" height="24" rx="6" fill="#EAE0D3" stroke="#D8CBB8" stroke-width="1"/><text x="269.5" y="117" text-anchor="middle" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11" font-weight="500" fill="#3A2A25">Redis</text><rect x="300" y="102" width="63" height="24" rx="6" fill="#EAE0D3" stroke="#D8CBB8" stroke-width="1"/><text x="331.5" y="117" text-anchor="middle" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11" font-weight="500" fill="#3A2A25">pgvector</text><rect x="370" y="102" width="79" height="24" rx="6" fill="#EAE0D3" stroke="#D8CBB8" stroke-width="1"/><text x="409.5" y="117" text-anchor="middle" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11" font-weight="500" fill="#3A2A25">Prometheus</text>
     
-    </div>
-  </foreignObject>
 </svg>

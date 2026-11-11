@@ -1,70 +1,40 @@
-<svg fill="none" viewBox="0 0 850 248" width="850" height="248" xmlns="http://www.w3.org/2000/svg">
-  <foreignObject x="0" y="0" width="850" height="248">
-    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 850px; height: 248px; box-sizing: border-box;">
-      <style>
-        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;family=Inter:wght@400;500;600&amp;family=Outfit:wght@500;600&amp;display=swap');
-body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
-       background-color: transparent; }
-* { box-sizing: border-box; }
-.card { width: 100%; height: 100%; background-color: #fffdfa;
-        border: 1px solid #e5dacf; border-radius: 10px; padding: 18px 20px; }
-.label { font-family: 'Courier Prime', monospace; font-size: 10.5px;
-         letter-spacing: 0.14em; text-transform: uppercase; color: #9c8b86; }
-.mono { font-family: 'Courier Prime', monospace; }
-.rule { flex: 1; height: 1px; background-color: #e5dacf; }
-.head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-.name { font-family: 'Outfit', sans-serif; font-weight: 600; letter-spacing: -0.01em; }
-.chip { font-family: 'Courier Prime', monospace; font-size: 10.5px;
-        color: #6f6259; background-color: #f7f1e8; border: 1px solid #eadfd2;
-        border-radius: 4px; padding: 2px 6px; }
-.highlight-text { color: #b05a30; font-weight: 600; }
-.pill { font-family: 'Courier Prime', monospace; font-size: 9.5px;
-        letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px;
-        border-radius: 999px; border: 1px solid; white-space: nowrap; }
-.pill-done { color: #5c6b46; background-color: #f1f3e8; border-color: #dde2cf; }
-.pill-wip { color: #96602f; background-color: #faf0e4; border-color: #eeddc9; }
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 880 250" width="880" height="250">
+
+<rect x="0.5" y="0.5" width="879" height="249" rx="16" fill="#FBF7F2" stroke="#E4D9C8" stroke-width="1"/>
+<line x1="565" y1="22" x2="565" y2="228" stroke="#E4D9C8" stroke-width="1"/>
+
+<!-- Left Column -->
+<g transform="translate(28.0, 31.0) scale(0.7500)"><path d="M8 1.6l1.9 4.1 4.5.6-3.3 3.1.8 4.5L8 11.7 4.1 13.9l.8-4.5-3.3-3.1 4.5-.6z" fill="#8C2D2D"/></g>
+<text x="46" y="42" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="10.5" font-weight="700" letter-spacing="1.2" fill="#5C4B45">FINAL-YEAR B.TECH CSE (DATA SCIENCE) · 2027 · BENGALURU, INDIA</text>
+<text x="28" y="80" font-family="'Playfair Display', Georgia, 'Times New Roman', serif" font-size="38" font-weight="700" fill="#231815">Ayush Singh</text>
+<text x="28" y="106" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13.5" fill="#4A3B36">Building reliable distributed systems, high-concurrency backend platforms,</text><text x="28" y="126" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13.5" fill="#4A3B36">and analytics-ready data pipelines.</text>
+
+<!-- Callout Highlight Box -->
+<rect x="28" y="162" width="510" height="60" rx="10" fill="#F6E6DC" stroke="#E8CFC0" stroke-width="1"/>
+<g transform="translate(44.0, 182.0) scale(1.1250)"><path d="M9.2 1.5L3.5 9h4.2l-1 5.5L12.5 7H8.3l.9-5.5z" fill="#C86428"/></g>
+<text x="72" y="187" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12.5" font-weight="700" fill="#B85D2B">I design systems that stay reliable under failure and contention.</text>
+<text x="72" y="207" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12.5" font-weight="500" fill="#4A3B36">From low-level WALs to production data &amp; backend platforms.</text>
+
+<!-- Right Column: Focus -->
+<g transform="translate(590.0, 31.0) scale(1.1250)"><circle cx="8" cy="8" r="6" fill="none" stroke="#8C2D2D" stroke-width="1.5"/><circle cx="8" cy="8" r="3" fill="none" stroke="#8C2D2D" stroke-width="1.4"/><circle cx="8" cy="8" r="1.2" fill="#8C2D2D"/></g>
+<text x="615" y="47" font-family="'Playfair Display', Georgia, 'Times New Roman', serif" font-size="22" font-weight="700" fill="#231815">Focus</text>
+<path d="M 842.0 26.5 Q 842.0 34.0 849.5 34.0 Q 842.0 34.0 842.0 41.5 Q 842.0 34.0 834.5 34.0 Q 842.0 34.0 842.0 26.5 Z" fill="#8C2D2D" fill-opacity="0.90"/>
+<path d="M 826.0 41.5 Q 826.0 46.0 830.5 46.0 Q 826.0 46.0 826.0 50.5 Q 826.0 46.0 821.5 46.0 Q 826.0 46.0 826.0 41.5 Z" fill="#8C2D2D" fill-opacity="0.75"/>
 
         
-      </style>
-      
-<div class="card" style="display: flex; gap: 40px;">
-  <div style="width: 468px; display: flex; flex-direction: column;">
-    <div class="label" style="color: #b05a30;">Final-year B.Tech CSE (Data Science) · 2027 · Bengaluru, India</div>
-    <div class="name" style="font-size: 44px; line-height: 1.25; color: #241c17; margin: 10px 0 12px;">
-      Ayush Singh
-    </div>
-    <div style="font-size: 16px; line-height: 1.5; color: #5a4a42;">
-      Building reliable distributed systems, high-concurrency backend platforms, and analytics-ready data pipelines.
-    </div>
-    <div style="margin-top: 16px; border-left: 2px solid #b05a30; padding-left: 12px;
-                font-size: 13.5px; line-height: 1.5; color: #7a6a65;">
-      <div>I design systems that stay reliable under failure and contention.</div><div>From low-level WALs to <span class="highlight-text">production data &amp; backend platforms</span>.</div>
-    </div>
-  </div>
-  <div style="flex: 1; border-left: 1px solid #efe6da; padding-left: 28px;">
-    <div class="label">Focus</div>
-    
-    <div style="display: flex; gap: 10px; align-items: baseline; padding: 9px 0;
-                border-top: 1px solid #f2ebe1;">
-      <span class="mono" style="font-size: 9.5px; color: #b05a30;">01</span>
-      <span style="font-size: 13px; color: #3c2f2f;">Distributed Systems &amp; Storage</span>
-    </div>
-    
-    <div style="display: flex; gap: 10px; align-items: baseline; padding: 9px 0;
-                border-top: 1px solid #f2ebe1;">
-      <span class="mono" style="font-size: 9.5px; color: #b05a30;">02</span>
-      <span style="font-size: 13px; color: #3c2f2f;">Backend &amp; Platform Engineering</span>
-    </div>
-    
-    <div style="display: flex; gap: 10px; align-items: baseline; padding: 9px 0;
-                border-top: 1px solid #f2ebe1;">
-      <span class="mono" style="font-size: 9.5px; color: #b05a30;">03</span>
-      <span style="font-size: 13px; color: #3c2f2f;">Data Engineering &amp; Lakehouses</span>
-    </div>
-    
-  </div>
-</div>
+        <circle cx="603" cy="98" r="11" fill="#8C2D2D"/>
+        <text x="603" y="101" text-anchor="middle" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="10.5" font-weight="700" fill="#FAF5EF">01</text>
+        <text x="624" y="102" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="600" fill="#231815">Distributed Systems &amp; Storage</text>
+        
+        <line x1="590" y1="122" x2="854" y2="122" stroke="#E4D9C8" stroke-width="1"/>
+        <circle cx="603" cy="144" r="11" fill="#8C2D2D"/>
+        <text x="603" y="147" text-anchor="middle" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="10.5" font-weight="700" fill="#FAF5EF">02</text>
+        <text x="624" y="148" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="600" fill="#231815">Backend &amp; Platform Engineering</text>
+        
+        <line x1="590" y1="168" x2="854" y2="168" stroke="#E4D9C8" stroke-width="1"/>
+        <circle cx="603" cy="190" r="11" fill="#8C2D2D"/>
+        <text x="603" y="193" text-anchor="middle" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="10.5" font-weight="700" fill="#FAF5EF">03</text>
+        <text x="624" y="194" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="600" fill="#231815">Data Engineering &amp; Lakehouses</text>
+        
 
-    </div>
-  </foreignObject>
 </svg>

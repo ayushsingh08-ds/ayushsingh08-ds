@@ -1,50 +1,75 @@
-<svg fill="none" viewBox="0 0 850 88" width="850" height="88" xmlns="http://www.w3.org/2000/svg">
-  <foreignObject x="0" y="0" width="850" height="88">
-    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 850px; height: 88px; box-sizing: border-box;">
-      <style>
-        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;family=Inter:wght@400;500;600&amp;family=Outfit:wght@500;600&amp;display=swap');
-body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
-       background-color: transparent; }
-* { box-sizing: border-box; }
-.card { width: 100%; height: 100%; background-color: #fffdfa;
-        border: 1px solid #e5dacf; border-radius: 10px; padding: 18px 20px; }
-.label { font-family: 'Courier Prime', monospace; font-size: 10.5px;
-         letter-spacing: 0.14em; text-transform: uppercase; color: #9c8b86; }
-.mono { font-family: 'Courier Prime', monospace; }
-.rule { flex: 1; height: 1px; background-color: #e5dacf; }
-.head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-.name { font-family: 'Outfit', sans-serif; font-weight: 600; letter-spacing: -0.01em; }
-.chip { font-family: 'Courier Prime', monospace; font-size: 10.5px;
-        color: #6f6259; background-color: #f7f1e8; border: 1px solid #eadfd2;
-        border-radius: 4px; padding: 2px 6px; }
-.highlight-text { color: #b05a30; font-weight: 600; }
-.pill { font-family: 'Courier Prime', monospace; font-size: 9.5px;
-        letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px;
-        border-radius: 999px; border: 1px solid; white-space: nowrap; }
-.pill-done { color: #5c6b46; background-color: #f1f3e8; border-color: #dde2cf; }
-.pill-wip { color: #96602f; background-color: #faf0e4; border-color: #eeddc9; }
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 880 220" width="880" height="220">
 
-        
-      </style>
-      
-<div class="card" style="display: flex; align-items: center; justify-content: space-between;">
-  <div style="display: flex; align-items: center; gap: 16px;">
-    <div style="width: 44px; height: 44px; border: 1px solid #e5dacf; border-radius: 8px;
-                background-color: #faf6f0; display: flex; align-items: center;
-                justify-content: center; font-family: 'Courier Prime', monospace;
-                font-size: 14px; letter-spacing: 0.04em; color: #b05a30;">AS.</div>
-    <div>
-      <div class="name" style="font-size: 18px; color: #2c1e1e;">Ayush Singh</div>
-      <div style="font-size: 12px; color: #7a6a65; margin-top: 2px;">Backend platforms · distributed systems · data engineering</div>
-    </div>
-  </div>
-  <div class="mono" style="text-align: right; font-size: 11px; color: #9c8b86;
-              line-height: 1.6;">
-    <div>github.com/ayushsingh08-ds</div>
-    <div>ayushsingh2005811@gmail.com</div>
-  </div>
-</div>
+<defs>
+  <clipPath id="hdr-clip">
+    <rect x="0" y="0" width="880" height="220" rx="16"/>
+  </clipPath>
+  <linearGradient id="hdr-grad" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#983232"/>
+    <stop offset="55%" stop-color="#8C2D2D"/>
+    <stop offset="100%" stop-color="#6B2021"/>
+  </linearGradient>
+</defs>
+<g clip-path="url(#hdr-clip)">
+  <rect x="0" y="0" width="880" height="220" fill="url(#hdr-grad)"/>
 
-    </div>
-  </foreignObject>
+  <!-- Layered rolling hills on the right -->
+  <path d="M320 220 C410 155, 505 182, 600 138 C695 94, 785 112, 880 78 L880 220 Z" fill="#5A1D1E" fill-opacity="0.72"/>
+  <path d="M410 220 C495 168, 575 188, 668 152 C748 120, 818 136, 880 112 L880 220 Z" fill="#261718"/>
+  <path d="M565 220 C645 185, 725 198, 805 165 C840 150, 862 154, 880 148 L880 220 Z" fill="#1A1011" fill-opacity="0.88"/>
+
+  <!-- Ringed planet doodle (top-center) -->
+  <g transform="translate(432, 54)">
+    <circle cx="0" cy="0" r="14" fill="#A53F3A" stroke="#FAF5EF" stroke-width="1.6"/>
+    <path d="M-8 -5 Q-2 -10 5 -6" fill="none" stroke="#E8D8D0" stroke-width="1" stroke-linecap="round"/>
+    <ellipse cx="0" cy="1" rx="25" ry="6.5" transform="rotate(-18)" fill="none" stroke="#FAF5EF" stroke-width="1.6"/>
+    <circle cx="29" cy="-9" r="1.5" fill="#FAF5EF"/>
+  </g>
+
+  <!-- 4-point sparkle stars -->
+  <path d="M 290.0 40.0 Q 290.0 48.0 298.0 48.0 Q 290.0 48.0 290.0 56.0 Q 290.0 48.0 282.0 48.0 Q 290.0 48.0 290.0 40.0 Z" fill="#FAF5EF" fill-opacity="0.90"/>
+  <path d="M 548.0 32.0 Q 548.0 42.0 558.0 42.0 Q 548.0 42.0 548.0 52.0 Q 548.0 42.0 538.0 42.0 Q 548.0 42.0 548.0 32.0 Z" fill="#FAF5EF" fill-opacity="0.95"/>
+  <path d="M 628.0 66.0 Q 628.0 72.0 634.0 72.0 Q 628.0 72.0 628.0 78.0 Q 628.0 72.0 622.0 72.0 Q 628.0 72.0 628.0 66.0 Z" fill="#E8D8D0" fill-opacity="0.80"/>
+  <path d="M 384.0 83.0 Q 384.0 88.0 389.0 88.0 Q 384.0 88.0 384.0 93.0 Q 384.0 88.0 379.0 88.0 Q 384.0 88.0 384.0 83.0 Z" fill="#E8D8D0" fill-opacity="0.70"/>
+  <path d="M 838.0 85.0 Q 838.0 92.0 845.0 92.0 Q 838.0 92.0 838.0 99.0 Q 838.0 92.0 831.0 92.0 Q 838.0 92.0 838.0 85.0 Z" fill="#E8CFC0" fill-opacity="0.85"/>
+  <circle cx="355" cy="42" r="1.6" fill="#E8D8D0" fill-opacity="0.7"/>
+  <circle cx="515" cy="88" r="1.4" fill="#E8D8D0" fill-opacity="0.6"/>
+  <circle cx="605" cy="34" r="1.8" fill="#FAF5EF" fill-opacity="0.85"/>
+
+  <!-- Peeking black cat silhouette (bottom-left) -->
+  <g transform="translate(38, 166)">
+    <!-- Ears -->
+    <polygon points="8,24 14,2 27,18" fill="#181010"/>
+    <polygon points="41,18 54,2 60,24" fill="#181010"/>
+    <polygon points="12,21 15,7 23,17" fill="#4A2525"/>
+    <polygon points="45,17 53,7 56,21" fill="#4A2525"/>
+    <!-- Head & shoulders -->
+    <ellipse cx="34" cy="34" rx="26" ry="21" fill="#181010"/>
+    <path d="M4 54 Q34 38 64 54 L68 58 L0 58 Z" fill="#181010"/>
+    <!-- Eyes (O . O) -->
+    <circle cx="23" cy="31" r="4.8" fill="#FAF5EF"/>
+    <circle cx="45" cy="31" r="4.8" fill="#FAF5EF"/>
+    <circle cx="23.8" cy="31" r="2.1" fill="#181010"/>
+    <circle cx="45.8" cy="31" r="2.1" fill="#181010"/>
+    <circle cx="24.6" cy="29.8" r="0.8" fill="#FFFFFF"/>
+    <circle cx="46.6" cy="29.8" r="0.8" fill="#FFFFFF"/>
+    <!-- Tiny nose dot -->
+    <circle cx="34" cy="37" r="1.3" fill="#E8CFC0"/>
+    <!-- Whiskers -->
+    <path d="M12 36 L2 34 M12 39 L2 40 M56 36 L66 34 M56 39 L66 40" stroke="#7A6A63" stroke-width="1" stroke-linecap="round"/>
+  </g>
+
+  <!-- Title & subtitle (left) -->
+  <text x="38" y="102" font-family="'Playfair Display', Georgia, 'Times New Roman', serif" font-size="44" font-weight="700" fill="#FAF5EF">Ayush Singh</text>
+  <text x="40" y="132" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="500" fill="#E8D8D0">Backend platforms · distributed systems · data engineering</text>
+
+  <!-- Top-right tilted handwritten annotation with double curved underline -->
+  <g transform="rotate(-8 730 56)">
+    <text x="730" y="54" text-anchor="middle" font-family="'Caveat', 'Bradley Hand', 'Segoe Print', cursive" font-size="22" font-weight="700" fill="#FAF5EF">Dream Big. Code Better.</text>
+    <path d="M635 63 Q728 57 826 62" fill="none" stroke="#FAF5EF" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M648 69 Q730 64 815 68" fill="none" stroke="#E8CFC0" stroke-width="1.3" stroke-linecap="round"/>
+  </g>
+</g>
+<rect x="0.5" y="0.5" width="879" height="219" rx="16" fill="none" stroke="#6E2223" stroke-width="1"/>
+
 </svg>

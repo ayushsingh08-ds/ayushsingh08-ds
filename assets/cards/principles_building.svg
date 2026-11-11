@@ -1,94 +1,50 @@
-<svg fill="none" viewBox="0 0 850 232" width="850" height="232" xmlns="http://www.w3.org/2000/svg">
-  <foreignObject x="0" y="0" width="850" height="232">
-    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 850px; height: 232px; box-sizing: border-box;">
-      <style>
-        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;family=Inter:wght@400;500;600&amp;family=Outfit:wght@500;600&amp;display=swap');
-body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
-       background-color: transparent; }
-* { box-sizing: border-box; }
-.card { width: 100%; height: 100%; background-color: #fffdfa;
-        border: 1px solid #e5dacf; border-radius: 10px; padding: 18px 20px; }
-.label { font-family: 'Courier Prime', monospace; font-size: 10.5px;
-         letter-spacing: 0.14em; text-transform: uppercase; color: #9c8b86; }
-.mono { font-family: 'Courier Prime', monospace; }
-.rule { flex: 1; height: 1px; background-color: #e5dacf; }
-.head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-.name { font-family: 'Outfit', sans-serif; font-weight: 600; letter-spacing: -0.01em; }
-.chip { font-family: 'Courier Prime', monospace; font-size: 10.5px;
-        color: #6f6259; background-color: #f7f1e8; border: 1px solid #eadfd2;
-        border-radius: 4px; padding: 2px 6px; }
-.highlight-text { color: #b05a30; font-weight: 600; }
-.pill { font-family: 'Courier Prime', monospace; font-size: 9.5px;
-        letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px;
-        border-radius: 999px; border: 1px solid; white-space: nowrap; }
-.pill-done { color: #5c6b46; background-color: #f1f3e8; border-color: #dde2cf; }
-.pill-wip { color: #96602f; background-color: #faf0e4; border-color: #eeddc9; }
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 880 244" width="880" height="244">
+
+<rect x="0.5" y="0.5" width="879" height="243" rx="16" fill="#FBF7F2" stroke="#E4D9C8" stroke-width="1"/>
+<rect x="24" y="20" width="408" height="204" rx="12" fill="#F3ECE2" stroke="#E2D5C5" stroke-width="1"/>
+<text x="44" y="46" font-family="'Playfair Display', Georgia, 'Times New Roman', serif" font-size="18" font-weight="700" fill="#231815">Engineering Principles</text>
+<line x1="252" y1="40" x2="412" y2="40" stroke="#E2D5C5" stroke-width="1"/>
 
         
-      </style>
-      
-<div class="card">
-  <div style="display: flex; gap: 30px;">
-    <div style="width: 372px;">
-      <div class="head"><span class="label">Engineering principles</span><span class="rule"></span></div>
-      
-    <div style="display: flex; gap: 12px; align-items: baseline; padding: 7px 0;
-                ">
-      <span class="mono" style="font-size: 10px; color: #b05a30;">01</span>
-      <span style="font-size: 13.5px; line-height: 1.4; color: #3c2f2f;">Build for failure first.</span>
-    </div>
-    
-    <div style="display: flex; gap: 12px; align-items: baseline; padding: 7px 0;
-                border-top: 1px solid #f2ebe1;">
-      <span class="mono" style="font-size: 10px; color: #b05a30;">02</span>
-      <span style="font-size: 13.5px; line-height: 1.4; color: #3c2f2f;">Prefer observability over assumptions.</span>
-    </div>
-    
-    <div style="display: flex; gap: 12px; align-items: baseline; padding: 7px 0;
-                border-top: 1px solid #f2ebe1;">
-      <span class="mono" style="font-size: 10px; color: #b05a30;">03</span>
-      <span style="font-size: 13.5px; line-height: 1.4; color: #3c2f2f;">Measure before optimizing.</span>
-    </div>
-    
-    <div style="display: flex; gap: 12px; align-items: baseline; padding: 7px 0;
-                border-top: 1px solid #f2ebe1;">
-      <span class="mono" style="font-size: 10px; color: #b05a30;">04</span>
-      <span style="font-size: 13.5px; line-height: 1.4; color: #3c2f2f;">Automate repetitive work.</span>
-    </div>
-    
-    <div style="display: flex; gap: 12px; align-items: baseline; padding: 7px 0;
-                border-top: 1px solid #f2ebe1;">
-      <span class="mono" style="font-size: 10px; color: #b05a30;">05</span>
-      <span style="font-size: 13.5px; line-height: 1.4; color: #3c2f2f;">Simple architectures scale better.</span>
-    </div>
-    
-    </div>
-    <div style="flex: 1; min-width: 0; border-left: 1px solid #efe6da;
-                padding-left: 30px;">
-      <div class="head"><span class="label">Currently building</span><span class="rule"></span><span class="label">active</span></div>
-      
-    <div style="padding: 12px 0; ">
-      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px;">
-        <span style="font-size: 13.5px; font-weight: 600; color: #2c1e1e;">Solaraeus</span>
-        <span class="mono" style="font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase;
-                     color: #b05a30;">ACTIVE</span>
-      </div>
-      <div style="font-size: 12px; line-height: 1.45; color: #5a4a42; margin-top: 5px;">Incremental radiative transfer &amp; GPU-accelerated 3D microclimate digital twin</div>
-    </div>
-    
-    <div style="padding: 12px 0; border-top: 1px solid #f2ebe1;">
-      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px;">
-        <span style="font-size: 13.5px; font-weight: 600; color: #2c1e1e;">Portfolio</span>
-        <span class="mono" style="font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase;
-                     color: #b05a30;">ACTIVE</span>
-      </div>
-      <div style="font-size: 12px; line-height: 1.45; color: #5a4a42; margin-top: 5px;">Interactive developer portfolio &amp; project showcase at ayudev-shiro.vercel.app</div>
-    </div>
-    
-    </div>
-  </div>
-</div>
+        <circle cx="53" cy="76" r="9" fill="#8C2D2D"/>
+        <text x="53" y="79.0" text-anchor="middle" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="9" font-weight="700" fill="#FAF5EF">01</text>
+        <text x="71" y="80.0" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12.5" font-weight="500" fill="#231815">Build for failure first.</text>
+        
+        <line x1="44" y1="91" x2="412" y2="91" stroke="#E2D5C5" stroke-width="1"/>
+        <circle cx="53" cy="109" r="9" fill="#8C2D2D"/>
+        <text x="53" y="112.0" text-anchor="middle" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="9" font-weight="700" fill="#FAF5EF">02</text>
+        <text x="71" y="113.0" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12.5" font-weight="500" fill="#231815">Prefer observability over assumptions.</text>
+        
+        <line x1="44" y1="124" x2="412" y2="124" stroke="#E2D5C5" stroke-width="1"/>
+        <circle cx="53" cy="142" r="9" fill="#8C2D2D"/>
+        <text x="53" y="145.0" text-anchor="middle" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="9" font-weight="700" fill="#FAF5EF">03</text>
+        <text x="71" y="146.0" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12.5" font-weight="500" fill="#231815">Measure before optimizing.</text>
+        
+        <line x1="44" y1="157" x2="412" y2="157" stroke="#E2D5C5" stroke-width="1"/>
+        <circle cx="53" cy="175" r="9" fill="#8C2D2D"/>
+        <text x="53" y="178.0" text-anchor="middle" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="9" font-weight="700" fill="#FAF5EF">04</text>
+        <text x="71" y="179.0" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12.5" font-weight="500" fill="#231815">Automate repetitive work.</text>
+        
+        <line x1="44" y1="190" x2="412" y2="190" stroke="#E2D5C5" stroke-width="1"/>
+        <circle cx="53" cy="208" r="9" fill="#8C2D2D"/>
+        <text x="53" y="211.0" text-anchor="middle" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="9" font-weight="700" fill="#FAF5EF">05</text>
+        <text x="71" y="212.0" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12.5" font-weight="500" fill="#231815">Simple architectures scale better.</text>
+        
 
-    </div>
-  </foreignObject>
+<rect x="446" y="20" width="410" height="204" rx="12" fill="#F3ECE2" stroke="#E2D5C5" stroke-width="1"/>
+<text x="466" y="46" font-family="'Playfair Display', Georgia, 'Times New Roman', serif" font-size="18" font-weight="700" fill="#231815">Currently Building</text>
+<line x1="634" y1="40" x2="778" y2="40" stroke="#E2D5C5" stroke-width="1"/>
+<text x="836" y="43" text-anchor="end" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="10" font-weight="700" letter-spacing="1.2" fill="#7A6A63">ACTIVE</text>
+
+        
+        <text x="466" y="76" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13.5" font-weight="700" fill="#231815">Solaraeus</text>
+        <rect x="782" y="63" width="54" height="19" rx="9.5" fill="#381E1F"/><text x="809" y="76" text-anchor="middle" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="9" font-weight="700" letter-spacing="0.8" fill="#FAF5EF">ACTIVE</text>
+        <text x="466" y="96" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" fill="#4A3B36">Incremental radiative transfer &amp; GPU-accelerated 3D</text><text x="466" y="112" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" fill="#4A3B36">microclimate digital twin</text>
+        
+        <line x1="466" y1="132" x2="836" y2="132" stroke="#E2D5C5" stroke-width="1"/>
+        <text x="466" y="148" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13.5" font-weight="700" fill="#231815">Portfolio</text>
+        <rect x="782" y="135" width="54" height="19" rx="9.5" fill="#381E1F"/><text x="809" y="148" text-anchor="middle" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="9" font-weight="700" letter-spacing="0.8" fill="#FAF5EF">ACTIVE</text>
+        <text x="466" y="168" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" fill="#4A3B36">Interactive developer portfolio &amp; project showcase at</text><text x="466" y="184" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" fill="#4A3B36">ayudev-shiro.vercel.app</text>
+        
+
 </svg>

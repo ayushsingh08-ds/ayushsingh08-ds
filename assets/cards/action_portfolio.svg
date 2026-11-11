@@ -1,32 +1,8 @@
-<svg fill="none" viewBox="0 0 850 56" width="850" height="56" xmlns="http://www.w3.org/2000/svg">
-  <foreignObject x="0" y="0" width="850" height="56">
-    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 850px; height: 56px; box-sizing: border-box;">
-      <style>
-        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;family=Inter:wght@400;500;600&amp;family=Outfit:wght@500;600&amp;display=swap');
-body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
-       background-color: transparent; }
-* { box-sizing: border-box; }
-.card { width: 100%; height: 100%; background-color: #fffdfa;
-        border: 1px solid #e5dacf; border-radius: 10px; padding: 18px 20px; }
-.label { font-family: 'Courier Prime', monospace; font-size: 10.5px;
-         letter-spacing: 0.14em; text-transform: uppercase; color: #9c8b86; }
-.mono { font-family: 'Courier Prime', monospace; }
-.rule { flex: 1; height: 1px; background-color: #e5dacf; }
-.head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-.name { font-family: 'Outfit', sans-serif; font-weight: 600; letter-spacing: -0.01em; }
-.chip { font-family: 'Courier Prime', monospace; font-size: 10.5px;
-        color: #6f6259; background-color: #f7f1e8; border: 1px solid #eadfd2;
-        border-radius: 4px; padding: 2px 6px; }
-.highlight-text { color: #b05a30; font-weight: 600; }
-.pill { font-family: 'Courier Prime', monospace; font-size: 9.5px;
-        letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px;
-        border-radius: 999px; border: 1px solid; white-space: nowrap; }
-.pill-done { color: #5c6b46; background-color: #f1f3e8; border-color: #dde2cf; }
-.pill-wip { color: #96602f; background-color: #faf0e4; border-color: #eeddc9; }
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 880 48" width="880" height="48">
 
-        
-      </style>
-      <div style="width: 100%; height: 100%; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; background-color: #fffdfa; border: 1px solid #ded3c6; color: #2c1e1e; font-family: 'Courier Prime', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;"><span>View portfolio</span><span style="color: #9c8b86;">ayudev-shiro.vercel.app →</span></div>
-    </div>
-  </foreignObject>
+<rect x="0.5" y="0.5" width="879" height="47" rx="12" fill="#F2EAE0" stroke="#E2D5C5" stroke-width="1"/>
+<g transform="translate(22.0, 16.0) scale(1.0000)"><circle cx="8" cy="8" r="6.2" fill="none" stroke="#8C2D2D" stroke-width="1.5"/><polygon points="10.8,5.2 6.8,6.8 5.2,10.8 9.2,9.2" fill="#8C2D2D"/></g>
+<text x="48" y="29" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="600" fill="#231815">View Portfolio</text>
+<text x="854" y="28.5" text-anchor="end" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11.5" font-weight="700" letter-spacing="0.8" fill="#4A3B36">AYUDEV-SHIRO.VERCEL.APP →</text>
+
 </svg>

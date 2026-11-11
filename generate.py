@@ -1,40 +1,14 @@
-"""Compile every README card and README.md itself.
+"""Compile pure-SVG Camo-safe README cards and README.md from profile.json.
 
-Two local sources of truth drive the whole page:
+Every card uses native SVG primitives (<rect>, <text>, <path>, <circle>, <image>)
+with zero <foreignObject> or external @import CSS, ensuring deterministic rendering
+behind GitHub's Camo image proxy.
 
-* ``profile.json`` -- the content (name, about, stack, projects, ...).
-* ``CARD_SIZES``  -- the geometry. Every ``<img>`` width in the README template
-  and every SVG ``viewBox`` is read from it, so a rendered card can never
-  disagree with the file it points at.
-
-Two live GitHub fetches feed the analytics cards, both cached next to the other
-assets so a build without network access still produces a complete README and a
-fallback is always visible in the committed files:
+Two live GitHub fetches feed the analytics cards, cached locally so offline
+builds remain reproducible:
 
 * ``assets/github_stats.json``  -- repository, follower, star and language counts
-  (GitHub REST API).
-* ``assets/contributions.json`` -- the public 12-month contribution calendar
-  (read from github.com/users/<user>/contributions).
-
-Layout model
-------------
-The page has exactly one content axis and one arrangement: every block is a
-single image of width ``GRID`` on its own centred line. Multi-column structure
-lives inside the cards (two or four internal columns), never in the flow of the
-page, because a row of two images is a width-dependent arrangement -- it either
-wraps or overflows once the reader's column is narrower than the row. Text rows
-(the section nav and the contact strip) are links rather than images, so they
-wrap wherever the window needs them to.
-
-GitHub rendering notes (all of them load-bearing):
-
-* A line containing a single complete tag is a CommonMark HTML block (type 7) and
-  is emitted WITHOUT a wrapping ``<p>``. Bare ``<img>`` lines therefore flow
-  inline -- cards share a row and bottom-align. Every card image must stay inside
-  its own ``<p align="center">``.
-* Nothing but ``src``/``width``/``alt`` survives sanitising on ``<img>``: no
-  inline styles, no ``height``. Only widths are pinned, so a card scales
-  proportionally (GitHub's ``max-width: 100%``) instead of squashing.
+* ``assets/contributions.json`` -- public 12-month contribution calendar
 """
 
 import collections
@@ -42,6 +16,7 @@ import datetime
 import json
 import os
 import re
+import shutil
 import urllib.request
 import xml.etree.ElementTree
 
@@ -50,12 +25,10 @@ WORKSPACE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROFILE_JSON = os.path.join(WORKSPACE_DIR, "profile.json")
 BASE64_ICONS_JSON = os.path.join(WORKSPACE_DIR, "assets", "base64_icons.json")
 CARDS_DIR = os.path.join(WORKSPACE_DIR, "assets", "cards")
-DARK_DIR = os.path.join(CARDS_DIR, "dark")
 GITHUB_STATS_JSON = os.path.join(WORKSPACE_DIR, "assets", "github_stats.json")
 CONTRIBUTIONS_JSON = os.path.join(WORKSPACE_DIR, "assets", "contributions.json")
 
 os.makedirs(CARDS_DIR, exist_ok=True)
-os.makedirs(DARK_DIR, exist_ok=True)
 
 # ----------------- Content -----------------
 with open(PROFILE_JSON, "r", encoding="utf-8") as f:
@@ -65,24 +38,29 @@ with open(BASE64_ICONS_JSON, "r", encoding="utf-8") as f:
     icons = json.load(f)
 
 
-def escape_xml(text):
-    """Escape bare ampersands so profile.json fragments stay valid XML."""
-    if not isinstance(text, str):
-        return text
-    return re.sub(r"&(?!(amp|lt|gt|quot|apos|#\d+);)", "&amp;", text)
+def strip_tags(text):
+    """Remove inline HTML fragments (e.g. <span>) and decode basic entities."""
+    cleaned = re.sub(r"<[^>]+>", "", str(text))
+    return cleaned.replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", '"')
 
 
-def escape_dict(d):
-    if isinstance(d, dict):
-        return {k: escape_dict(v) for k, v in d.items()}
-    if isinstance(d, list):
-        return [escape_dict(item) for item in d]
-    if isinstance(d, str):
-        return escape_xml(d)
-    return d
+def xml_esc(text):
+    """Escape XML special characters without double-escaping existing entities."""
+    s = str(text)
+    s = re.sub(r"&(?!(?:amp|lt|gt|quot|apos|#\d+|#x[0-9a-fA-F]+);)", "&amp;", s)
+    return s.replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
 
 
-profile = escape_dict(profile)
+def html_attr(text):
+    """Escape plain text for HTML attributes in README.md."""
+    return (
+        str(text)
+        .replace("&", "&amp;")
+        .replace('"', "&quot;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+    )
+
 
 GITHUB_URL = profile["about_me"]["github_url"]
 GITHUB_USER = GITHUB_URL.split("/")[-1]
@@ -91,209 +69,213 @@ PORTFOLIO_URL = profile["about_me"]["portfolio_url"]
 RESUME_URL = profile["about_me"]["resume_url"]
 
 # ----------------- Layout grid -----------------
-# Every block on this page is ONE full-width image on its own line. That is the
-# whole layout, and it is deliberate: GitHub gives images `max-width: 100%`, so a
-# single card always fits the column and scales with it, on any window.
-#
-# Nothing is placed two-to-a-line any more. Two images need a real text node
-# between them to keep them from touching, and the only way to control that gap is
-# a non-breaking space -- which makes the pair one unbreakable unit. On a column
-# narrower than the pair the row then overflows the page instead of wrapping: the
-# right-hand card is clipped off the edge and the overflow drags every other
-# block sideways with it. Half-width pairs were the single fragile thing in this
-# layout, so the multi-column look now lives INSIDE the cards (two or four
-# internal columns) where it cannot depend on the reader's window width.
-GRID = 850
+GRID = 880
 
 CARD_SIZES = {
-    "header": (GRID, 88),
-    "hero": (GRID, 248),
-    "action": (GRID, 56),
-    "info": (GRID, 112),
-    "about": (GRID, 216),
-    "stack": (GRID, 254),
-    "principles_building": (GRID, 232),
-    "project": (GRID, 128),
-    "achievements": (GRID, 232),
-    "certifications": (GRID, 233),
-    "analytics": (GRID, 196),
-    "contrib": (GRID, 212),
-    "next": (GRID, 96),
-    "closing": (GRID, 106),
+    "header": (GRID, 220),
+    "hero": (GRID, 250),
+    "action": (GRID, 48),
+    "info": (GRID, 76),
+    "about": (GRID, 232),
+    "principles_building": (GRID, 244),
+    "stack": (GRID, 422),
+    "project": (GRID, 144),
+    "certifications": (GRID, 248),
+    "next": (GRID, 110),
+    "analytics": (GRID, 224),
+    "contrib": (GRID, 220),
+    "closing": (GRID, 148),
 }
 
-# ----------------- Design tokens -----------------
-# Warm off-white surfaces, charcoal text, one terracotta accent. Kept in one
-# place so the whole page reads as a single system.
-SURFACE = "#fffdfa"
-SURFACE_TINT = "#f7f1e8"
-BORDER = "#e5dacf"
-BORDER_SOFT = "#efe6da"
-INK = "#2c1e1e"
-INK_STRONG = "#241c17"
-BODY = "#4a3f39"
-MUTED = "#7a6a65"
-FAINT = "#9c8b86"
-ACCENT = "#b05a30"
+# ----------------- Theme Tokens (Cozy Parchment & Crimson) -----------------
+CANVAS_BG = "#FBF7F2"
+CANVAS_BORDER = "#E4D9C8"
+SUBCARD_BG = "#F3ECE2"
+SUBCARD_BORDER = "#E2D5C5"
+ESPRESSO = "#381E1F"
+DARK_HILL = "#261718"
+MID_HILL = "#5A1D1E"
+CRIMSON = "#8C2D2D"
+CALLOUT_BG = "#F6E6DC"
+CALLOUT_BORDER = "#E8CFC0"
+CALLOUT_ACCENT = "#C86428"
+CALLOUT_HEAD = "#B85D2B"
+TEXT_HEAD = "#231815"
+TEXT_BODY = "#4A3B36"
+TEXT_MUTED = "#7A6A63"
+TEXT_EYEBROW = "#5C4B45"
+PILL_BG = "#EAE0D3"
+PILL_BORDER = "#D8CBB8"
+PILL_TEXT = "#3A2A25"
+NAV_BG = "#F2EAE0"
+NAV_BORDER = "#DFD3C3"
+ON_DARK = "#FAF5EF"
+ON_DARK_SUB = "#E8D8D0"
 
-# Text on the filled primary button. This has the same value as SURFACE_TINT in
-# spirit but is its own token, because in the dark theme the tile stays dark
-# while the button text must invert (see DARK_COLORS below).
-BUTTON_TEXT = "#fdf9f3"
+LEVEL_COLORS = ["#EAE0D3", "#E8CFC0", "#D49B85", "#B35D4E", "#8C2D2D"]
 
-# Contribution heatmap ramp: empty cell up to the accent itself.
-LEVEL_COLORS = ["#f2ebe1", "#ecd6c1", "#dcae86", "#c47c4c", "#a8542c"]
-
-# ----------------- Dark theme -----------------
-# Every card is compiled twice: the cream original in assets/cards/ and a
-# GitHub-dark counterpart in assets/cards/dark/. The dark variant is produced by
-# mapping the palette below rather than by drawing the cards again -- the two
-# themes differ in colour only, and a mapping keeps the geometry from ever
-# drifting apart between them.
-#
-# The surfaces, borders and text greys are GitHub's own dark tokens
-# (#0d1117 canvas, #161b22 surface, #30363d border, #e6edf3 / #c9d1d9 / #8b949e
-# text); the accent stays terracotta, brightened so it still carries on a dark
-# surface. Every colour a card uses must appear here: an unmapped one fails the
-# build, because an unmapped colour is a light-mode colour leaking into the dark
-# cards.
-DARK_COLORS = {
-    # surfaces and lines
-    "#fffdfa": "#161b22",  # card surface
-    "#faf6f0": "#21262d",  # monogram tile
-    "#f7f1e8": "#21262d",  # stat tiles, chips
-    "#f2ebe1": "#21262d",  # interior hairlines, empty calendar cell
-    "#efe6da": "#21262d",  # soft column dividers
-    "#f0e7db": "#21262d",  # progress bar and language bar tracks
-    "#e5dacf": "#30363d",  # card border
-    "#eadfd2": "#30363d",  # chip and stat tile borders
-    "#ded3c6": "#30363d",  # secondary button border
-    # text
-    "#241c17": "#f0f6fc",  # display ink
-    "#2c1e1e": "#e6edf3",  # headings, and the filled primary button
-    "#3c2f2f": "#c9d1d9",  # row text
-    "#4a3f39": "#c9d1d9",  # body text
-    "#5a4a42": "#8b949e",  # secondary text (descriptions, hero role)
-    "#6f6259": "#8b949e",  # chip and button labels
-    "#7a6a65": "#8b949e",  # muted text
-    "#9c8b86": "#7d8590",  # faint labels
-    "#fdf9f3": "#0d1117",  # text on the filled primary button
-    "#c9b8a8": "#57606a",  # arrow on the filled primary button
-    # accent
-    "#b05a30": "#e08d63",
-    # status pills
-    "#5c6b46": "#7ee787",
-    "#f1f3e8": "#152418",
-    "#dde2cf": "#2b4a33",
-    "#96602f": "#e8a569",
-    "#faf0e4": "#2b1f12",
-    "#eeddc9": "#4d3620",
-    # contribution calendar ramp
-    "#ecd6c1": "#3d2a1e",
-    "#dcae86": "#6b3f26",
-    "#c47c4c": "#9c5527",
-    "#a8542c": "#cf7a45",
-}
-
-HEX_COLOR = re.compile(r"#[0-9a-fA-F]{6}")
-UNMAPPED_COLORS = set()
-
-
-def to_dark(svg):
-    """Swap every palette colour for its dark counterpart."""
-
-    def swap(match):
-        light = match.group(0).lower()
-        dark = DARK_COLORS.get(light)
-        if dark is None:
-            UNMAPPED_COLORS.add(light)
-            return match.group(0)
-        return dark
-
-    return HEX_COLOR.sub(swap, svg)
-
-FONT_IMPORT = (
-    "@import url('https://fonts.googleapis.com/css2?"
-    "family=Courier+Prime:wght@400;700&amp;"
-    "family=Inter:wght@400;500;600&amp;"
-    "family=Outfit:wght@500;600&amp;display=swap');"
-)
-
-COMMON_CSS = (
-    FONT_IMPORT
-    + """
-body { font-family: 'Inter', sans-serif; color: %(body)s; margin: 0; padding: 0;
-       background-color: transparent; }
-* { box-sizing: border-box; }
-.card { width: 100%%; height: 100%%; background-color: %(surface)s;
-        border: 1px solid %(border)s; border-radius: 10px; padding: 18px 20px; }
-.label { font-family: 'Courier Prime', monospace; font-size: 10.5px;
-         letter-spacing: 0.14em; text-transform: uppercase; color: %(faint)s; }
-.mono { font-family: 'Courier Prime', monospace; }
-.rule { flex: 1; height: 1px; background-color: %(border)s; }
-.head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-.name { font-family: 'Outfit', sans-serif; font-weight: 600; letter-spacing: -0.01em; }
-.chip { font-family: 'Courier Prime', monospace; font-size: 10.5px;
-        color: #6f6259; background-color: %(tint)s; border: 1px solid #eadfd2;
-        border-radius: 4px; padding: 2px 6px; }
-.highlight-text { color: %(accent)s; font-weight: 600; }
-.pill { font-family: 'Courier Prime', monospace; font-size: 9.5px;
-        letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px;
-        border-radius: 999px; border: 1px solid; white-space: nowrap; }
-.pill-done { color: #5c6b46; background-color: #f1f3e8; border-color: #dde2cf; }
-.pill-wip { color: #96602f; background-color: #faf0e4; border-color: #eeddc9; }
-"""
-    % {
-        "body": BODY,
-        "surface": SURFACE,
-        "tint": SURFACE_TINT,
-        "border": BORDER,
-        "faint": FAINT,
-        "accent": ACCENT,
-    }
-)
-
+# ----------------- Camo-Safe Typography -----------------
+FONT_SERIF = "'Playfair Display', Georgia, 'Times New Roman', serif"
+FONT_SANS = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+FONT_MONO = "'JetBrains Mono', 'SFMono-Regular', Consolas, monospace"
+FONT_CURSIVE = "'Caveat', 'Bradley Hand', 'Segoe Print', cursive"
 
 GENERATED_CARDS = set()
 
 
-def save_svg(filename, width, height, content, extra_css=""):
-    """Write one card, in both themes. Every card is a fixed-size foreignObject."""
+def save_svg(filename, width, height, body):
+    """Write one standalone Camo-safe SVG card."""
     GENERATED_CARDS.add(filename)
-    svg = """<svg fill="none" viewBox="0 0 %(w)d %(h)d" width="%(w)d" height="%(h)d" xmlns="http://www.w3.org/2000/svg">
-  <foreignObject x="0" y="0" width="%(w)d" height="%(h)d">
-    <div xmlns="http://www.w3.org/1999/xhtml" style="width: %(w)dpx; height: %(h)dpx; box-sizing: border-box;">
-      <style>
-        %(css)s
-        %(extra)s
-      </style>
-      %(content)s
-    </div>
-  </foreignObject>
-</svg>""" % {
-        "w": width,
-        "h": height,
-        "css": COMMON_CSS,
-        "extra": extra_css,
-        "content": content,
-    }
+    svg = (
+        '<svg xmlns="http://www.w3.org/2000/svg" '
+        'xmlns:xlink="http://www.w3.org/1999/xlink" '
+        'viewBox="0 0 %(w)d %(h)d" width="%(w)d" height="%(h)d">\n'
+        "%(body)s\n"
+        "</svg>\n"
+    ) % {"w": width, "h": height, "body": body}
     with open(os.path.join(CARDS_DIR, filename), "w", encoding="utf-8") as sf:
         sf.write(svg)
-    with open(os.path.join(DARK_DIR, filename), "w", encoding="utf-8") as sf:
-        sf.write(to_dark(svg))
-    print("Compiled: %s (light + dark)" % filename)
+    print("Compiled: %s (%dx%d)" % (filename, width, height))
 
 
-def head(label, note=""):
-    """Small uppercase section label followed by a hairline across the card."""
-    note_html = '<span class="label">%s</span>' % note if note else ""
+# ----------------- Text & Pill Layout Helpers -----------------
+NARROW_CHARS = set("iltfjI1!.,:;'|()[]{}/ ")
+WIDE_CHARS = set("mwMWGOQ@#%&")
+
+
+def est_text_width(text, font_size, family="sans", bold=False):
+    """Conservative pixel width estimator calibrated for Georgia / Sans / Mono."""
+    if family == "mono":
+        return len(text) * font_size * 0.61
+    scale = 1.05 if bold else 1.0
+    if family == "serif":
+        scale *= 1.03
+    total = 0.0
+    for ch in text:
+        if ch in NARROW_CHARS:
+            total += 0.34
+        elif ch in WIDE_CHARS or ("A" <= ch <= "Z"):
+            total += 0.72
+        else:
+            total += 0.54
+    return total * font_size * scale
+
+
+def wrap_lines(text, max_width, font_size, family="sans", bold=False):
+    """Word-wrap text into lines whose estimated width fits inside max_width."""
+    words = text.split()
+    if not words:
+        return []
+    lines = []
+    cur = words[0]
+    for word in words[1:]:
+        candidate = cur + " " + word
+        if est_text_width(candidate, font_size, family, bold) <= max_width:
+            cur = candidate
+        else:
+            lines.append(cur)
+            cur = word
+    lines.append(cur)
+    return lines
+
+
+def layout_pills(labels, x0, y0, max_width, pill_h=24, gap_x=7, gap_y=7, font_size=11, pad_x=18):
+    """Pack pill tags cleanly into rows within max_width."""
+    placed = []
+    cx = x0
+    cy = y0
+    rows = 1
+    for label in labels:
+        pw = max(34, round(est_text_width(label, font_size, "sans", bold=False) + pad_x))
+        if cx > x0 and (cx - x0 + pw) > max_width:
+            cx = x0
+            cy += pill_h + gap_y
+            rows += 1
+        placed.append((label, cx, cy, pw))
+        cx += pw + gap_x
+    total_h = rows * pill_h + (rows - 1) * gap_y
+    return placed, total_h
+
+
+def card_frame(w, h, fill=CANVAS_BG, stroke=CANVAS_BORDER, rx=16):
+    """Outer rounded rectangle inset by 0.5px so 1px stroke is never clipped."""
     return (
-        '<div class="head"><span class="label">%s</span>'
-        '<span class="rule"></span>%s</div>' % (label, note_html)
-    )
+        '<rect x="0.5" y="0.5" width="%(w)s" height="%(h)s" rx="%(rx)d" '
+        'fill="%(fill)s" stroke="%(stroke)s" stroke-width="1"/>'
+    ) % {"w": w - 1, "h": h - 1, "rx": rx, "fill": fill, "stroke": stroke}
 
 
-# Spoken and written form of each icon key, for alt text.
+def subcard_frame(x, y, w, h, fill=SUBCARD_BG, stroke=SUBCARD_BORDER, rx=12):
+    return (
+        '<rect x="%(x)d" y="%(y)d" width="%(w)d" height="%(h)d" rx="%(rx)d" '
+        'fill="%(fill)s" stroke="%(stroke)s" stroke-width="1"/>'
+    ) % {"x": x, "y": y, "w": w, "h": h, "rx": rx, "fill": fill, "stroke": stroke}
+
+
+# ----------------- Crisp Vector Icons (16x16 viewBox) -----------------
+VECTOR_PATHS = {
+    "home": '<path d="M2 8.5L8 3l6 5.5V14a1 1 0 0 1-1 1H9.5v-4h-3v4H3a1 1 0 0 1-1-1V8.5z" fill="none" stroke="%(c)s" stroke-width="1.5" stroke-linejoin="round"/>',
+    "code": '<path d="M5.5 4.5L2 8l3.5 3.5M10.5 4.5L14 8l-3.5 3.5M9 3.5L7 12.5" fill="none" stroke="%(c)s" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>',
+    "folder": '<path d="M2 4.5A1.5 1.5 0 0 1 3.5 3h3l1.5 1.8h4.5A1.5 1.5 0 0 1 14 6.3v6.2A1.5 1.5 0 0 1 12.5 14h-9A1.5 1.5 0 0 1 2 12.5V4.5z" fill="none" stroke="%(c)s" stroke-width="1.5" stroke-linejoin="round"/>',
+    "medal": '<circle cx="8" cy="6.5" r="4" fill="none" stroke="%(c)s" stroke-width="1.5"/><path d="M5.5 9.8L4.5 14.5 8 13l3.5 1.5-1-4.7" fill="none" stroke="%(c)s" stroke-width="1.4" stroke-linejoin="round"/>',
+    "chart": '<path d="M2.5 13.5V8.5M6.5 13.5V4.5M10.5 13.5V6.5M14 13.5V2.5" fill="none" stroke="%(c)s" stroke-width="1.8" stroke-linecap="round"/>',
+    "star": '<path d="M8 1.6l1.9 4.1 4.5.6-3.3 3.1.8 4.5L8 11.7 4.1 13.9l.8-4.5-3.3-3.1 4.5-.6z" fill="%(c)s"/>',
+    "bolt": '<path d="M9.2 1.5L3.5 9h4.2l-1 5.5L12.5 7H8.3l.9-5.5z" fill="%(c)s"/>',
+    "target": '<circle cx="8" cy="8" r="6" fill="none" stroke="%(c)s" stroke-width="1.5"/><circle cx="8" cy="8" r="3" fill="none" stroke="%(c)s" stroke-width="1.4"/><circle cx="8" cy="8" r="1.2" fill="%(c)s"/>',
+    "mail": '<rect x="1.8" y="3.2" width="12.4" height="9.6" rx="1.6" fill="none" stroke="%(c)s" stroke-width="1.5"/><path d="M2.2 4l5.8 4.4L13.8 4" fill="none" stroke="%(c)s" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>',
+    "compass": '<circle cx="8" cy="8" r="6.2" fill="none" stroke="%(c)s" stroke-width="1.5"/><polygon points="10.8,5.2 6.8,6.8 5.2,10.8 9.2,9.2" fill="%(c)s"/>',
+    "grad_cap": '<path d="M1.5 6.5L8 3.2l6.5 3.3L8 9.8 1.5 6.5z" fill="none" stroke="%(c)s" stroke-width="1.4" stroke-linejoin="round"/><path d="M4.2 8v3.6c0 1.1 1.7 2 3.8 2s3.8-.9 3.8-2V8M14 7v4.2" fill="none" stroke="%(c)s" stroke-width="1.4" stroke-linecap="round"/>',
+    "pin": '<path d="M8 14.5s4.5-4.3 4.5-8A4.5 4.5 0 0 0 3.5 6.5c0 3.7 4.5 8 4.5 8z" fill="none" stroke="%(c)s" stroke-width="1.5"/><circle cx="8" cy="6.5" r="1.6" fill="%(c)s"/>',
+    "briefcase": '<rect x="2" y="5" width="12" height="8.5" rx="1.6" fill="none" stroke="%(c)s" stroke-width="1.5"/><path d="M5.5 5V3.5A1.2 1.2 0 0 1 6.7 2.3h2.6a1.2 1.2 0 0 1 1.2 1.2V5M2 8.5h12" fill="none" stroke="%(c)s" stroke-width="1.4"/>',
+    "handshake": '<path d="M1.5 7.5l3-3 3.5 2.5 3.5-2.5 3 3-4.5 4.5a2 2 0 0 1-2.8 0L1.5 7.5z" fill="none" stroke="%(c)s" stroke-width="1.4" stroke-linejoin="round"/>',
+    "layers": '<path d="M8 2L2 5.2 8 8.4l6-3.2L8 2zM2 8.2l6 3.2 6-3.2M2 11.2l6 3.2 6-3.2" fill="none" stroke="%(c)s" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>',
+    "database": '<ellipse cx="8" cy="4" rx="5" ry="2" fill="none" stroke="%(c)s" stroke-width="1.4"/><path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2" fill="none" stroke="%(c)s" stroke-width="1.4"/>',
+    "cloud": '<path d="M4.5 13h7.2a2.8 2.8 0 0 0 .4-5.6A4.2 4.2 0 0 0 4 6.2a3.2 3.2 0 0 0 .5 6.8z" fill="none" stroke="%(c)s" stroke-width="1.4" stroke-linejoin="round"/>',
+    "check": '<circle cx="8" cy="8" r="6" fill="none" stroke="%(c)s" stroke-width="1.4"/><path d="M5.2 8.2l1.9 1.9 3.7-3.8" fill="none" stroke="%(c)s" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>',
+    "activity": '<path d="M1.5 8.5h3l1.8-4.5 2.6 8 1.9-3.5h3.7" fill="none" stroke="%(c)s" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>',
+    "wrench": '<path d="M10.5 2.5a3.5 3.5 0 0 0-4.3 4.3L2.5 10.5l3 3 3.7-3.7a3.5 3.5 0 0 0 4.3-4.3l-2 2-1.8-.4-.4-1.8 2-2z" fill="none" stroke="%(c)s" stroke-width="1.4" stroke-linejoin="round"/>',
+    "server": '<rect x="2.2" y="2.5" width="11.6" height="4.5" rx="1" fill="none" stroke="%(c)s" stroke-width="1.4"/><rect x="2.2" y="9" width="11.6" height="4.5" rx="1" fill="none" stroke="%(c)s" stroke-width="1.4"/><circle cx="4.5" cy="4.7" r="0.7" fill="%(c)s"/><circle cx="4.5" cy="11.2" r="0.7" fill="%(c)s"/>',
+    "book": '<path d="M2.5 3.5h4.2A1.8 1.8 0 0 1 8.5 5.3V13a1.5 1.5 0 0 0-1.5-1.2H2.5V3.5zM13.5 3.5H9.3a1.8 1.8 0 0 0-1.8 1.8V13a1.5 1.5 0 0 1 1.5-1.2h4.5V3.5z" fill="none" stroke="%(c)s" stroke-width="1.4" stroke-linejoin="round"/>',
+    "repo": '<path d="M3.5 2.5h9a1 1 0 0 1 1 1v9.5a1 1 0 0 1-1 1h-9a1.2 1.2 0 0 1-1.2-1.2V3.7A1.2 1.2 0 0 1 3.5 2.5zM2.3 11.2h11.2M5.2 2.5v8.7" fill="none" stroke="%(c)s" stroke-width="1.4" stroke-linejoin="round"/>',
+    "users": '<circle cx="6.2" cy="5.5" r="2.2" fill="none" stroke="%(c)s" stroke-width="1.4"/><path d="M2.2 13a4 4 0 0 1 8 0M11 4.5a1.8 1.8 0 0 1 0 3.5M12 10.2a3.2 3.2 0 0 1 2.2 2.8" fill="none" stroke="%(c)s" stroke-width="1.4" stroke-linecap="round"/>',
+}
+
+
+def vec_icon(kind, x, y, color, size=14):
+    scale = size / 16.0
+    inner = VECTOR_PATHS[kind] % {"c": color}
+    return '<g transform="translate(%.1f, %.1f) scale(%.4f)">%s</g>' % (x, y, scale, inner)
+
+
+def sparkle_path(cx, cy, r, fill=CRIMSON, opacity=1.0):
+    ir = r * 0.24
+    d = (
+        "M %(cx).1f %(top).1f Q %(cx).1f %(cy).1f %(right).1f %(cy).1f "
+        "Q %(cx).1f %(cy).1f %(cx).1f %(bot).1f "
+        "Q %(cx).1f %(cy).1f %(left).1f %(cy).1f "
+        "Q %(cx).1f %(cy).1f %(cx).1f %(top).1f Z"
+    ) % {
+        "cx": cx,
+        "cy": cy,
+        "top": cy - r,
+        "bot": cy + r,
+        "left": cx - r,
+        "right": cx + r,
+    }
+    _ = ir
+    return '<path d="%s" fill="%s" fill-opacity="%.2f"/>' % (d, fill, opacity)
+
+
+def find_icon(cat, key):
+    src = icons.get(cat, {}).get(key)
+    if src:
+        return src
+    for mapping in icons.values():
+        if key in mapping:
+            return mapping[key]
+    return ""
+
+
 TECH_LABELS = {
     "go": "Go",
     "java": "Java",
@@ -301,644 +283,924 @@ TECH_LABELS = {
     "typescript": "TypeScript",
     "c": "C",
     "bash": "Bash",
-    "cplusplus": "C++",
     "javascript": "JavaScript",
     "fastapi": "FastAPI",
     "nodejs": "Node.js",
     "react": "React",
     "tailwindcss": "Tailwind CSS",
-    "apachekafka": "Kafka",
+    "apachespark": "Apache Spark",
+    "apacheairflow": "Apache Airflow",
+    "pytorch": "PyTorch",
+    "duckdb": "DuckDB",
+    "sqlite": "SQLite3",
     "grpc": "gRPC",
     "rabbitmq": "RabbitMQ",
     "redis": "Redis",
-    "apachespark": "Spark",
-    "apacheairflow": "Apache Airflow",
-    "duckdb": "DuckDB",
-    "sqlite": "SQLite3",
-    "sqlalchemy": "SQLAlchemy",
-    "googlecloud": "Google Cloud",
     "postgresql": "PostgreSQL",
-    "mysql": "MySQL",
     "mongodb": "MongoDB",
     "amazonwebservices": "AWS",
     "docker": "Docker",
-    "nginx": "Nginx",
+    "nginx": "NGINX",
     "githubactions": "GitHub Actions",
     "pytest": "Pytest",
     "vitest": "Vitest",
-    "kubernetes": "Kubernetes",
-    "terraform": "Terraform",
     "prometheus": "Prometheus",
     "grafana": "Grafana",
     "git": "Git",
     "github": "GitHub",
     "linux": "Linux",
     "vscode": "VS Code",
-    "intellij": "IntelliJ",
+    "postman": "Postman",
 }
 
 
-def icon(cat, key, size=22):
-    """One tech chip. Warns instead of silently dropping an unknown icon.
-
-    Self-closed on purpose: a card is an XML document, so an unclosed <img>
-    makes the browser discard the whole image.
-    """
-    src = icons.get(cat, {}).get(key)
-    if not src:
-        print("Warning: no icon for %s/%s -- skipped" % (cat, key))
-        return ""
-    return '<img src="%s" alt="%s" style="width:%dpx;height:%dpx;border-radius:4px;" />' % (
-        src,
-        TECH_LABELS.get(key, key),
-        size,
-        size,
-    )
-
-
 # =====================================================================
-# 01 -- Header
+# 01 -- Header Banner (880x220)
 # =====================================================================
-header_content = """
-<div class="card" style="display: flex; align-items: center; justify-content: space-between;">
-  <div style="display: flex; align-items: center; gap: 16px;">
-    <div style="width: 44px; height: 44px; border: 1px solid %(border)s; border-radius: 8px;
-                background-color: #faf6f0; display: flex; align-items: center;
-                justify-content: center; font-family: 'Courier Prime', monospace;
-                font-size: 14px; letter-spacing: 0.04em; color: %(accent)s;">AS.</div>
-    <div>
-      <div class="name" style="font-size: 18px; color: %(ink)s;">%(name)s</div>
-      <div style="font-size: 12px; color: %(muted)s; margin-top: 2px;">%(role_short)s</div>
-    </div>
-  </div>
-  <div class="mono" style="text-align: right; font-size: 11px; color: %(faint)s;
-              line-height: 1.6;">
-    <div>github.com/%(user)s</div>
-    <div>%(email)s</div>
-  </div>
-</div>
+header_body = """
+<defs>
+  <clipPath id="hdr-clip">
+    <rect x="0" y="0" width="880" height="220" rx="16"/>
+  </clipPath>
+  <linearGradient id="hdr-grad" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%%" stop-color="#983232"/>
+    <stop offset="55%%" stop-color="#8C2D2D"/>
+    <stop offset="100%%" stop-color="#6B2021"/>
+  </linearGradient>
+</defs>
+<g clip-path="url(#hdr-clip)">
+  <rect x="0" y="0" width="880" height="220" fill="url(#hdr-grad)"/>
+
+  <!-- Layered rolling hills on the right -->
+  <path d="M320 220 C410 155, 505 182, 600 138 C695 94, 785 112, 880 78 L880 220 Z" fill="%(mid_hill)s" fill-opacity="0.72"/>
+  <path d="M410 220 C495 168, 575 188, 668 152 C748 120, 818 136, 880 112 L880 220 Z" fill="%(dark_hill)s"/>
+  <path d="M565 220 C645 185, 725 198, 805 165 C840 150, 862 154, 880 148 L880 220 Z" fill="#1A1011" fill-opacity="0.88"/>
+
+  <!-- Ringed planet doodle (top-center) -->
+  <g transform="translate(432, 54)">
+    <circle cx="0" cy="0" r="14" fill="#A53F3A" stroke="%(on_dark)s" stroke-width="1.6"/>
+    <path d="M-8 -5 Q-2 -10 5 -6" fill="none" stroke="%(on_dark_sub)s" stroke-width="1" stroke-linecap="round"/>
+    <ellipse cx="0" cy="1" rx="25" ry="6.5" transform="rotate(-18)" fill="none" stroke="%(on_dark)s" stroke-width="1.6"/>
+    <circle cx="29" cy="-9" r="1.5" fill="%(on_dark)s"/>
+  </g>
+
+  <!-- 4-point sparkle stars -->
+  %(s1)s
+  %(s2)s
+  %(s3)s
+  %(s4)s
+  %(s5)s
+  <circle cx="355" cy="42" r="1.6" fill="%(on_dark_sub)s" fill-opacity="0.7"/>
+  <circle cx="515" cy="88" r="1.4" fill="%(on_dark_sub)s" fill-opacity="0.6"/>
+  <circle cx="605" cy="34" r="1.8" fill="%(on_dark)s" fill-opacity="0.85"/>
+
+  <!-- Peeking black cat silhouette (bottom-left) -->
+  <g transform="translate(38, 166)">
+    <!-- Ears -->
+    <polygon points="8,24 14,2 27,18" fill="#181010"/>
+    <polygon points="41,18 54,2 60,24" fill="#181010"/>
+    <polygon points="12,21 15,7 23,17" fill="#4A2525"/>
+    <polygon points="45,17 53,7 56,21" fill="#4A2525"/>
+    <!-- Head & shoulders -->
+    <ellipse cx="34" cy="34" rx="26" ry="21" fill="#181010"/>
+    <path d="M4 54 Q34 38 64 54 L68 58 L0 58 Z" fill="#181010"/>
+    <!-- Eyes (O . O) -->
+    <circle cx="23" cy="31" r="4.8" fill="%(on_dark)s"/>
+    <circle cx="45" cy="31" r="4.8" fill="%(on_dark)s"/>
+    <circle cx="23.8" cy="31" r="2.1" fill="#181010"/>
+    <circle cx="45.8" cy="31" r="2.1" fill="#181010"/>
+    <circle cx="24.6" cy="29.8" r="0.8" fill="#FFFFFF"/>
+    <circle cx="46.6" cy="29.8" r="0.8" fill="#FFFFFF"/>
+    <!-- Tiny nose dot -->
+    <circle cx="34" cy="37" r="1.3" fill="#E8CFC0"/>
+    <!-- Whiskers -->
+    <path d="M12 36 L2 34 M12 39 L2 40 M56 36 L66 34 M56 39 L66 40" stroke="#7A6A63" stroke-width="1" stroke-linecap="round"/>
+  </g>
+
+  <!-- Title & subtitle (left) -->
+  <text x="38" y="102" font-family="%(serif)s" font-size="44" font-weight="700" fill="%(on_dark)s">%(name)s</text>
+  <text x="40" y="132" font-family="%(sans)s" font-size="14" font-weight="500" fill="%(on_dark_sub)s">%(role_short)s</text>
+
+  <!-- Top-right tilted handwritten annotation with double curved underline -->
+  <g transform="rotate(-8 730 56)">
+    <text x="730" y="54" text-anchor="middle" font-family="%(cursive)s" font-size="22" font-weight="700" fill="%(on_dark)s">Dream Big. Code Better.</text>
+    <path d="M635 63 Q728 57 826 62" fill="none" stroke="%(on_dark)s" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M648 69 Q730 64 815 68" fill="none" stroke="%(callout_border)s" stroke-width="1.3" stroke-linecap="round"/>
+  </g>
+</g>
+<rect x="0.5" y="0.5" width="879" height="219" rx="16" fill="none" stroke="#6E2223" stroke-width="1"/>
 """ % {
-    "border": BORDER,
-    "accent": ACCENT,
-    "ink": INK,
-    "muted": MUTED,
-    "faint": FAINT,
-    "name": profile["name"],
-    "role_short": profile.get("role_short", "Backend platforms · distributed systems · data engineering"),
-    "user": GITHUB_USER,
-    "email": EMAIL,
+    "mid_hill": MID_HILL,
+    "dark_hill": DARK_HILL,
+    "on_dark": ON_DARK,
+    "on_dark_sub": ON_DARK_SUB,
+    "callout_border": CALLOUT_BORDER,
+    "serif": FONT_SERIF,
+    "sans": FONT_SANS,
+    "cursive": FONT_CURSIVE,
+    "name": xml_esc(profile["name"]),
+    "role_short": xml_esc(profile.get("role_short", "Backend platforms · distributed systems · data engineering")),
+    "s1": sparkle_path(290, 48, 8, ON_DARK, 0.9),
+    "s2": sparkle_path(548, 42, 10, ON_DARK, 0.95),
+    "s3": sparkle_path(628, 72, 6, ON_DARK_SUB, 0.8),
+    "s4": sparkle_path(384, 88, 5, ON_DARK_SUB, 0.7),
+    "s5": sparkle_path(838, 92, 7, CALLOUT_BORDER, 0.85),
 }
-save_svg("header.svg", *CARD_SIZES["header"], header_content)
+save_svg("header.svg", *CARD_SIZES["header"], header_body)
 
 
 # =====================================================================
-# 02 -- Navigation and contact links (drawn by GitHub, not by this script)
+# 02 -- Navigation Bar Pills (5 individual clickable SVGs)
 # =====================================================================
-# These were hairline button images, four to a line. Four images cannot be made
-# to fit one line at every window width, and when a row does not fit it either
-# wraps into a ragged 3 + 1 or overflows the column. Links are text, so they wrap
-# wherever the reader's window needs them to, they pick up GitHub's own theme
-# colours, and a screen reader and a keyboard user can both reach them.
 HAS_ACHIEVEMENTS = bool(profile.get("achievements"))
 HAS_UPCOMING = bool(profile.get("upcoming_projects"))
 
-NAV_ITEMS = [
-    ("About", "#about"),
-    ("Tech Stack", "#tech-stack"),
-    ("Featured Projects", "#featured-projects"),
-    ("Achievements" if HAS_ACHIEVEMENTS else "Certifications", "#achievements" if HAS_ACHIEVEMENTS else "#certifications"),
-    ("GitHub Analytics", "#github-analytics"),
+NAV_SPECS = [
+    ("nav_about.svg", "About", "#about", "home", 114, True),
+    ("nav_stack.svg", "Tech Stack", "#tech-stack", "code", 152, False),
+    ("nav_projects.svg", "Featured Projects", "#featured-projects", "folder", 202, False),
+    (
+        "nav_certs.svg",
+        "Achievements" if HAS_ACHIEVEMENTS else "Certifications",
+        "#achievements" if HAS_ACHIEVEMENTS else "#certifications",
+        "medal",
+        168,
+        False,
+    ),
+    ("nav_analytics.svg", "GitHub Analytics", "#github-analytics", "chart", 196, False),
 ]
 
-CONTACT_ITEMS = [
-    ("GitHub", GITHUB_URL),
-    ("Portfolio", PORTFOLIO_URL),
-    ("LinkedIn", profile["about_me"]["linkedin_url"]),
-    ("Email", "mailto:" + EMAIL),
-    ("Resume", RESUME_URL),
-]
+for filename, label, _href, icon_key, width, active in NAV_SPECS:
+    bg = ESPRESSO if active else NAV_BG
+    border = ESPRESSO if active else NAV_BORDER
+    fg = ON_DARK if active else PILL_TEXT
+    ic = ON_DARK if active else CRIMSON
+    tw = est_text_width(label, 13, "sans", bold=True)
+    content_w = 18 + tw
+    sx = (width - content_w) / 2.0
+    nav_body = """
+    %(frame)s
+    %(icon)s
+    <text x="%(tx).1f" y="24.5" font-family="%(sans)s" font-size="13" font-weight="600" fill="%(fg)s">%(label)s</text>
+    """ % {
+        "frame": card_frame(width, 40, fill=bg, stroke=border, rx=12),
+        "icon": vec_icon(icon_key, sx, 13, ic, size=14),
+        "tx": sx + 20,
+        "sans": FONT_SANS,
+        "fg": fg,
+        "label": xml_esc(label),
+    }
+    save_svg(filename, width, 40, nav_body)
 
-LINK_SEPARATOR = " · "
 
+# =====================================================================
+# 03 -- Hero / Split Bio + Focus Card (880x250)
+# =====================================================================
+bio_lines = wrap_lines(profile["role"], 505, 13.5, "sans", bold=False)[:2]
+bio_svg = "".join(
+    '<text x="28" y="%d" font-family="%s" font-size="13.5" fill="%s">%s</text>'
+    % (106 + i * 20, FONT_SANS, TEXT_BODY, xml_esc(line))
+    for i, line in enumerate(bio_lines)
+)
 
-def link_row(items):
-    """A centred row of links.
+quote_lines = [strip_tags(l) for l in profile["quote"]["lines"]]
+quote_l1 = quote_lines[0] if len(quote_lines) > 0 else ""
+quote_l2 = quote_lines[1] if len(quote_lines) > 1 else ""
 
-    The separator between two links is ordinary text, so the line can break
-    there: the row wraps on a narrow window instead of overflowing it.
-    """
-    return '<p align="center">%s</p>' % LINK_SEPARATOR.join(
-        '<a href="%s">%s</a>' % (href, label) for label, href in items
+focus_items = profile["focus"][:3]
+focus_rows = []
+for idx, item in enumerate(focus_items):
+    ry = 98 + idx * 46
+    sep = (
+        '<line x1="590" y1="%d" x2="854" y2="%d" stroke="%s" stroke-width="1"/>'
+        % (ry - 22, ry - 22, CANVAS_BORDER)
+        if idx > 0
+        else ""
+    )
+    focus_rows.append(
+        """
+        %(sep)s
+        <circle cx="603" cy="%(cy)d" r="11" fill="%(crimson)s"/>
+        <text x="603" y="%(num_y)d" text-anchor="middle" font-family="%(mono)s" font-size="10.5" font-weight="700" fill="%(on_dark)s">%(num)s</text>
+        <text x="624" y="%(txt_y)d" font-family="%(sans)s" font-size="13" font-weight="600" fill="%(head)s">%(text)s</text>
+        """
+        % {
+            "sep": sep,
+            "cy": ry,
+            "crimson": CRIMSON,
+            "num_y": ry + 3.5,
+            "mono": FONT_MONO,
+            "on_dark": ON_DARK,
+            "num": "%02d" % (idx + 1),
+            "txt_y": ry + 4.5,
+            "sans": FONT_SANS,
+            "head": TEXT_HEAD,
+            "text": xml_esc(item),
+        }
     )
 
+hero_body = """
+%(frame)s
+<line x1="565" y1="22" x2="565" y2="228" stroke="%(border)s" stroke-width="1"/>
+
+<!-- Left Column -->
+%(star)s
+<text x="46" y="42" font-family="%(sans)s" font-size="10.5" font-weight="700" letter-spacing="1.2" fill="%(eyebrow)s">%(kicker)s</text>
+<text x="28" y="80" font-family="%(serif)s" font-size="38" font-weight="700" fill="%(head)s">%(name)s</text>
+%(bio)s
+
+<!-- Callout Highlight Box -->
+<rect x="28" y="162" width="510" height="60" rx="10" fill="%(cbg)s" stroke="%(cborder)s" stroke-width="1"/>
+%(bolt)s
+<text x="72" y="187" font-family="%(sans)s" font-size="12.5" font-weight="700" fill="%(chead)s">%(q1)s</text>
+<text x="72" y="207" font-family="%(sans)s" font-size="12.5" font-weight="500" fill="%(body)s">%(q2)s</text>
+
+<!-- Right Column: Focus -->
+%(target)s
+<text x="615" y="47" font-family="%(serif)s" font-size="22" font-weight="700" fill="%(head)s">Focus</text>
+%(sp1)s
+%(sp2)s
+%(focus_rows)s
+""" % {
+    "frame": card_frame(880, 250),
+    "border": CANVAS_BORDER,
+    "star": vec_icon("star", 28, 31, CRIMSON, size=12),
+    "sans": FONT_SANS,
+    "eyebrow": TEXT_EYEBROW,
+    "kicker": xml_esc(profile["kicker"].upper()),
+    "serif": FONT_SERIF,
+    "head": TEXT_HEAD,
+    "name": xml_esc(profile["name"]),
+    "bio": bio_svg,
+    "cbg": CALLOUT_BG,
+    "cborder": CALLOUT_BORDER,
+    "bolt": vec_icon("bolt", 44, 182, CALLOUT_ACCENT, size=18),
+    "chead": CALLOUT_HEAD,
+    "q1": xml_esc(quote_l1),
+    "body": TEXT_BODY,
+    "q2": xml_esc(quote_l2),
+    "target": vec_icon("target", 590, 31, CRIMSON, size=18),
+    "sp1": sparkle_path(842, 34, 7.5, CRIMSON, 0.9),
+    "sp2": sparkle_path(826, 46, 4.5, CRIMSON, 0.75),
+    "focus_rows": "".join(focus_rows),
+}
+save_svg("hero.svg", *CARD_SIZES["hero"], hero_body)
+
 
 # =====================================================================
-# 03 -- Hero
+# 04 -- Calls to Action (880x48 each)
 # =====================================================================
-FOCUS = [("%02d" % (index + 1), text) for index, text in enumerate(profile["focus"])]
+email_body = """
+%(frame)s
+%(icon)s
+<text x="48" y="29" font-family="%(sans)s" font-size="14" font-weight="600" fill="%(fg)s">Email Me</text>
+<text x="854" y="29" text-anchor="end" font-family="%(sans)s" font-size="16" font-weight="600" fill="%(fg)s">→</text>
+""" % {
+    "frame": card_frame(880, 48, fill=ESPRESSO, stroke=ESPRESSO, rx=12),
+    "icon": vec_icon("mail", 22, 16.5, ON_DARK, size=15),
+    "sans": FONT_SANS,
+    "fg": ON_DARK,
+}
+save_svg("action_email.svg", *CARD_SIZES["action"], email_body)
 
-focus_rows = "".join(
-    """
-    <div style="display: flex; gap: 10px; align-items: baseline; padding: 9px 0;
-                border-top: 1px solid #f2ebe1;">
-      <span class="mono" style="font-size: 9.5px; color: %(accent)s;">%(idx)s</span>
-      <span style="font-size: 13px; color: #3c2f2f;">%(text)s</span>
-    </div>
-    """
-    % {"accent": ACCENT, "idx": idx, "text": text}
-    for idx, text in FOCUS
+portfolio_host = PORTFOLIO_URL.replace("https://", "").replace("http://", "").rstrip("/").upper()
+portfolio_body = """
+%(frame)s
+%(icon)s
+<text x="48" y="29" font-family="%(sans)s" font-size="14" font-weight="600" fill="%(head)s">View Portfolio</text>
+<text x="854" y="28.5" text-anchor="end" font-family="%(sans)s" font-size="11.5" font-weight="700" letter-spacing="0.8" fill="%(body)s">%(host)s →</text>
+""" % {
+    "frame": card_frame(880, 48, fill=NAV_BG, stroke=SUBCARD_BORDER, rx=12),
+    "icon": vec_icon("compass", 22, 16, CRIMSON, size=16),
+    "sans": FONT_SANS,
+    "head": TEXT_HEAD,
+    "body": TEXT_BODY,
+    "host": xml_esc(portfolio_host),
+}
+save_svg("action_portfolio.svg", *CARD_SIZES["action"], portfolio_body)
+
+
+# =====================================================================
+# 05 -- Profile Information Grid (880x76)
+# =====================================================================
+INFO = [(item["label"], item["main"], item["sub"]) for item in profile["info"]]
+INFO_ICONS = ["grad_cap", "pin", "briefcase", "handshake"]
+
+info_cols_svg = []
+for idx, (label, main, _sub) in enumerate(INFO):
+    cx = idx * 220
+    div = (
+        '<line x1="%d" y1="15" x2="%d" y2="61" stroke="%s" stroke-width="1"/>'
+        % (cx, cx, CANVAS_BORDER)
+        if idx > 0
+        else ""
+    )
+    info_cols_svg.append(
+        """
+        %(div)s
+        %(icon)s
+        <text x="%(lx)d" y="30" font-family="%(sans)s" font-size="10.5" font-weight="700" letter-spacing="1.2" fill="%(muted)s">%(label)s</text>
+        <text x="%(vx)d" y="52" font-family="%(sans)s" font-size="13.5" font-weight="600" fill="%(head)s">%(main)s</text>
+        """
+        % {
+            "div": div,
+            "icon": vec_icon(INFO_ICONS[idx % len(INFO_ICONS)], cx + 22, 19.5, CRIMSON, size=13),
+            "lx": cx + 40,
+            "vx": cx + 22,
+            "sans": FONT_SANS,
+            "muted": TEXT_MUTED,
+            "label": xml_esc(label.upper()),
+            "head": TEXT_HEAD,
+            "main": xml_esc(main),
+        }
+    )
+
+info_body = card_frame(880, 76) + "".join(info_cols_svg)
+save_svg("info.svg", *CARD_SIZES["info"], info_body)
+
+
+# =====================================================================
+# 06 -- About Card (880x232)
+# =====================================================================
+about_lines = wrap_lines(profile["about_me"]["text"], 480, 13.5, "sans", bold=False)
+about_text_svg = "".join(
+    '<text x="28" y="%d" font-family="%s" font-size="13.5" fill="%s">%s</text>'
+    % (82 + i * 21, FONT_SANS, TEXT_BODY, xml_esc(line))
+    for i, line in enumerate(about_lines)
 )
 
-hero_content = """
-<div class="card" style="display: flex; gap: 40px;">
-  <div style="width: 468px; display: flex; flex-direction: column;">
-    <div class="label" style="color: %(accent)s;">%(kicker)s</div>
-    <div class="name" style="font-size: 44px; line-height: 1.25; color: %(ink_strong)s; margin: 10px 0 12px;">
-      %(name)s
-    </div>
-    <div style="font-size: 16px; line-height: 1.5; color: #5a4a42;">
-      %(role)s
-    </div>
-    <div style="margin-top: 16px; border-left: 2px solid %(accent)s; padding-left: 12px;
-                font-size: 13.5px; line-height: 1.5; color: %(muted)s;">
-      %(quote)s
-    </div>
-  </div>
-  <div style="flex: 1; border-left: 1px solid %(border_soft)s; padding-left: 28px;">
-    <div class="label">Focus</div>
-    %(focus)s
-  </div>
-</div>
+exploring_lines = wrap_lines(profile["about_me"]["exploring"], 274, 12.5, "sans")
+interests_lines = wrap_lines(profile["about_me"]["interests"], 274, 12.5, "sans")
+
+exploring_svg = "".join(
+    '<text x="564" y="%d" font-family="%s" font-size="12.5" fill="%s">%s</text>'
+    % (106 + i * 17, FONT_SANS, TEXT_BODY, xml_esc(line))
+    for i, line in enumerate(exploring_lines)
+)
+interests_svg = "".join(
+    '<text x="564" y="%d" font-family="%s" font-size="12.5" fill="%s">%s</text>'
+    % (176 + i * 17, FONT_SANS, TEXT_BODY, xml_esc(line))
+    for i, line in enumerate(interests_lines)
+)
+
+about_body = """
+%(frame)s
+%(icon)s
+<text x="52" y="42" font-family="%(serif)s" font-size="22" font-weight="700" fill="%(head)s">About</text>
+<line x1="126" y1="35" x2="852" y2="35" stroke="%(border)s" stroke-width="1"/>
+
+<!-- Left narrative + coffee quote -->
+%(about_text)s
+<rect x="28" y="168" width="484" height="40" rx="8" fill="%(cbg)s" stroke="%(cborder)s" stroke-width="1"/>
+<rect x="28" y="168" width="4" height="40" rx="2" fill="%(crimson)s"/>
+<text x="44" y="192.5" font-family="%(sans)s" font-size="12.5" font-style="italic" font-weight="500" fill="%(body)s">%(fun)s</text>
+
+<!-- Right sub-card: Exploring & Interests -->
+%(subcard)s
+<text x="564" y="88" font-family="%(sans)s" font-size="10.5" font-weight="700" letter-spacing="1.2" fill="%(muted)s">EXPLORING</text>
+%(exploring)s
+<line x1="564" y1="142" x2="834" y2="142" stroke="%(subborder)s" stroke-width="1"/>
+<text x="564" y="159" font-family="%(sans)s" font-size="10.5" font-weight="700" letter-spacing="1.2" fill="%(muted)s">INTERESTS</text>
+%(interests)s
 """ % {
-    "accent": ACCENT,
-    "ink_strong": INK_STRONG,
-    "muted": MUTED,
-    "border_soft": BORDER_SOFT,
-    "kicker": profile["kicker"],
-    "name": profile["name"],
-    "role": profile["role"],
-    "quote": "".join("<div>%s</div>" % line for line in profile["quote"]["lines"]),
-    "focus": focus_rows,
+    "frame": card_frame(880, CARD_SIZES["about"][1]),
+    "icon": vec_icon("book", 28, 26, CRIMSON, size=17),
+    "serif": FONT_SERIF,
+    "sans": FONT_SANS,
+    "head": TEXT_HEAD,
+    "border": CANVAS_BORDER,
+    "about_text": about_text_svg,
+    "cbg": CALLOUT_BG,
+    "cborder": CALLOUT_BORDER,
+    "crimson": CRIMSON,
+    "body": TEXT_BODY,
+    "fun": xml_esc(profile["about_me"]["fun_fact"]),
+    "subcard": subcard_frame(544, 62, 308, 146),
+    "muted": TEXT_MUTED,
+    "exploring": exploring_svg,
+    "subborder": SUBCARD_BORDER,
+    "interests": interests_svg,
 }
-save_svg("hero.svg", *CARD_SIZES["hero"], hero_content)
+save_svg("about.svg", *CARD_SIZES["about"], about_body)
 
 
 # =====================================================================
-# 04 -- Calls to action
+# 07 -- Engineering Principles + Currently Building (880x244)
 # =====================================================================
-def action_content(label, trailing, primary):
-    if primary:
-        style = (
-            "background-color: %s; border: 1px solid %s; color: %s;"
-            % (INK, INK, BUTTON_TEXT)
+prin_rows = []
+for idx, item in enumerate(profile["principles"][:5]):
+    ry = 76 + idx * 33
+    sep = (
+        '<line x1="44" y1="%d" x2="412" y2="%d" stroke="%s" stroke-width="1"/>'
+        % (ry - 18, ry - 18, SUBCARD_BORDER)
+        if idx > 0
+        else ""
+    )
+    prin_rows.append(
+        """
+        %(sep)s
+        <circle cx="53" cy="%(cy)d" r="9" fill="%(crimson)s"/>
+        <text x="53" y="%(ny).1f" text-anchor="middle" font-family="%(mono)s" font-size="9" font-weight="700" fill="%(on_dark)s">%(num)s</text>
+        <text x="71" y="%(ty).1f" font-family="%(sans)s" font-size="12.5" font-weight="500" fill="%(head)s">%(text)s</text>
+        """
+        % {
+            "sep": sep,
+            "cy": ry,
+            "crimson": CRIMSON,
+            "ny": ry + 3.0,
+            "mono": FONT_MONO,
+            "on_dark": ON_DARK,
+            "num": "%02d" % (idx + 1),
+            "ty": ry + 4.0,
+            "sans": FONT_SANS,
+            "head": TEXT_HEAD,
+            "text": xml_esc(item),
+        }
+    )
+
+build_rows = []
+for idx, item in enumerate(profile["currently_building"][:3]):
+    by = 76 + idx * 72
+    sep = (
+        '<line x1="466" y1="%d" x2="836" y2="%d" stroke="%s" stroke-width="1"/>'
+        % (by - 16, by - 16, SUBCARD_BORDER)
+        if idx > 0
+        else ""
+    )
+    desc_lines = wrap_lines(item.get("desc", ""), 360, 12, "sans")[:2]
+    desc_svg = "".join(
+        '<text x="466" y="%d" font-family="%s" font-size="12" fill="%s">%s</text>'
+        % (by + 20 + li * 16, FONT_SANS, TEXT_BODY, xml_esc(line))
+        for li, line in enumerate(desc_lines)
+    )
+    if "percentage" in item:
+        pct = int(item["percentage"])
+        badge = '<text x="836" y="%d" text-anchor="end" font-family="%s" font-size="11" font-weight="700" fill="%s">%d%%</text>' % (
+            by, FONT_MONO, CRIMSON, pct
         )
-        trailing_color = "#c9b8a8"
+        bar = (
+            '<rect x="466" y="%d" width="370" height="6" rx="3" fill="%s"/>'
+            '<rect x="466" y="%d" width="%d" height="6" rx="3" fill="%s"/>'
+        ) % (by + 12, PILL_BG, by + 12, round(3.7 * pct), CRIMSON)
+        extra = bar
     else:
-        style = "background-color: %s; border: 1px solid #ded3c6; color: %s;" % (
-            SURFACE,
-            INK,
-        )
-        trailing_color = FAINT
-    return (
-        '<div style="width: 100%%; height: 100%%; border-radius: 8px; display: flex;'
-        " align-items: center; justify-content: space-between; padding: 0 20px;"
-        ' %(style)s font-family: \'Courier Prime\', monospace; font-size: 11px;'
-        ' letter-spacing: 0.14em; text-transform: uppercase;">'
-        "<span>%(label)s</span>"
-        '<span style="color: %(trailing_color)s;">%(trailing)s</span></div>'
-    ) % {
-        "style": style,
-        "label": label,
-        "trailing": trailing,
-        "trailing_color": trailing_color,
-    }
+        badge = (
+            '<rect x="782" y="%d" width="54" height="19" rx="9.5" fill="%s"/>'
+            '<text x="809" y="%d" text-anchor="middle" font-family="%s" font-size="9" font-weight="700" letter-spacing="0.8" fill="%s">ACTIVE</text>'
+        ) % (by - 13, ESPRESSO, by, FONT_MONO, ON_DARK)
+        extra = desc_svg
 
+    build_rows.append(
+        """
+        %(sep)s
+        <text x="466" y="%(y)d" font-family="%(sans)s" font-size="13.5" font-weight="700" fill="%(head)s">%(name)s</text>
+        %(badge)s
+        %(extra)s
+        """
+        % {
+            "sep": sep,
+            "y": by,
+            "sans": FONT_SANS,
+            "head": TEXT_HEAD,
+            "name": xml_esc(item["name"]),
+            "badge": badge,
+            "extra": extra,
+        }
+    )
 
-save_svg("action_email.svg", *CARD_SIZES["action"], action_content("Email me", "→", True))
-save_svg("action_portfolio.svg", *CARD_SIZES["action"], action_content("View portfolio", "ayudev-shiro.vercel.app →", False))
+pb_body = """
+%(frame)s
+%(left_sub)s
+<text x="44" y="46" font-family="%(serif)s" font-size="18" font-weight="700" fill="%(head)s">Engineering Principles</text>
+<line x1="252" y1="40" x2="412" y2="40" stroke="%(subborder)s" stroke-width="1"/>
+%(prin_rows)s
 
-
-# =====================================================================
-# 05 -- Profile information grid (four balanced columns, one card)
-# =====================================================================
-INFO = [
-    (item["label"], item["main"], item["sub"])
-    for item in profile["info"]
-]
-
-info_cols = "".join(
-    """
-    <div style="flex: 1 1 0; min-width: 0; padding: 0 16px; border-left: 1px solid %(border_soft)s;
-                %(edge)s">
-      <div class="label">%(label)s</div>
-      <div style="font-size: 13px; font-weight: 600; color: %(ink)s; margin-top: 7px;">%(main)s</div>
-      <div style="font-size: 11.5px; color: %(muted)s; margin-top: 3px;">%(sub)s</div>
-    </div>
-    """
-    % {
-        "border_soft": BORDER_SOFT,
-        "ink": INK,
-        "muted": MUTED,
-        "label": label,
-        "main": main,
-        "sub": sub,
-        # The outer edges drop their padding so the four columns align with the
-        # card padding of every other block.
-        "edge": "padding-left: 0; border-left: none;"
-        if index == 0
-        else ("padding-right: 0;" if index == len(INFO) - 1 else ""),
-    }
-    for index, (label, main, sub) in enumerate(INFO)
-)
-
-info_content = '<div class="card" style="display: flex;">%s</div>' % info_cols
-save_svg("info.svg", *CARD_SIZES["info"], info_content)
-
-
-# =====================================================================
-# 06 -- About
-# =====================================================================
-about_facts = [
-    ("Exploring", profile["about_me"]["exploring"]),
-    ("Interests", profile["about_me"]["interests"]),
-]
-
-about_fact_rows = "".join(
-    """
-    <div style="padding: 12px 0; %(border)s">
-      <div class="label">%(label)s</div>
-      <div style="font-size: 12.5px; line-height: 1.5; color: #4a3f39; margin-top: 5px;">%(value)s</div>
-    </div>
-    """
-    % {
-        "border": "border-top: 1px solid #f2ebe1;" if index else "",
-        "label": label,
-        "value": value,
-    }
-    for index, (label, value) in enumerate(about_facts)
-)
-
-about_content = """
-<div class="card" style="display: flex; gap: 40px;">
-  <div style="width: 468px;">
-    <div style="font-size: 15px; line-height: 1.6; color: %(body)s;">%(text)s</div>
-    <div style="margin-top: 16px; border-left: 2px solid %(border)s; padding-left: 12px;
-                font-size: 13px; color: %(muted)s;">%(fun)s</div>
-  </div>
-  <div style="flex: 1; border-left: 1px solid %(border_soft)s; padding-left: 28px;">
-    %(facts)s
-  </div>
-</div>
+%(right_sub)s
+<text x="466" y="46" font-family="%(serif)s" font-size="18" font-weight="700" fill="%(head)s">Currently Building</text>
+<line x1="634" y1="40" x2="778" y2="40" stroke="%(subborder)s" stroke-width="1"/>
+<text x="836" y="43" text-anchor="end" font-family="%(sans)s" font-size="10" font-weight="700" letter-spacing="1.2" fill="%(muted)s">%(build_note)s</text>
+%(build_rows)s
 """ % {
-    "body": BODY,
-    "border": BORDER,
-    "border_soft": BORDER_SOFT,
-    "muted": MUTED,
-    "text": profile["about_me"]["text"],
-    "fun": profile["about_me"]["fun_fact"],
-    "facts": about_fact_rows,
+    "frame": card_frame(880, CARD_SIZES["principles_building"][1]),
+    "left_sub": subcard_frame(24, 20, 408, 204),
+    "right_sub": subcard_frame(446, 20, 410, 204),
+    "serif": FONT_SERIF,
+    "head": TEXT_HEAD,
+    "subborder": SUBCARD_BORDER,
+    "prin_rows": "".join(prin_rows),
+    "sans": FONT_SANS,
+    "muted": TEXT_MUTED,
+    "build_note": "SELF-ASSESSED" if any("percentage" in i for i in profile["currently_building"]) else "ACTIVE",
+    "build_rows": "".join(build_rows),
 }
-save_svg("about.svg", *CARD_SIZES["about"], about_content)
+save_svg("principles_building.svg", *CARD_SIZES["principles_building"], pb_body)
 
 
 # =====================================================================
-# 07 -- Tech stack
+# 07b -- Optional Next (Planned, Not Started) when upcoming_projects non-empty
 # =====================================================================
-# Labels and column order are curated here; the technologies themselves come
-# from profile.json in the order listed there, and each one appears in exactly
-# one category (no icon is repeated across the grid).
-TECH_CATEGORIES = [
-    ("Languages", "languages"),
-    ("Backend &amp; APIs", "backend_apis"),
-    ("Data &amp; Lakehouse", "data_lakehouse"),
-    ("Databases &amp; Queues", "databases"),
-    ("Cloud &amp; Infra", "cloud_infra"),
-    ("CI &amp; Testing", "ci_testing"),
-    ("Observability", "observability"),
-    ("Tools", "tools"),
+if HAS_UPCOMING:
+    next_cols = []
+    n_items = profile["upcoming_projects"][:2]
+    col_w = 398
+    for idx, item in enumerate(n_items):
+        nx = 28 + idx * 424
+        next_cols.append(
+            """
+            %(sub)s
+            <text x="%(tx)d" y="64" font-family="%(sans)s" font-size="13" font-weight="700" fill="%(head)s">%(name)s</text>
+            <text x="%(tx)d" y="83" font-family="%(sans)s" font-size="12" fill="%(body)s">%(desc)s</text>
+            """
+            % {
+                "sub": subcard_frame(nx, 42, col_w, 52, rx=10),
+                "tx": nx + 14,
+                "sans": FONT_SANS,
+                "head": TEXT_HEAD,
+                "name": xml_esc(item["name"]),
+                "body": TEXT_BODY,
+                "desc": xml_esc(item["desc"]),
+            }
+        )
+    next_body = """
+    %(frame)s
+    <text x="28" y="30" font-family="%(serif)s" font-size="17" font-weight="700" fill="%(head)s">Next</text>
+    <line x1="78" y1="24" x2="690" y2="24" stroke="%(border)s" stroke-width="1"/>
+    <text x="852" y="28" text-anchor="end" font-family="%(sans)s" font-size="10" font-weight="700" letter-spacing="1.2" fill="%(muted)s">PLANNED, NOT STARTED</text>
+    %(cols)s
+    """ % {
+        "frame": card_frame(880, CARD_SIZES["next"][1]),
+        "serif": FONT_SERIF,
+        "head": TEXT_HEAD,
+        "border": CANVAS_BORDER,
+        "sans": FONT_SANS,
+        "muted": TEXT_MUTED,
+        "cols": "".join(next_cols),
+    }
+    save_svg("next.svg", *CARD_SIZES["next"], next_body)
+
+
+# =====================================================================
+# 08 -- Tech Stack 4x2 Bento Grid + Primitives Card (880x422)
+# =====================================================================
+BENTO_CATS = [
+    ("Languages", "languages", "code"),
+    ("Backend & APIs", "backend_apis", "server"),
+    ("Data & Lakehouse", "data_lakehouse", "layers"),
+    ("Databases & Queues", "databases", "database"),
+    ("Cloud & Infra", "cloud_infra", "cloud"),
+    ("CI & Testing", "ci_testing", "check"),
+    ("Observability", "observability", "activity"),
+    ("Tools", "tools", "wrench"),
 ]
 
-tech_cells = "".join(
-    """
-    <div>
-      <div class="label" style="font-size: 10px; margin-bottom: 8px;">%(label)s</div>
-      <div style="display: flex; flex-wrap: wrap; gap: 6px;">%(icons)s</div>
-    </div>
-    """
-    % {
-        "label": label,
-        "icons": "".join(icon(category, name) for name in profile["tech_stack"].get(category, [])),
-    }
-    for label, category in TECH_CATEGORIES
-)
+bento_svg = []
+for idx, (label, cat_key, vec_key) in enumerate(BENTO_CATS):
+    col = idx % 4
+    row = idx // 4
+    bx = 26 + col * 210
+    by = 76 + row * 108
+    tech_keys = profile["tech_stack"].get(cat_key, [])[:3]
+    n_icons = len(tech_keys)
+    icon_size = 30
+    gap = 16
+    total_iw = n_icons * icon_size + max(0, n_icons - 1) * gap
+    ix0 = bx + (198 - total_iw) / 2.0
+    imgs = []
+    for i_idx, tkey in enumerate(tech_keys):
+        src = find_icon(cat_key, tkey)
+        if not src:
+            print("Warning: no icon for %s/%s" % (cat_key, tkey))
+            continue
+        ix = ix0 + i_idx * (icon_size + gap)
+        iy = by + 46
+        imgs.append(
+            '<image href="%s" xlink:href="%s" x="%.1f" y="%d" width="%d" height="%d"/>'
+            % (src, src, ix, iy, icon_size, icon_size)
+        )
+    bento_svg.append(
+        """
+        %(sub)s
+        %(cicon)s
+        <text x="%(lx)d" y="%(ly)d" font-family="%(sans)s" font-size="11.5" font-weight="700" fill="%(head)s">%(label)s</text>
+        <line x1="%(x1)d" y1="%(line_y)d" x2="%(x2)d" y2="%(line_y)d" stroke="%(subborder)s" stroke-width="1"/>
+        %(imgs)s
+        """
+        % {
+            "sub": subcard_frame(bx, by, 198, 96),
+            "cicon": vec_icon(vec_key, bx + 14, by + 13, CRIMSON, size=13),
+            "lx": bx + 32,
+            "ly": by + 23,
+            "sans": FONT_SANS,
+            "head": TEXT_HEAD,
+            "label": xml_esc(label),
+            "x1": bx + 14,
+            "x2": bx + 184,
+            "line_y": by + 35,
+            "subborder": SUBCARD_BORDER,
+            "imgs": "".join(imgs),
+        }
+    )
 
 core_skills = profile["tech_stack"].get("core_skills", [])
-core_chips = "".join('<span class="chip">%s</span>' % skill for skill in core_skills)
+placed_pills, pills_h = layout_pills(
+    core_skills, x0=42, y0=324, max_width=796, pill_h=23, gap_x=6, gap_y=6, font_size=10.5, pad_x=14
+)
+primitives_sub_h = 44 + pills_h + 14
+stack_total_h = 294 + primitives_sub_h + 20
+CARD_SIZES["stack"] = (GRID, stack_total_h)
 
-stack_content = """
-<div class="card">
-  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px 18px;">
-    %(cells)s
-  </div>
-  <div style="border-top: 1px solid #f2ebe1; margin-top: 16px; padding-top: 14px;">
-    <div class="label" style="font-size: 10px; margin-bottom: 8px;">Systems, Data &amp; Storage Primitives</div>
-    <div style="display: flex; flex-wrap: wrap; gap: 6px;">%(core)s</div>
-  </div>
-</div>
-""" % {"cells": tech_cells, "core": core_chips}
-save_svg("stack.svg", *CARD_SIZES["stack"], stack_content)
-
-
-# =====================================================================
-# 08 -- Engineering principles + currently building
-# =====================================================================
-principle_rows = "".join(
-    """
-    <div style="display: flex; gap: 12px; align-items: baseline; padding: 7px 0;
-                %(border)s">
-      <span class="mono" style="font-size: 10px; color: %(accent)s;">%(idx)s</span>
-      <span style="font-size: 13.5px; line-height: 1.4; color: #3c2f2f;">%(text)s</span>
-    </div>
-    """
-    % {
-        "border": "border-top: 1px solid #f2ebe1;" if index else "",
-        "accent": ACCENT,
-        "idx": "%02d" % (index + 1),
-        "text": item,
-    }
-    for index, item in enumerate(profile["principles"])
+pill_svgs = "".join(
+    '<rect x="%d" y="%d" width="%d" height="23" rx="6" fill="%s" stroke="%s" stroke-width="1"/>'
+    '<text x="%.1f" y="%d" text-anchor="middle" font-family="%s" font-size="10.5" font-weight="500" fill="%s">%s</text>'
+    % (px, py, pw, PILL_BG, PILL_BORDER, px + pw / 2.0, py + 15.0, FONT_SANS, PILL_TEXT, xml_esc(lbl))
+    for lbl, px, py, pw in placed_pills
 )
 
+stack_body = """
+%(frame)s
+<!-- Header row -->
+<text x="26" y="48" font-family="%(mono)s" font-size="22" font-weight="700" fill="%(crimson)s">//</text>
+<text x="58" y="48" font-family="%(serif)s" font-size="24" font-weight="700" fill="%(head)s">Tech Stack</text>
+<line x1="194" y1="41" x2="610" y2="41" stroke="%(border)s" stroke-width="1"/>
 
-# The bars are the owner's own estimates from profile.json, not something this
-# build can verify against the repositories, so the card says so. Anything the
-# build cannot check is labelled rather than stated as fact.
-has_pct = any("percentage" in item for item in profile["currently_building"])
-building_gap = 38 if len(profile["currently_building"]) <= 2 else 30
+<!-- Tilted handwritten annotation (top-right) -->
+<g transform="rotate(-8 738 40)">
+  <text x="738" y="38" text-anchor="middle" font-family="%(cursive)s" font-size="20" font-weight="700" fill="%(crimson)s">Build. Scale. Innovate.</text>
+  <path d="M652 46 Q738 41 824 45" fill="none" stroke="%(crimson)s" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M664 51 Q738 47 812 50" fill="none" stroke="%(callout_acc)s" stroke-width="1.2" stroke-linecap="round"/>
+</g>
 
-if has_pct:
-    building_note = "self-assessed"
-    building_items = "".join(
-        """
-    <div style="margin-bottom: %(gap)dpx;">
-      <div style="display: flex; justify-content: space-between; align-items: baseline;">
-        <span style="font-size: 13px; font-weight: 500; color: #3c2f2f;">%(name)s</span>
-        <span class="mono" style="font-size: 10.5px; color: %(faint)s;">%(percentage)d%%</span>
-      </div>
-      <div style="height: 6px; background-color: #f0e7db; border-radius: 3px; margin-top: 8px;
-                  overflow: hidden;">
-        <div style="height: 100%%; width: %(percentage)d%%; background-color: %(accent)s;
-                    border-radius: 3px;"></div>
-      </div>
-    </div>
-    """
-        % {
-            "gap": building_gap,
-            "name": item["name"],
-            "percentage": item["percentage"],
-            "faint": FAINT,
-            "accent": ACCENT,
-        }
-        for item in profile["currently_building"]
-    )
-else:
-    building_note = "active"
-    building_items = "".join(
-        """
-    <div style="padding: 12px 0; %(border)s">
-      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px;">
-        <span style="font-size: 13.5px; font-weight: 600; color: %(ink)s;">%(name)s</span>
-        <span class="mono" style="font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase;
-                     color: %(accent)s;">ACTIVE</span>
-      </div>
-      <div style="font-size: 12px; line-height: 1.45; color: #5a4a42; margin-top: 5px;">%(desc)s</div>
-    </div>
-    """
-        % {
-            "border": "border-top: 1px solid #f2ebe1;" if index else "",
-            "ink": INK,
-            "accent": ACCENT,
-            "name": item["name"],
-            "desc": item.get("desc", ""),
-        }
-        for index, item in enumerate(profile["currently_building"])
-    )
+<!-- 4x2 Bento Grid -->
+%(bento)s
 
-# Both columns live in one card. As two half-width images they could clip on a
-# narrow column (see the layout notes at the top); as two internal columns they
-# always sit side by side, at any width, and still share the page's left and
-# right edges with every other block.
-principles_building_content = """
-<div class="card">
-  <div style="display: flex; gap: 30px;">
-    <div style="width: 372px;">
-      %(principles_head)s
-      %(principles)s
-    </div>
-    <div style="flex: 1; min-width: 0; border-left: 1px solid %(border_soft)s;
-                padding-left: 30px;">
-      %(building_head)s
-      %(building)s
-    </div>
-  </div>
-</div>
+<!-- Full-width Primitives Sub-card -->
+%(prim_sub)s
+<text x="42" y="314" font-family="%(sans)s" font-size="10.5" font-weight="700" letter-spacing="1.2" fill="%(muted)s">SYSTEMS, DATA &amp; STORAGE PRIMITIVES</text>
+%(pills)s
 """ % {
-    "border_soft": BORDER_SOFT,
-    "principles_head": head("Engineering principles"),
-    "principles": principle_rows,
-    "building_head": head("Currently building", building_note),
-    "building": building_items,
+    "frame": card_frame(880, stack_total_h),
+    "mono": FONT_MONO,
+    "crimson": CRIMSON,
+    "serif": FONT_SERIF,
+    "head": TEXT_HEAD,
+    "border": CANVAS_BORDER,
+    "cursive": FONT_CURSIVE,
+    "callout_acc": CALLOUT_ACCENT,
+    "bento": "".join(bento_svg),
+    "prim_sub": subcard_frame(26, 294, 828, primitives_sub_h),
+    "sans": FONT_SANS,
+    "muted": TEXT_MUTED,
+    "pills": pill_svgs,
 }
-save_svg(
-    "principles_building.svg",
-    *CARD_SIZES["principles_building"],
-    principles_building_content
-)
-
-# Planned work, labelled as planned: rendered only when upcoming_projects is populated.
-if HAS_UPCOMING:
-    next_items = "".join(
-        """
-        <div style="flex: 1;">
-          <div style="font-size: 12.5px; font-weight: 500; color: #3c2f2f;">%(name)s</div>
-          <div style="font-size: 11.5px; color: %(muted)s; margin-top: 3px;">%(desc)s</div>
-        </div>
-        """
-        % {"name": item["name"], "desc": item["desc"], "muted": MUTED}
-        for item in profile["upcoming_projects"]
-    )
-
-    next_content = """
-    <div class="card">
-      %(head)s
-      <div style="display: flex; gap: 28px;">%(items)s</div>
-    </div>
-    """ % {"head": head("Next", "planned, not started"), "items": next_items}
-    save_svg("next.svg", *CARD_SIZES["next"], next_content)
+save_svg("stack.svg", *CARD_SIZES["stack"], stack_body)
 
 
 # =====================================================================
-# 09 -- Featured projects
+# 09 -- Featured Projects (880x144 each)
 # =====================================================================
 COMPLETE_STATUSES = {"production", "done", "complete", "completed", "shipped"}
 
 for idx, project in enumerate(profile["featured_projects"]):
     done = project["status"].strip().lower() in COMPLETE_STATUSES
-    tags = "".join('<span class="chip">%s</span>' % tag for tag in project["tags"])
-    project_content = """
-    <div class="card">
-      <div style="display: flex; align-items: center; gap: 14px;">
-        <span class="mono" style="font-size: 10.5px; color: %(accent)s;">%(idx)s</span>
-        <span class="name" style="font-size: 15.5px; color: %(ink)s;">%(name)s</span>
-        <span class="rule"></span>
-        <span class="pill %(pill_cls)s">%(status)s</span>
-      </div>
-      <div style="font-size: 12.5px; line-height: 1.45; color: #5a4a42; margin: 9px 0 10px;">
-        %(desc)s
-      </div>
-      <div style="display: flex; flex-wrap: wrap; gap: 6px;">%(tags)s</div>
-    </div>
+    status_txt = project["status"].strip().upper()
+    pill_w = max(56, round(est_text_width(status_txt, 9.5, "mono", bold=True) + 22))
+    pill_x = 852 - pill_w
+    title_w = est_text_width(project["name"], 18, "serif", bold=True)
+    rule_x1 = min(pill_x - 16, round(64 + title_w + 14))
+
+    desc_lines = wrap_lines(project["desc"], 822, 13, "sans")[:2]
+    desc_svg = "".join(
+        '<text x="28" y="%d" font-family="%s" font-size="13" fill="%s">%s</text>'
+        % (66 + li * 19, FONT_SANS, TEXT_BODY, xml_esc(line))
+        for li, line in enumerate(desc_lines)
+    )
+    placed_tags, _ = layout_pills(
+        project["tags"], x0=28, y0=102, max_width=824, pill_h=24, gap_x=7, gap_y=6, font_size=11, pad_x=18
+    )
+    tags_svg = "".join(
+        '<rect x="%d" y="%d" width="%d" height="24" rx="6" fill="%s" stroke="%s" stroke-width="1"/>'
+        '<text x="%.1f" y="%d" text-anchor="middle" font-family="%s" font-size="11" font-weight="500" fill="%s">%s</text>'
+        % (px, py, pw, PILL_BG, PILL_BORDER, px + pw / 2.0, py + 15.5, FONT_SANS, PILL_TEXT, xml_esc(lbl))
+        for lbl, px, py, pw in placed_tags
+    )
+
+    proj_body = """
+    %(frame)s
+    <circle cx="39" cy="34" r="11" fill="%(crimson)s"/>
+    <text x="39" y="37.5" text-anchor="middle" font-family="%(mono)s" font-size="10.5" font-weight="700" fill="%(on_dark)s">%(num)s</text>
+    <text x="60" y="39.5" font-family="%(serif)s" font-size="18" font-weight="700" fill="%(head)s">%(title)s</text>
+    <line x1="%(rx1)d" y1="34" x2="%(rx2)d" y2="34" stroke="%(border)s" stroke-width="1"/>
+    <rect x="%(px)d" y="23" width="%(pw)d" height="22" rx="11" fill="%(pbg)s" stroke="%(pbd)s" stroke-width="1"/>
+    <text x="%(ptx).1f" y="37" text-anchor="middle" font-family="%(mono)s" font-size="9.5" font-weight="700" letter-spacing="0.8" fill="%(pfg)s">%(status)s</text>
+    %(desc)s
+    %(tags)s
     """ % {
-        "accent": ACCENT,
-        "ink": INK,
-        "idx": "%02d" % (idx + 1),
-        "name": project["name"],
-        "pill_cls": "pill-done" if done else "pill-wip",
-        "status": project["status"],
-        "desc": project["desc"],
-        "tags": tags,
+        "frame": card_frame(880, CARD_SIZES["project"][1]),
+        "crimson": CRIMSON,
+        "mono": FONT_MONO,
+        "on_dark": ON_DARK,
+        "num": "%02d" % (idx + 1),
+        "serif": FONT_SERIF,
+        "head": TEXT_HEAD,
+        "title": xml_esc(project["name"]),
+        "rx1": rule_x1,
+        "rx2": pill_x - 14,
+        "border": CANVAS_BORDER,
+        "px": pill_x,
+        "pw": pill_w,
+        "pbg": ESPRESSO if done else CALLOUT_BG,
+        "pbd": ESPRESSO if done else CALLOUT_BORDER,
+        "ptx": pill_x + pill_w / 2.0,
+        "pfg": ON_DARK if done else CRIMSON,
+        "status": xml_esc(status_txt),
+        "desc": desc_svg,
+        "tags": tags_svg,
     }
-    save_svg("project_%d.svg" % idx, *CARD_SIZES["project"], project_content)
+    save_svg("project_%d.svg" % idx, *CARD_SIZES["project"], proj_body)
 
 
 # =====================================================================
-# 09b -- Achievements / Certifications
+# 09b -- Certifications / Achievements Card
 # =====================================================================
 if HAS_ACHIEVEMENTS:
-    achievement_rows = "".join(
-        """
-        <div style="padding: 10px 0; %(border)s">
-          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 10px;">
-            <div style="display: flex; align-items: baseline; gap: 10px;">
-              <span class="mono" style="font-size: 10px; color: %(accent)s;">%(idx)s</span>
-              <span style="font-size: 13px; font-weight: 600; color: %(ink)s;">%(title)s</span>
-            </div>
-            <span class="mono" style="font-size: 10px; color: %(faint)s; white-space: nowrap;">%(period)s</span>
-          </div>
-          <div style="font-size: 12px; line-height: 1.45; color: #5a4a42; margin-top: 4px; padding-left: 22px;">
-            %(desc)s
-          </div>
-        </div>
-        """
-        % {
-            "border": "border-top: 1px solid #f2ebe1;" if index else "",
-            "accent": ACCENT,
-            "ink": INK,
-            "faint": FAINT,
-            "idx": "%02d" % (index + 1),
-            "title": item["title"],
-            "period": item["period"],
-            "desc": item["desc"],
-        }
-        for index, item in enumerate(profile.get("achievements", []))
-    )
+    ach_rows = []
+    for idx, item in enumerate(profile["achievements"][:3]):
+        ay = 84 + idx * 62
+        sep = (
+            '<line x1="40" y1="%d" x2="424" y2="%d" stroke="%s" stroke-width="1"/>'
+            % (ay - 16, ay - 16, SUBCARD_BORDER)
+            if idx > 0
+            else ""
+        )
+        dlines = wrap_lines(item["desc"], 356, 11.5, "sans")[:2]
+        dsvg = "".join(
+            '<text x="68" y="%d" font-family="%s" font-size="11.5" fill="%s">%s</text>'
+            % (ay + 18 + li * 15, FONT_SANS, TEXT_BODY, xml_esc(line))
+            for li, line in enumerate(dlines)
+        )
+        ach_rows.append(
+            """
+            %(sep)s
+            <circle cx="50" cy="%(cy)d" r="9.5" fill="%(crimson)s"/>
+            <text x="50" y="%(ny).1f" text-anchor="middle" font-family="%(mono)s" font-size="9" font-weight="700" fill="%(on_dark)s">%(num)s</text>
+            <text x="68" y="%(ty)d" font-family="%(sans)s" font-size="12.5" font-weight="700" fill="%(head)s">%(title)s</text>
+            <text x="424" y="%(ty)d" text-anchor="end" font-family="%(mono)s" font-size="10" fill="%(muted)s">%(period)s</text>
+            %(dsvg)s
+            """
+            % {
+                "sep": sep,
+                "cy": ay - 3,
+                "crimson": CRIMSON,
+                "ny": ay,
+                "mono": FONT_MONO,
+                "on_dark": ON_DARK,
+                "num": "%02d" % (idx + 1),
+                "ty": ay,
+                "sans": FONT_SANS,
+                "head": TEXT_HEAD,
+                "title": xml_esc(item["title"]),
+                "muted": TEXT_MUTED,
+                "period": xml_esc(item["period"]),
+                "dsvg": dsvg,
+            }
+        )
 
-    cert_rows = "".join(
-        """
-        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
-                    padding: 7px 0; %(border)s">
-          <span style="font-size: 12px; color: #3c2f2f;">%(name)s</span>
-          <span class="mono" style="font-size: 10px; color: %(faint)s; white-space: nowrap;">%(issuer)s</span>
-        </div>
-        """
-        % {
-            "border": "border-top: 1px solid #f2ebe1;" if index else "",
-            "faint": FAINT,
-            "name": cert["name"],
-            "issuer": cert["issuer"],
-        }
-        for index, cert in enumerate(profile.get("certifications", []))
-    )
+    cert_rows = []
+    for idx, cert in enumerate(profile.get("certifications", [])[:5]):
+        cy = 84 + idx * 30
+        sep = (
+            '<line x1="476" y1="%d" x2="840" y2="%d" stroke="%s" stroke-width="1"/>'
+            % (cy - 17, cy - 17, SUBCARD_BORDER)
+            if idx > 0
+            else ""
+        )
+        cert_rows.append(
+            """
+            %(sep)s
+            <text x="476" y="%(y)d" font-family="%(sans)s" font-size="12" font-weight="500" fill="%(head)s">%(name)s</text>
+            <text x="840" y="%(y)d" text-anchor="end" font-family="%(mono)s" font-size="10" fill="%(muted)s">%(issuer)s</text>
+            """
+            % {
+                "sep": sep,
+                "y": cy,
+                "sans": FONT_SANS,
+                "head": TEXT_HEAD,
+                "name": xml_esc(cert["name"]),
+                "mono": FONT_MONO,
+                "muted": TEXT_MUTED,
+                "issuer": xml_esc(cert["issuer"]),
+            }
+        )
 
-    achievements_content = """
-    <div class="card">
-      <div style="display: flex; gap: 30px;">
-        <div style="width: 400px;">
-          %(ach_head)s
-          %(ach_rows)s
-        </div>
-        <div style="flex: 1; min-width: 0; border-left: 1px solid %(border_soft)s; padding-left: 30px;">
-          %(cert_head)s
-          %(cert_rows)s
-        </div>
-      </div>
-    </div>
+    ach_body = """
+    %(frame)s
+    %(lsub)s
+    <text x="40" y="46" font-family="%(serif)s" font-size="18" font-weight="700" fill="%(head)s">Leadership &amp; Hackathons</text>
+    <line x1="274" y1="40" x2="424" y2="40" stroke="%(subborder)s" stroke-width="1"/>
+    %(ach_rows)s
+
+    %(rsub)s
+    <text x="476" y="46" font-family="%(serif)s" font-size="18" font-weight="700" fill="%(head)s">Certifications</text>
+    <line x1="604" y1="40" x2="840" y2="40" stroke="%(subborder)s" stroke-width="1"/>
+    %(cert_rows)s
     """ % {
-        "border_soft": BORDER_SOFT,
-        "ach_head": head("Leadership &amp; Hackathons"),
-        "ach_rows": achievement_rows,
-        "cert_head": head("Certifications"),
-        "cert_rows": cert_rows,
+        "frame": card_frame(880, CARD_SIZES["achievements"][1]),
+        "lsub": subcard_frame(24, 20, 416, 192),
+        "rsub": subcard_frame(456, 20, 400, 192),
+        "serif": FONT_SERIF,
+        "head": TEXT_HEAD,
+        "subborder": SUBCARD_BORDER,
+        "ach_rows": "".join(ach_rows),
+        "cert_rows": "".join(cert_rows),
     }
-    save_svg("achievements.svg", *CARD_SIZES["achievements"], achievements_content)
+    save_svg("achievements.svg", *CARD_SIZES["achievements"], ach_body)
 else:
-    cert_rows = "".join(
-        """
-        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
-                    padding: 8px 0; %(border)s">
-          <div style="display: flex; align-items: baseline; gap: 12px;">
-            <span class="mono" style="font-size: 10px; color: %(accent)s;">%(idx)s</span>
-            <span style="font-size: 13px; color: #3c2f2f;">%(name)s</span>
-          </div>
-          <span class="mono" style="font-size: 10.5px; color: %(faint)s; white-space: nowrap;">%(issuer)s</span>
-        </div>
-        """
-        % {
-            "border": "border-top: 1px solid #f2ebe1;" if index else "",
-            "accent": ACCENT,
-            "faint": FAINT,
-            "idx": "%02d" % (index + 1),
-            "name": cert["name"],
-            "issuer": cert["issuer"],
-        }
-        for index, cert in enumerate(profile.get("certifications", []))
-    )
-    certifications_content = """
-    <div class="card">
-      %(cert_head)s
-      %(cert_rows)s
-    </div>
+    certs = profile.get("certifications", [])
+    cert_h = 84 + max(1, len(certs)) * 34 + 18
+    CARD_SIZES["certifications"] = (GRID, cert_h)
+    sub_h = max(1, len(certs)) * 34 + 12
+    cert_rows = []
+    for idx, cert in enumerate(certs):
+        ry = 86 + idx * 34
+        sep = (
+            '<line x1="42" y1="%d" x2="838" y2="%d" stroke="%s" stroke-width="1"/>'
+            % (ry - 19, ry - 19, SUBCARD_BORDER)
+            if idx > 0
+            else ""
+        )
+        issuer = cert["issuer"]
+        iw = max(72, round(est_text_width(issuer, 10.5, "mono", bold=True) + 20))
+        ix = 838 - iw
+        cert_rows.append(
+            """
+            %(sep)s
+            <circle cx="53" cy="%(cy)d" r="9.5" fill="%(crimson)s"/>
+            <text x="53" y="%(ny).1f" text-anchor="middle" font-family="%(mono)s" font-size="9.5" font-weight="700" fill="%(on_dark)s">%(num)s</text>
+            <text x="74" y="%(ty)d" font-family="%(sans)s" font-size="13.5" font-weight="600" fill="%(head)s">%(name)s</text>
+            <rect x="%(ix)d" y="%(iby)d" width="%(iw)d" height="22" rx="6" fill="%(pbg)s" stroke="%(pbd)s" stroke-width="1"/>
+            <text x="%(itx).1f" y="%(ity)d" text-anchor="middle" font-family="%(mono)s" font-size="10.5" font-weight="600" fill="%(pfg)s">%(issuer)s</text>
+            """
+            % {
+                "sep": sep,
+                "cy": ry - 3,
+                "crimson": CRIMSON,
+                "ny": ry + 0.5,
+                "mono": FONT_MONO,
+                "on_dark": ON_DARK,
+                "num": "%02d" % (idx + 1),
+                "ty": ry + 1,
+                "sans": FONT_SANS,
+                "head": TEXT_HEAD,
+                "name": xml_esc(cert["name"]),
+                "ix": ix,
+                "iby": ry - 14,
+                "iw": iw,
+                "pbg": PILL_BG,
+                "pbd": PILL_BORDER,
+                "itx": ix + iw / 2.0,
+                "ity": ry + 0.5,
+                "pfg": PILL_TEXT,
+                "issuer": xml_esc(issuer),
+            }
+        )
+
+    certs_body = """
+    %(frame)s
+    %(medal)s
+    <text x="52" y="42" font-family="%(serif)s" font-size="22" font-weight="700" fill="%(head)s">Certifications</text>
+    <line x1="196" y1="35" x2="854" y2="35" stroke="%(border)s" stroke-width="1"/>
+    %(sub)s
+    %(rows)s
     """ % {
-        "cert_head": head("Certifications"),
-        "cert_rows": cert_rows,
+        "frame": card_frame(880, cert_h),
+        "medal": vec_icon("medal", 28, 25, CRIMSON, size=18),
+        "serif": FONT_SERIF,
+        "head": TEXT_HEAD,
+        "border": CANVAS_BORDER,
+        "sub": subcard_frame(26, 62, 828, sub_h),
+        "rows": "".join(cert_rows),
     }
-    save_svg("certifications.svg", *CARD_SIZES["certifications"], certifications_content)
+    save_svg("certifications.svg", *CARD_SIZES["certifications"], certs_body)
 
 
 # =====================================================================
-# 10 -- GitHub analytics (fetched, cached, drawn locally)
+# 10 -- GitHub Analytics (fetched, cached, drawn locally)
 # =====================================================================
-# These numbers used to be images served by github-readme-stats.vercel.app and
-# streak-stats.demolab.com. Both are third-party deployments with no uptime
-# guarantee, and when the first was paused the whole section rendered as broken
-# images. Everything here is fetched at build time, cached beside the other
-# assets, and drawn in the same theme as the rest of the page, so the published
-# README depends on no external image host at all.
 DEFAULT_GITHUB_STATS = {
     "source": "default",
     "auth": "anonymous",
     "checked_at": "",
     "fetched_at": "",
-    "public_repos": 23,
-    "followers": 38,
-    "stars": 105,
-    "language_count": 8,
+    "public_repos": 16,
+    "followers": 36,
+    "stars": 75,
+    "language_count": 6,
     "languages": [
         {"name": "Python", "repos": 8},
-        {"name": "JavaScript", "repos": 3},
-        {"name": "HTML", "repos": 3},
-        {"name": "TypeScript", "repos": 2},
+        {"name": "JavaScript", "repos": 2},
         {"name": "Jupyter Notebook", "repos": 2},
+        {"name": "TypeScript", "repos": 1},
+        {"name": "Go", "repos": 1},
     ],
 }
 
@@ -960,15 +1222,7 @@ def write_json(path, payload):
 
 
 def fetch_github_stats():
-    """Refresh repository stats from the GitHub REST API, falling back to cache.
-
-    The result records where the numbers came from -- "api", "cache" or
-    "default" -- and how the attempt was authenticated, and it is written to disk
-    on every run, so a build that reused stale numbers shows up in the committed
-    file instead of passing unnoticed.
-    """
     cached = read_json(GITHUB_STATS_JSON)
-
     token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
     headers = {
         "User-Agent": "ayushsingh08-ds-profile-generator",
@@ -1003,19 +1257,13 @@ def fetch_github_stats():
             "public_repos": user["public_repos"],
             "followers": user["followers"],
             "stars": sum(repo["stargazers_count"] for repo in repos),
-            # Distinct languages across all repositories, counted separately from
-            # the five the card has room for -- reporting the card's own list
-            # length said "5 languages used", which was simply wrong.
             "language_count": len(languages),
             "languages": [
                 {"name": name, "repos": count} for name, count in languages.most_common(5)
             ],
         }
         write_json(GITHUB_STATS_JSON, stats)
-        print(
-            "GitHub stats refreshed from the API (%s, %s)"
-            % (stats["fetched_at"], "with token" if token else "unauthenticated")
-        )
+        print("GitHub stats refreshed from the API (%s, %s)" % (stats["fetched_at"], auth))
         return stats
     except Exception as exc:
         print("Warning: GitHub stats fetch failed (%s)" % exc)
@@ -1024,23 +1272,10 @@ def fetch_github_stats():
         fallback["auth"] = auth
         fallback["checked_at"] = today
         write_json(GITHUB_STATS_JSON, fallback)
-        print(
-            "Using %s stats (data fetched %s) -- recorded in %s"
-            % (fallback["source"], fallback.get("fetched_at") or "never", GITHUB_STATS_JSON)
-        )
         return fallback
 
 
 def fetch_contributions():
-    """Read the public 12-month contribution calendar for the account.
-
-    GitHub has no token-free JSON endpoint for contributions, so the public
-    calendar page is parsed instead: each day is a ``<td>`` carrying ``data-date``
-    and ``data-level``, and the exact count sits in the ``<tool-tip>`` bound to
-    that cell's id. The parsed grid is cached in ``assets/contributions.json``
-    and reused whenever the fetch fails, so a network-less build still renders
-    the last real calendar rather than an empty card.
-    """
     cached = read_json(CONTRIBUTIONS_JSON)
     today = datetime.date.today().isoformat()
     url = "https://github.com/users/%s/contributions" % GITHUB_USER
@@ -1081,9 +1316,7 @@ def fetch_contributions():
             raise ValueError("no contribution cells found in the calendar page")
 
         weeks = max(week for week, _ in cells) + 1
-        columns = [
-            [cells.get((week, day)) for day in range(7)] for week in range(weeks)
-        ]
+        columns = [[cells.get((week, day)) for day in range(7)] for week in range(weeks)]
         payload = {
             "source": "github.com/users/%s/contributions" % GITHUB_USER,
             "fetched_at": today,
@@ -1098,167 +1331,152 @@ def fetch_contributions():
         return payload
     except Exception as exc:
         print("Warning: contributions fetch failed (%s)" % exc)
-        if not cached:
-            print("No cached calendar -- the contributions card will render empty")
         return cached
 
 
 GITHUB_STATS = fetch_github_stats()
 CONTRIBUTIONS = fetch_contributions()
 
-# --- Stats card -----------------------------------------------------
-stat_tiles = "".join(
-    """
-    <div style="background-color: %(tint)s; border: 1px solid #eadfd2; border-radius: 8px;
-                padding: 10px 12px;">
-      <div class="name" style="font-size: 20px; color: %(ink_strong)s;">%(value)s</div>
-      <div class="label" style="font-size: 9.5px; margin-top: 4px;">%(label)s</div>
-    </div>
-    """
-    % {"tint": SURFACE_TINT, "ink_strong": INK_STRONG, "value": value, "label": label}
-    for value, label in [
-        (GITHUB_STATS["public_repos"], "Repositories"),
-        (GITHUB_STATS["stars"], "Stars"),
-        (GITHUB_STATS["followers"], "Followers"),
-        (GITHUB_STATS.get("language_count") or len(GITHUB_STATS["languages"]), "Languages"),
-    ]
-)
+# --- Analytics card (880x224) ---
+langs_total = GITHUB_STATS.get("language_count") or len(GITHUB_STATS["languages"])
+stat_items = [
+    (GITHUB_STATS["public_repos"], "REPOSITORIES", "repo"),
+    (GITHUB_STATS["stars"], "STARS", "star"),
+    (GITHUB_STATS["followers"], "FOLLOWERS", "users"),
+    (langs_total, "LANGUAGES", "code"),
+]
 
-# The card states where its numbers come from, so a cached fallback is visible
-# to whoever reads the profile and not just to whoever reads the build log.
+tiles_svg = []
+for idx, (val, lbl, ikey) in enumerate(stat_items):
+    col = idx % 2
+    row = idx // 2
+    tx = 26 + col * 190
+    ty = 64 + row * 68
+    tiles_svg.append(
+        """
+        %(sub)s
+        <text x="%(vx)d" y="%(vy)d" font-family="%(serif)s" font-size="24" font-weight="700" fill="%(head)s">%(val)s</text>
+        %(icon)s
+        <text x="%(lx)d" y="%(ly)d" font-family="%(sans)s" font-size="9.5" font-weight="700" letter-spacing="1.0" fill="%(muted)s">%(lbl)s</text>
+        """
+        % {
+            "sub": subcard_frame(tx, ty, 178, 58, rx=10),
+            "vx": tx + 14,
+            "vy": ty + 28,
+            "serif": FONT_SERIF,
+            "head": TEXT_HEAD,
+            "val": val,
+            "icon": vec_icon(ikey, tx + 14, ty + 37, CRIMSON, size=11),
+            "lx": tx + 29,
+            "ly": ty + 46,
+            "sans": FONT_SANS,
+            "muted": TEXT_MUTED,
+            "lbl": lbl,
+        }
+    )
+
 stats_source = (
     "REST API · %s" % GITHUB_STATS["fetched_at"]
     if GITHUB_STATS.get("fetched_at")
-    else "snapshot"
+    else "SNAPSHOT"
 )
 
-# Stats and languages share one card for the same reason the principles and
-# current work do: two half-width images are a width-dependent row.
-stats_content = """
-<div style="width: 372px;">
-  %(head)s
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">%(tiles)s</div>
-</div>
+max_repos = max((l["repos"] for l in GITHUB_STATS["languages"]), default=1) or 1
+lang_bars = []
+for idx, lang in enumerate(GITHUB_STATS["languages"][:5]):
+    ly = 74 + idx * 28
+    bar_w = round(210 * lang["repos"] / max_repos)
+    lang_bars.append(
+        """
+        <text x="444" y="%(y)d" font-family="%(sans)s" font-size="12" font-weight="500" fill="%(text)s">%(name)s</text>
+        <rect x="598" y="%(by)d" width="210" height="8" rx="4" fill="%(track)s"/>
+        <rect x="598" y="%(by)d" width="%(bw)d" height="8" rx="4" fill="%(fill)s"/>
+        <text x="854" y="%(y)d" text-anchor="end" font-family="%(mono)s" font-size="11" font-weight="600" fill="%(muted)s">%(repos)d</text>
+        """
+        % {
+            "y": ly,
+            "sans": FONT_SANS,
+            "text": PILL_TEXT,
+            "name": xml_esc(lang["name"]),
+            "by": ly - 7,
+            "track": PILL_BG,
+            "bw": max(6, bar_w),
+            "fill": CRIMSON,
+            "mono": FONT_MONO,
+            "muted": TEXT_MUTED,
+            "repos": lang["repos"],
+        }
+    )
+
+analytics_body = """
+%(frame)s
+<line x1="418" y1="22" x2="418" y2="202" stroke="%(border)s" stroke-width="1"/>
+
+<!-- Left: GitHub Stats -->
+<text x="26" y="42" font-family="%(serif)s" font-size="19" font-weight="700" fill="%(head)s">GitHub Stats</text>
+<line x1="152" y1="36" x2="274" y2="36" stroke="%(border)s" stroke-width="1"/>
+<text x="394" y="40" text-anchor="end" font-family="%(mono)s" font-size="9.5" font-weight="600" fill="%(muted)s">%(source)s</text>
+%(tiles)s
+
+<!-- Right: Top Languages -->
+<text x="444" y="42" font-family="%(serif)s" font-size="19" font-weight="700" fill="%(head)s">Top Languages</text>
+<line x1="590" y1="36" x2="758" y2="36" stroke="%(border)s" stroke-width="1"/>
+<text x="854" y="40" text-anchor="end" font-family="%(mono)s" font-size="9.5" font-weight="600" fill="%(muted)s">TOP %(nlangs)d OF %(total_langs)d</text>
+%(bars)s
 """ % {
-    "head": head("GitHub stats", stats_source),
-    "tiles": stat_tiles,
+    "frame": card_frame(880, CARD_SIZES["analytics"][1]),
+    "border": CANVAS_BORDER,
+    "serif": FONT_SERIF,
+    "head": TEXT_HEAD,
+    "mono": FONT_MONO,
+    "muted": TEXT_MUTED,
+    "source": xml_esc(stats_source.upper()),
+    "tiles": "".join(tiles_svg),
+    "nlangs": len(GITHUB_STATS["languages"][:5]),
+    "total_langs": langs_total,
+    "bars": "".join(lang_bars),
 }
+save_svg("analytics.svg", *CARD_SIZES["analytics"], analytics_body)
 
-# --- Languages card -------------------------------------------------
-max_repos = max(language["repos"] for language in GITHUB_STATS["languages"]) or 1
-lang_rows = "".join(
-    """
-    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
-      <span style="width: 110px; font-size: 11px; color: #3c2f2f; white-space: nowrap;
-                   overflow: hidden;">%(name)s</span>
-      <span style="flex: 1; height: 6px; background-color: #f0e7db; border-radius: 3px;
-                   overflow: hidden;">
-        <span style="display: block; height: 100%%; width: %(width)d%%;
-                     background-color: %(accent)s; border-radius: 3px;"></span>
-      </span>
-      <span class="mono" style="width: 22px; text-align: right; font-size: 10.5px;
-                   color: %(muted)s;">%(repos)d</span>
-    </div>
-    """
-    % {
-        "name": language["name"],
-        "width": round(100 * language["repos"] / max_repos),
-        "repos": language["repos"],
-        "accent": ACCENT,
-        "muted": MUTED,
-    }
-    for language in GITHUB_STATS["languages"]
-)
+# --- Contributions heatmap (880x220) ---
+columns = CONTRIBUTIONS.get("columns") or []
+n_weeks = max(1, len(columns))
+PITCH = 15.6
+CELL = 12.2
+gx0 = 26
+gy0 = 76
+month_names = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+month_labels = []
+cell_rects = []
+last_m_x = -999
 
-langs_total = GITHUB_STATS.get("language_count") or len(GITHUB_STATS["languages"])
-langs_content = """
-<div style="flex: 1; min-width: 0; border-left: 1px solid %(border_soft)s;
-            padding-left: 30px;">
-  %(head)s
-  <div>%(rows)s</div>
-</div>
-""" % {
-    "border_soft": BORDER_SOFT,
-    "head": head("Top languages", "top %d of %d" % (len(GITHUB_STATS["languages"]), langs_total)),
-    "rows": lang_rows,
-}
-
-analytics_content = """
-<div class="card">
-  <div style="display: flex; gap: 30px;">
-    %(stats)s
-    %(langs)s
-  </div>
-</div>
-""" % {"stats": stats_content, "langs": langs_content}
-save_svg("analytics.svg", *CARD_SIZES["analytics"], analytics_content)
-
-
-# --- Contribution calendar ------------------------------------------
-CONTRIB_CELL = 12
-CONTRIB_GAP = 3
-CONTRIB_PITCH = CONTRIB_CELL + CONTRIB_GAP
-
-
-def contribution_heatmap(columns):
-    """Draw the cached calendar as a warm-toned 7 x N grid plus month labels."""
-    if not columns:
-        return "", ""
-
-    width = len(columns) * CONTRIB_PITCH - CONTRIB_GAP
-
-    cells = []
-    months = []
-    last_month_label = -99
-    for week, days in enumerate(columns):
-        first = next((day for day in days if day), None)
-        if first:
-            month = first["date"][:7]
-            month_names = [
-                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
-            ]
-            label = month_names[int(month[5:7]) - 1]
-            if not months or months[-1][0] != label:
-                if week - last_month_label >= 4 and week * CONTRIB_PITCH < width - 24:
-                    months.append((label, week * CONTRIB_PITCH))
-                    last_month_label = week
-        for day_index, day in enumerate(days):
-            if not day:
-                continue
-            cells.append(
-                '<rect x="%d" y="%d" width="%d" height="%d" rx="2.5" fill="%s"></rect>'
-                % (
-                    week * CONTRIB_PITCH,
-                    day_index * CONTRIB_PITCH,
-                    CONTRIB_CELL,
-                    CONTRIB_CELL,
-                    LEVEL_COLORS[min(day["level"], 4)],
-                )
-            )
-
-    grid = (
-        '<svg viewBox="0 0 %d %d" width="%d" height="%d" xmlns="http://www.w3.org/2000/svg">%s</svg>'
-        % (
-            width,
-            7 * CONTRIB_PITCH - CONTRIB_GAP,
-            width,
-            7 * CONTRIB_PITCH - CONTRIB_GAP,
-            "".join(cells),
+for week, days in enumerate(columns):
+    first = next((day for day in days if day), None)
+    wx = gx0 + week * PITCH
+    if first:
+        lbl = month_names[int(first["date"][5:7]) - 1]
+        if (not month_labels or month_labels[-1][0] != lbl) and (wx - last_m_x >= 52) and wx < 832:
+            month_labels.append((lbl, wx))
+            last_m_x = wx
+    for day_idx, day in enumerate(days):
+        if not day:
+            continue
+        cy = gy0 + day_idx * PITCH
+        color = LEVEL_COLORS[min(day["level"], 4)]
+        cell_rects.append(
+            '<rect x="%.1f" y="%.1f" width="%.1f" height="%.1f" rx="2.5" fill="%s"/>'
+            % (wx, cy, CELL, CELL, color)
         )
-    )
-    month_labels = "".join(
-        '<span style="position: absolute; left: %dpx;">%s</span>' % (x, label)
-        for label, x in months
-    )
-    return grid, month_labels
 
-
-contrib_grid, contrib_months = contribution_heatmap(CONTRIBUTIONS.get("columns") or [])
+months_svg = "".join(
+    '<text x="%.1f" y="66" font-family="%s" font-size="10" font-weight="600" fill="%s">%s</text>'
+    % (mx, FONT_MONO, TEXT_MUTED, lbl)
+    for lbl, mx in month_labels
+)
 
 contrib_total = CONTRIBUTIONS.get("total")
 contrib_note = (
-    "%s in the last year" % format(contrib_total, ",") if contrib_total is not None else ""
+    "%s IN THE LAST YEAR" % format(contrib_total, ",") if contrib_total is not None else ""
 )
 contrib_window = (
     "%s → %s" % (CONTRIBUTIONS["start"], CONTRIBUTIONS["end"])
@@ -1266,86 +1484,120 @@ contrib_window = (
     else ""
 )
 
-contrib_legend = "".join(
-    '<span style="display: inline-block; width: 9px; height: 9px; border-radius: 2px;'
-    ' background-color: %s;"></span>' % color
-    for color in LEVEL_COLORS
+legend_rects = "".join(
+    '<rect x="%d" y="191" width="10" height="10" rx="2" fill="%s"/>' % (752 + i * 14, col)
+    for i, col in enumerate(LEVEL_COLORS)
 )
 
-contrib_content = """
-<div class="card">
-  %(head)s
-  <div style="position: relative; height: 12px; margin-bottom: 8px;">
-    <span class="mono" style="font-size: 9px; color: %(faint)s;">%(months)s</span>
-  </div>
-  %(grid)s
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
-    <span class="mono" style="font-size: 9.5px; color: %(faint)s;">%(window)s</span>
-    <span class="mono" style="font-size: 9.5px; color: %(faint)s; display: flex;
-                 align-items: center; gap: 4px;">Less %(legend)s More</span>
-  </div>
-</div>
+contrib_body = """
+%(frame)s
+<text x="26" y="42" font-family="%(serif)s" font-size="19" font-weight="700" fill="%(head)s">Contributions</text>
+<line x1="158" y1="36" x2="690" y2="36" stroke="%(border)s" stroke-width="1"/>
+<text x="854" y="40" text-anchor="end" font-family="%(mono)s" font-size="10" font-weight="600" fill="%(muted)s">%(note)s</text>
+%(months)s
+%(cells)s
+<text x="26" y="200" font-family="%(mono)s" font-size="10" fill="%(muted)s">%(window)s</text>
+<text x="744" y="200" text-anchor="end" font-family="%(mono)s" font-size="10" fill="%(muted)s">Less</text>
+%(legend)s
+<text x="826" y="200" font-family="%(mono)s" font-size="10" fill="%(muted)s">More</text>
 """ % {
-    "head": head("Contributions", contrib_note),
-    "months": contrib_months,
-    "grid": contrib_grid,
-    "legend": contrib_legend,
-    "window": contrib_window,
-    "faint": FAINT,
+    "frame": card_frame(880, CARD_SIZES["contrib"][1]),
+    "serif": FONT_SERIF,
+    "head": TEXT_HEAD,
+    "border": CANVAS_BORDER,
+    "mono": FONT_MONO,
+    "muted": TEXT_MUTED,
+    "note": xml_esc(contrib_note),
+    "months": months_svg,
+    "cells": "".join(cell_rects),
+    "window": xml_esc(contrib_window),
+    "legend": legend_rects,
 }
-save_svg("contrib.svg", *CARD_SIZES["contrib"], contrib_content)
+save_svg("contrib.svg", *CARD_SIZES["contrib"], contrib_body)
 
 
 # =====================================================================
-# 11 -- Closing
+# 11 -- Closing Card with Crimson Wave Footer & Sleeping Cat (880x148)
 # =====================================================================
-closing_content = """
-<div class="card" style="padding: 26px 20px;">
-  <div class="name" style="font-size: 25px; color: %(ink_strong)s;">Let’s build something meaningful.</div>
-  <div style="font-size: 13.5px; line-height: 1.5; color: %(muted)s; margin-top: 8px;">
-    Always open to collaboration, new opportunities, and interesting technical conversations.
-  </div>
-</div>
-""" % {"ink_strong": INK_STRONG, "muted": MUTED}
-save_svg("closing.svg", *CARD_SIZES["closing"], closing_content)
+closing_body = """
+<defs>
+  <clipPath id="cls-clip">
+    <rect x="0" y="0" width="880" height="148" rx="16"/>
+  </clipPath>
+</defs>
+<g clip-path="url(#cls-clip)">
+  <rect x="0" y="0" width="880" height="148" fill="%(bg)s"/>
+
+  <!-- Crimson & dark wave hills along bottom-right -->
+  <path d="M0 148 L0 132 C160 120, 320 138, 480 122 C630 106, 760 88, 880 96 L880 148 Z" fill="%(crimson)s" fill-opacity="0.92"/>
+  <path d="M360 148 C480 132, 620 118, 740 122 C800 124, 848 114, 880 108 L880 148 Z" fill="%(dark_hill)s"/>
+
+  <!-- Sleeping black cat silhouette + z z z -->
+  <g transform="translate(744, 72)">
+    <!-- Curled tail -->
+    <path d="M52 44 C70 46, 74 34, 64 29" fill="none" stroke="#181010" stroke-width="5.5" stroke-linecap="round"/>
+    <!-- Curled body -->
+    <ellipse cx="36" cy="39" rx="22" ry="13" fill="#181010"/>
+    <!-- Head & ears -->
+    <circle cx="19" cy="34" r="11" fill="#181010"/>
+    <polygon points="10,27 12,15 19,24" fill="#181010"/>
+    <polygon points="20,24 26,15 28,27" fill="#181010"/>
+    <!-- Sleeping closed eyes -->
+    <path d="M13 34 Q16 36.5 19 34" fill="none" stroke="%(on_dark_sub)s" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M21 34 Q24 36.5 27 34" fill="none" stroke="%(on_dark_sub)s" stroke-width="1.2" stroke-linecap="round"/>
+    <!-- Floating z z z -->
+    <text x="34" y="18" font-family="%(cursive)s" font-size="13" font-weight="700" fill="%(crimson)s">z</text>
+    <text x="44" y="10" font-family="%(cursive)s" font-size="16" font-weight="700" fill="%(crimson)s">z</text>
+    <text x="56" y="2" font-family="%(cursive)s" font-size="19" font-weight="700" fill="%(crimson)s">z</text>
+  </g>
+
+  <!-- Closing copy -->
+  <text x="34" y="58" font-family="%(serif)s" font-size="25" font-weight="700" fill="%(head)s">Let’s build something meaningful.</text>
+  <text x="34" y="86" font-family="%(sans)s" font-size="13.5" fill="%(body)s">Always open to collaboration, new opportunities, and interesting technical conversations.</text>
+</g>
+<rect x="0.5" y="0.5" width="879" height="147" rx="16" fill="none" stroke="%(border)s" stroke-width="1"/>
+""" % {
+    "bg": CANVAS_BG,
+    "crimson": CRIMSON,
+    "dark_hill": DARK_HILL,
+    "on_dark_sub": ON_DARK_SUB,
+    "cursive": FONT_CURSIVE,
+    "serif": FONT_SERIF,
+    "head": TEXT_HEAD,
+    "sans": FONT_SANS,
+    "body": TEXT_BODY,
+    "border": CANVAS_BORDER,
+}
+save_svg("closing.svg", *CARD_SIZES["closing"], closing_body)
 
 
 # =====================================================================
-# 12 -- Alt text, assembled from the same data the cards are drawn from
+# 12 -- Alt Text & README Assembly
 # =====================================================================
 def as_sentence(text):
-    """Normalise a profile.json fragment so alt text reads as whole sentences."""
     text = text.strip()
     return text if text.endswith((".", "!", "?")) else text + "."
 
 
 tech_names = ", ".join(
     TECH_LABELS.get(key, key)
-    for _label, category in TECH_CATEGORIES
-    for key in profile["tech_stack"].get(category, [])
+    for _lbl, category, _vk in BENTO_CATS
+    for key in profile["tech_stack"].get(category, [])[:3]
 )
 core_skill_names = ", ".join(profile["tech_stack"].get("core_skills", []))
 
-# Alt text is read aloud, so it carries the same content as the cards with the
-# markup flattened out of it.
-def plain(text):
-    return re.sub(r"<[^>]+>", "", text)
-
-
 ALT_TEXT = {
-    "header": "%(name)s — %(role)s %(email)s"
-    % {"name": profile["name"], "role": profile["role"], "email": EMAIL},
-    "hero": "%(name)s: %(role)s Focus: %(focus)s. %(quote)s"
-    % {
-        "name": profile["name"],
-        "role": profile["role"],
-        "focus": ", ".join(text.lower() for _idx, text in FOCUS),
-        "quote": " ".join(plain(line) for line in profile["quote"]["lines"]),
-    },
+    "header": "%s — %s" % (profile["name"], profile.get("role_short", profile["role"])),
+    "hero": "%s: %s Focus: %s. %s"
+    % (
+        profile["name"],
+        profile["role"],
+        ", ".join(profile["focus"][:3]),
+        " ".join(quote_lines),
+    ),
     "action_email": "Email me at %s" % EMAIL,
     "action_portfolio": "Open my portfolio at %s" % PORTFOLIO_URL,
-    "info": "Profile: "
-    + "; ".join("%s: %s (%s)" % (label, main, sub) for label, main, sub in INFO),
+    "info": "Profile: " + "; ".join("%s: %s" % (label, main) for label, main, _sub in INFO),
     "about": "%s Exploring: %s. Interests: %s. %s"
     % (
         profile["about_me"]["text"],
@@ -1353,16 +1605,15 @@ ALT_TEXT = {
         profile["about_me"]["interests"],
         profile["about_me"]["fun_fact"],
     ),
-    "stack": "Tech stack: %s. Core skills: %s" % (tech_names, core_skill_names),
     "principles_building": "Engineering principles: "
     + " ".join(as_sentence(item) for item in profile["principles"])
     + " Currently building: "
     + "; ".join(
-        ("%s %d%%" % (item["name"], item["percentage"]))
-        if "percentage" in item
-        else ("%s — %s" % (item["name"], item.get("desc", "")))
+        ("%s — %s" % (item["name"], item.get("desc", "")))
         for item in profile["currently_building"]
     ),
+    "stack": "Tech stack: %s. Systems, Data & Storage Primitives: %s"
+    % (tech_names, core_skill_names),
     "next": "Planned, not started: "
     + "; ".join("%s %s" % (item["name"], item["desc"]) for item in profile["upcoming_projects"]),
     "achievements": "Leadership & Hackathons: "
@@ -1374,16 +1625,13 @@ ALT_TEXT = {
     + ", ".join("%s (%s)" % (c["name"], c["issuer"]) for c in profile.get("certifications", [])),
     "certifications": "Certifications: "
     + ", ".join("%s (%s)" % (c["name"], c["issuer"]) for c in profile.get("certifications", [])),
-    "analytics": "GitHub stats for %s: %d public repositories, %d stars, %d followers and %d "
-    "languages, from the GitHub REST API. Top %d languages by repository count: %s"
+    "analytics": "GitHub stats for %s: %d public repositories, %d stars, %d followers and %d languages."
     % (
         GITHUB_USER,
         GITHUB_STATS["public_repos"],
         GITHUB_STATS["stars"],
         GITHUB_STATS["followers"],
         langs_total,
-        len(GITHUB_STATS["languages"]),
-        ", ".join("%s (%d)" % (l["name"], l["repos"]) for l in GITHUB_STATS["languages"]),
     ),
     "contrib": "Contribution calendar for %s: %s contributions between %s and %s"
     % (
@@ -1392,38 +1640,31 @@ ALT_TEXT = {
         CONTRIBUTIONS.get("start", "unknown"),
         CONTRIBUTIONS.get("end", "unknown"),
     ),
-    "closing": "Let’s build something meaningful — always open to collaboration, new "
-    "opportunities and interesting technical conversations",
+    "closing": "Let's build something meaningful — always open to collaboration, new opportunities and interesting technical conversations.",
 }
 
-# ----------------- README assembly -----------------
-def card_image(filename, width, alt, href=None):
-    """One card, in whichever theme the reader uses.
 
-    `<picture>` with `prefers-color-scheme` is the mechanism GitHub documents
-    for theme-aware images. The `<img>` inside it is not only the light image:
-    it is the fallback, so if a host ignores `<picture>` the cream card is what
-    renders. Both files are local to this repository -- the dark variant is not
-    an external service, so it cannot rot the way the old analytics cards did.
-    """
-    markup = (
-        '<picture><source media="(prefers-color-scheme: dark)" '
-        'srcset="assets/cards/dark/%s"><img src="assets/cards/%s" width="%d" '
-        'alt="%s"></picture>' % (filename, filename, width, alt)
+def img_tag(filename, width, alt, href=None):
+    img = '<img src="assets/cards/%s" width="%d" alt="%s">' % (filename, width, html_attr(alt))
+    return '<a href="%s">%s</a>' % (html_attr(href), img) if href else img
+
+
+def row(markup):
+    return '<p align="center">%s</p>' % markup
+
+
+nav_row = row(
+    " ".join(
+        img_tag(fname, width, "Jump to %s" % label, href=href)
+        for fname, label, href, _ik, width, _act in NAV_SPECS
     )
-    return '<a href="%s">%s</a>' % (href, markup) if href else markup
-
-
-def row(card):
-    """One card, centred, on a line of its own -- the page's only arrangement."""
-    return '<p align="center">%s</p>' % card
-
+)
 
 PROJECT_ROWS = [
     row(
-        card_image(
+        img_tag(
             "project_%d.svg" % idx,
-            CARD_SIZES["project"][0],
+            GRID,
             "%s — %s Status: %s." % (project["name"], as_sentence(project["desc"]), project["status"]),
             href=project["url"],
         )
@@ -1431,107 +1672,86 @@ PROJECT_ROWS = [
     for idx, project in enumerate(profile["featured_projects"])
 ]
 
+CONTACT_ITEMS = [
+    ("GitHub", GITHUB_URL),
+    ("Portfolio", PORTFOLIO_URL),
+    ("LinkedIn", profile["about_me"]["linkedin_url"]),
+    ("Email", "mailto:" + EMAIL),
+    ("Resume", RESUME_URL),
+]
+contact_row = row(
+    " · ".join('<a href="%s">%s</a>' % (html_attr(href), html_attr(lbl)) for lbl, href in CONTACT_ITEMS)
+)
+
 README_BLOCKS = [
     "<!-- Generated by generate.py from profile.json -- edit those, not this file. -->",
-    "<!-- Header: monogram, name, contact meta. -->",
-    row(card_image("header.svg", CARD_SIZES["header"][0], ALT_TEXT["header"])),
-    # Real in-page links, not decoration: GitHub emits `id="user-content-<slug>"`
-    # on each heading and strips the prefix at runtime, so `#featured-projects`
-    # resolves to the heading further down.
-    "<!-- Section navigation. -->",
-    link_row(NAV_ITEMS),
-    "<!-- Hero. -->",
-    row(card_image("hero.svg", GRID, ALT_TEXT["hero"])),
-    # One action per line rather than two side by side: each is a single image,
-    # so it can never be clipped by a narrow column.
-    "<!-- Primary and secondary action. -->",
+    row(img_tag("header.svg", GRID, ALT_TEXT["header"])),
+    nav_row,
+    row(img_tag("hero.svg", GRID, ALT_TEXT["hero"])),
     row(
-        card_image(
-            "action_email.svg",
-            GRID,
-            ALT_TEXT["action_email"],
-            href="mailto:" + EMAIL,
-        )
+        img_tag("action_email.svg", GRID, ALT_TEXT["action_email"], href="mailto:" + EMAIL)
+        + "<br>\n"
+        + img_tag("action_portfolio.svg", GRID, ALT_TEXT["action_portfolio"], href=PORTFOLIO_URL)
     ),
-    row(card_image("action_portfolio.svg", GRID, ALT_TEXT["action_portfolio"], href=PORTFOLIO_URL)),
-    # Four balanced columns inside one card, so they are always four columns on
-    # one row and can never wrap into a ragged 3 + 1.
-    "<!-- Profile at a glance. -->",
-    row(card_image("info.svg", GRID, ALT_TEXT["info"])),
+    row(img_tag("info.svg", GRID, ALT_TEXT["info"])),
     '<h2 align="center">About</h2>',
-    row(card_image("about.svg", GRID, ALT_TEXT["about"])),
-    '<h2 align="center">Tech Stack</h2>',
-    row(card_image("stack.svg", GRID, ALT_TEXT["stack"])),
-    # Principles and current work sit side by side INSIDE one card, so the two
-    # columns are a property of the drawing rather than of the reader's window.
-    "<!-- Principles beside current work. -->",
-    row(card_image("principles_building.svg", GRID, ALT_TEXT["principles_building"])),
+    row(img_tag("about.svg", GRID, ALT_TEXT["about"])),
+    row(img_tag("principles_building.svg", GRID, ALT_TEXT["principles_building"])),
     *(
-        [
-            "<!-- Planned work, labelled as planned. -->",
-            row(card_image("next.svg", GRID, ALT_TEXT["next"])),
-        ]
+        [row(img_tag("next.svg", GRID, ALT_TEXT["next"]))]
         if HAS_UPCOMING
         else []
     ),
+    '<h2 align="center">Tech Stack</h2>',
+    row(img_tag("stack.svg", GRID, ALT_TEXT["stack"])),
     '<h2 align="center">Featured Projects</h2>',
     *PROJECT_ROWS,
     '<p align="center"><a href="%s?tab=repositories">View all repositories &rarr;</a></p>' % GITHUB_URL,
     *(
         [
             '<h2 align="center">Achievements</h2>',
-            row(card_image("achievements.svg", GRID, ALT_TEXT["achievements"])),
+            row(img_tag("achievements.svg", GRID, ALT_TEXT["achievements"])),
         ]
         if HAS_ACHIEVEMENTS
         else [
             '<h2 align="center">Certifications</h2>',
-            row(card_image("certifications.svg", GRID, ALT_TEXT["certifications"])),
+            row(img_tag("certifications.svg", GRID, ALT_TEXT["certifications"])),
         ]
     ),
     '<h2 align="center">GitHub Analytics</h2>',
-    row(card_image("analytics.svg", GRID, ALT_TEXT["analytics"])),
-    row(card_image("contrib.svg", GRID, ALT_TEXT["contrib"])),
-    "<!-- Closing. -->",
-    row(card_image("closing.svg", GRID, ALT_TEXT["closing"])),
-    link_row(CONTACT_ITEMS),
+    row(img_tag("analytics.svg", GRID, ALT_TEXT["analytics"])),
+    row(img_tag("contrib.svg", GRID, ALT_TEXT["contrib"])),
+    row(img_tag("closing.svg", GRID, ALT_TEXT["closing"])),
+    contact_row,
 ]
 
 readme = "\n\n".join(README_BLOCKS) + "\n"
 
-# Remove stale generated card files so no orphan assets remain on disk.
-for directory in (CARDS_DIR, DARK_DIR):
-    for existing_name in os.listdir(directory):
-        if existing_name.endswith(".svg") and existing_name not in GENERATED_CARDS:
-            os.remove(os.path.join(directory, existing_name))
+# Remove dark/ directory and any stale SVGs no longer produced.
+dark_dir = os.path.join(CARDS_DIR, "dark")
+if os.path.isdir(dark_dir):
+    shutil.rmtree(dark_dir)
+for existing_name in os.listdir(CARDS_DIR):
+    if existing_name.endswith(".svg") and existing_name not in GENERATED_CARDS:
+        os.remove(os.path.join(CARDS_DIR, existing_name))
 
-# ----------------- Card validation -----------------
-# Every card is an XML document, and a browser silently drops an SVG it cannot
-# parse -- so a stray HTML-only entity (&middot;, &rarr;) or an unclosed <img>
-# publishes a blank space with no warning anywhere. Both shipped once; this
-# fails the build instead, before README.md is written. The same run also checks
-# that the dark theme covers every colour a card actually uses.
+# ----------------- XML Validation -----------------
 INVALID_CARDS = []
-for directory in (CARDS_DIR, DARK_DIR):
-    for card_name in sorted(os.listdir(directory)):
-        if not card_name.endswith(".svg"):
-            continue
-        path = os.path.join(directory, card_name)
-        try:
-            xml.etree.ElementTree.parse(path)
-        except xml.etree.ElementTree.ParseError as exc:
-            INVALID_CARDS.append("%s: %s" % (os.path.relpath(path, CARDS_DIR), exc))
+for card_name in sorted(os.listdir(CARDS_DIR)):
+    if not card_name.endswith(".svg"):
+        continue
+    path = os.path.join(CARDS_DIR, card_name)
+    try:
+        xml.etree.ElementTree.parse(path)
+    except xml.etree.ElementTree.ParseError as exc:
+        INVALID_CARDS.append("%s: %s" % (card_name, exc))
+
 if INVALID_CARDS:
     for problem in INVALID_CARDS:
         print("INVALID CARD: %s" % problem)
     raise SystemExit("Refusing to write README.md: %d card(s) are not valid XML" % len(INVALID_CARDS))
-if UNMAPPED_COLORS:
-    for colour in sorted(UNMAPPED_COLORS):
-        print("UNMAPPED COLOUR: %s -- no dark counterpart" % colour)
-    raise SystemExit("Refusing to write README.md: %d colour(s) missing from DARK_COLORS" % len(UNMAPPED_COLORS))
-print(
-    "Validated: %d cards (light + dark) are well-formed XML and every colour has a dark counterpart"
-    % (2 * len([n for n in os.listdir(CARDS_DIR) if n.endswith('.svg')]))
-)
+
+print("Validated: %d pure-SVG cards are well-formed XML" % len(GENERATED_CARDS))
 
 README_MD = os.path.join(WORKSPACE_DIR, "README.md")
 with open(README_MD, "w", encoding="utf-8") as rf:

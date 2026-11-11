@@ -52,27 +52,21 @@
     "languages": [
       "python",
       "go",
-      "typescript",
-      "javascript",
-      "c",
       "java"
     ],
     "backend_apis": [
       "fastapi",
       "nodejs",
-      "grpc",
-      "react",
-      "tailwindcss"
+      "grpc"
     ],
     "data_lakehouse": [
+      "apachespark",
       "apacheairflow",
-      "duckdb",
-      "sqlite"
+      "pytorch"
     ],
     "databases": [
       "postgresql",
       "redis",
-      "rabbitmq",
       "mongodb"
     ],
     "cloud_infra": [
@@ -82,17 +76,16 @@
     ],
     "ci_testing": [
       "githubactions",
-      "pytest",
-      "vitest"
+      "git",
+      "pytest"
     ],
     "observability": [
       "prometheus",
       "grafana"
     ],
     "tools": [
-      "git",
+      "postman",
       "github",
-      "linux",
       "vscode"
     ],
     "core_skills": [
@@ -100,9 +93,11 @@
       "Bash",
       "Express 5",
       "Protobuf",
+      "SQLite3",
       "SQLAlchemy 2.0",
       "Prisma ORM",
       "dbt-core",
+      "DuckDB",
       "PyArrow / Parquet",
       "Great Expectations",
       "BoltDB",
