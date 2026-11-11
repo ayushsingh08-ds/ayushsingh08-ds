@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 880 48" width="880" height="48">
+
+<rect x="0.5" y="0.5" width="879" height="47" rx="12" fill="#251C1A" stroke="#3E2F2A" stroke-width="1"/>
+<g transform="translate(22.0, 16.0) scale(1.0000)"><circle cx="8" cy="8" r="6.2" fill="none" stroke="#C44B46" stroke-width="1.5"/><polygon points="10.8,5.2 6.8,6.8 5.2,10.8 9.2,9.2" fill="#C44B46"/></g>
+<text x="48" y="29" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="600" fill="#FAF5EF">View Portfolio</text>
+<text x="854" y="28.5" text-anchor="end" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11.5" font-weight="700" letter-spacing="0.8" fill="#D8CBC2">AYUDEV-SHIRO.VERCEL.APP →</text>
+
+</svg>

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 880 148" width="880" height="148">
+
+<defs>
+  <clipPath id="cls-clip">
+    <rect x="0" y="0" width="880" height="148" rx="16"/>
+  </clipPath>
+</defs>
+<g clip-path="url(#cls-clip)">
+  <rect x="0" y="0" width="880" height="148" fill="#181312"/>
+
+  <!-- Crimson & dark wave hills along bottom-right -->
+  <path d="M0 148 L0 132 C160 120, 320 138, 480 122 C630 106, 760 88, 880 96 L880 148 Z" fill="#C44B46" fill-opacity="0.92"/>
+  <path d="M360 148 C480 132, 620 118, 740 122 C800 124, 848 114, 880 108 L880 148 Z" fill="#201314"/>
+
+  <!-- Sleeping black cat silhouette + z z z -->
+  <g transform="translate(744, 72)">
+    <!-- Curled tail -->
+    <path d="M52 44 C70 46, 74 34, 64 29" fill="none" stroke="#140D0D" stroke-width="5.5" stroke-linecap="round"/>
+    <!-- Curled body -->
+    <ellipse cx="36" cy="39" rx="22" ry="13" fill="#140D0D"/>
+    <!-- Head & ears -->
+    <circle cx="19" cy="34" r="11" fill="#140D0D"/>
+    <polygon points="10,27 12,15 19,24" fill="#140D0D"/>
+    <polygon points="20,24 26,15 28,27" fill="#140D0D"/>
+    <!-- Sleeping closed eyes -->
+    <path d="M13 34 Q16 36.5 19 34" fill="none" stroke="#E8D8D0" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M21 34 Q24 36.5 27 34" fill="none" stroke="#E8D8D0" stroke-width="1.2" stroke-linecap="round"/>
+    <!-- Floating z z z -->
+    <text x="34" y="18" font-family="'Caveat', 'Bradley Hand', 'Segoe Print', cursive" font-size="13" font-weight="700" fill="#C44B46">z</text>
+    <text x="44" y="10" font-family="'Caveat', 'Bradley Hand', 'Segoe Print', cursive" font-size="16" font-weight="700" fill="#C44B46">z</text>
+    <text x="56" y="2" font-family="'Caveat', 'Bradley Hand', 'Segoe Print', cursive" font-size="19" font-weight="700" fill="#C44B46">z</text>
+  </g>
+
+  <!-- Closing copy -->
+  <text x="34" y="58" font-family="'Playfair Display', Georgia, 'Times New Roman', serif" font-size="25" font-weight="700" fill="#FAF5EF">Let’s build something meaningful.</text>
+  <text x="34" y="86" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13.5" fill="#D8CBC2">Always open to collaboration, new opportunities, and interesting technical conversations.</text>
+</g>
+<rect x="0.5" y="0.5" width="879" height="147" rx="16" fill="none" stroke="#3A2C28" stroke-width="1"/>
+
+</svg>

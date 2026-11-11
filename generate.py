@@ -16,7 +16,6 @@ import datetime
 import json
 import os
 import re
-import shutil
 import urllib.request
 import xml.etree.ElementTree
 
@@ -25,10 +24,12 @@ WORKSPACE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROFILE_JSON = os.path.join(WORKSPACE_DIR, "profile.json")
 BASE64_ICONS_JSON = os.path.join(WORKSPACE_DIR, "assets", "base64_icons.json")
 CARDS_DIR = os.path.join(WORKSPACE_DIR, "assets", "cards")
+DARK_DIR = os.path.join(CARDS_DIR, "dark")
 GITHUB_STATS_JSON = os.path.join(WORKSPACE_DIR, "assets", "github_stats.json")
 CONTRIBUTIONS_JSON = os.path.join(WORKSPACE_DIR, "assets", "contributions.json")
 
 os.makedirs(CARDS_DIR, exist_ok=True)
+os.makedirs(DARK_DIR, exist_ok=True)
 
 # ----------------- Content -----------------
 with open(PROFILE_JSON, "r", encoding="utf-8") as f:
@@ -114,6 +115,76 @@ ON_DARK_SUB = "#E8D8D0"
 
 LEVEL_COLORS = ["#EAE0D3", "#E8CFC0", "#D49B85", "#B35D4E", "#8C2D2D"]
 
+# ----------------- Dark Theme Palette (Cozy Espresso & Crimson) -----------------
+DARK_COLORS = {
+    # Surfaces
+    "#fbf7f2": "#181312",  # outer card canvas
+    "#f3ece2": "#231B19",  # bento sub-card surface
+    "#f2eae0": "#251C1A",  # nav inactive & portfolio bar
+    "#f6e6dc": "#2B1B17",  # callout highlight box
+    "#eae0d3": "#2E2320",  # tag pills, progress tracks, heatmap level 0
+    # Borders & hairlines
+    "#e4d9c8": "#3A2C28",  # outer card border & horizontal rules
+    "#e2d5c5": "#3E2F2A",  # sub-card border
+    "#dfd3c3": "#42322D",  # nav inactive border
+    "#e8cfc0": "#523029",  # callout border & heatmap level 1
+    "#d8cbb8": "#4A3934",  # pill border
+    # Espresso & Crimson accents
+    "#381e1f": "#8C2D2D",  # active nav pill, Email Me CTA, DONE/ACTIVE badges
+    "#8c2d2d": "#C44B46",  # crimson badges, icons, bars, closing wave, heatmap level 4
+    "#c86428": "#E6884A",  # lightning accent & underline secondary stroke
+    "#b85d2b": "#F09C62",  # callout bold headline
+    # Typography on card surfaces
+    "#231815": "#FAF5EF",  # headings
+    "#4a3b36": "#D8CBC2",  # body text
+    "#3a2a25": "#EDE2D8",  # pill text & nav text
+    "#5c4b45": "#C2B0A6",  # eyebrow text
+    "#7a6a63": "#A6958C",  # muted labels & cat whiskers
+    # Header crimson banner & illustrations
+    "#943030": "#8C2D2D",
+    "#822627": "#782223",
+    "#5e1a1b": "#521617",
+    "#5a1d1e": "#4C1819",
+    "#261718": "#201314",
+    "#1a1011": "#170E0F",
+    "#a53f3a": "#993632",
+    "#181010": "#140D0D",
+    "#4a2525": "#4A2525",
+    "#6e2223": "#9C3838",
+    "#f0d5c6": "#F0D5C6",
+    "#faf5ef": "#FAF5EF",
+    "#e8d8d0": "#E8D8D0",
+    "#ffffff": "#FFFFFF",
+    # Heatmap mid-tones
+    "#d49b85": "#7A3A35",
+    "#b35d4e": "#A1433F",
+}
+
+HEX_COLOR = re.compile(r"#[0-9a-fA-F]{6}\b")
+UNMAPPED_COLORS = set()
+
+
+def to_dark(svg):
+    """Map every non-data-URI hex colour in an SVG to its dark-mode counterpart."""
+    parts = re.split(r'(data:image/[^"]+)', svg)
+    out = []
+    for idx, part in enumerate(parts):
+        if idx % 2 == 1:
+            out.append(part)
+            continue
+
+        def swap(match):
+            light = match.group(0).lower()
+            dark = DARK_COLORS.get(light)
+            if dark is None:
+                UNMAPPED_COLORS.add(light)
+                return match.group(0)
+            return dark
+
+        out.append(HEX_COLOR.sub(swap, part))
+    return "".join(out)
+
+
 # ----------------- Camo-Safe Typography -----------------
 FONT_SERIF = "'Playfair Display', Georgia, 'Times New Roman', serif"
 FONT_SANS = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
@@ -123,19 +194,26 @@ FONT_CURSIVE = "'Caveat', 'Bradley Hand', 'Segoe Print', cursive"
 GENERATED_CARDS = set()
 
 
-def save_svg(filename, width, height, body):
-    """Write one standalone Camo-safe SVG card."""
+def save_svg(filename, width, height, body, dark_body=None):
+    """Write one standalone Camo-safe SVG card in both light and dark themes."""
     GENERATED_CARDS.add(filename)
-    svg = (
-        '<svg xmlns="http://www.w3.org/2000/svg" '
-        'xmlns:xlink="http://www.w3.org/1999/xlink" '
-        'viewBox="0 0 %(w)d %(h)d" width="%(w)d" height="%(h)d">\n'
-        "%(body)s\n"
-        "</svg>\n"
-    ) % {"w": width, "h": height, "body": body}
+
+    def wrap(inner):
+        return (
+            '<svg xmlns="http://www.w3.org/2000/svg" '
+            'xmlns:xlink="http://www.w3.org/1999/xlink" '
+            'viewBox="0 0 %(w)d %(h)d" width="%(w)d" height="%(h)d">\n'
+            "%(body)s\n"
+            "</svg>\n"
+        ) % {"w": width, "h": height, "body": inner}
+
+    light_svg = wrap(body)
+    dark_svg = to_dark(wrap(dark_body if dark_body is not None else body))
     with open(os.path.join(CARDS_DIR, filename), "w", encoding="utf-8") as sf:
-        sf.write(svg)
-    print("Compiled: %s (%dx%d)" % (filename, width, height))
+        sf.write(light_svg)
+    with open(os.path.join(DARK_DIR, filename), "w", encoding="utf-8") as sf:
+        sf.write(dark_svg)
+    print("Compiled: %s (%dx%d light + dark)" % (filename, width, height))
 
 
 # ----------------- Text & Pill Layout Helpers -----------------
@@ -323,9 +401,9 @@ header_body = """
     <rect x="0" y="0" width="880" height="220" rx="16"/>
   </clipPath>
   <linearGradient id="hdr-grad" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0%%" stop-color="#983232"/>
-    <stop offset="55%%" stop-color="#8C2D2D"/>
-    <stop offset="100%%" stop-color="#6B2021"/>
+    <stop offset="0%%" stop-color="#943030"/>
+    <stop offset="55%%" stop-color="#822627"/>
+    <stop offset="100%%" stop-color="#5E1A1B"/>
   </linearGradient>
 </defs>
 <g clip-path="url(#hdr-clip)">
@@ -372,7 +450,7 @@ header_body = """
     <circle cx="24.6" cy="29.8" r="0.8" fill="#FFFFFF"/>
     <circle cx="46.6" cy="29.8" r="0.8" fill="#FFFFFF"/>
     <!-- Tiny nose dot -->
-    <circle cx="34" cy="37" r="1.3" fill="#E8CFC0"/>
+    <circle cx="34" cy="37" r="1.3" fill="#F0D5C6"/>
     <!-- Whiskers -->
     <path d="M12 36 L2 34 M12 39 L2 40 M56 36 L66 34 M56 39 L66 40" stroke="#7A6A63" stroke-width="1" stroke-linecap="round"/>
   </g>
@@ -385,7 +463,7 @@ header_body = """
   <g transform="rotate(-8 730 56)">
     <text x="730" y="54" text-anchor="middle" font-family="%(cursive)s" font-size="22" font-weight="700" fill="%(on_dark)s">Dream Big. Code Better.</text>
     <path d="M635 63 Q728 57 826 62" fill="none" stroke="%(on_dark)s" stroke-width="1.8" stroke-linecap="round"/>
-    <path d="M648 69 Q730 64 815 68" fill="none" stroke="%(callout_border)s" stroke-width="1.3" stroke-linecap="round"/>
+    <path d="M648 69 Q730 64 815 68" fill="none" stroke="#F0D5C6" stroke-width="1.3" stroke-linecap="round"/>
   </g>
 </g>
 <rect x="0.5" y="0.5" width="879" height="219" rx="16" fill="none" stroke="#6E2223" stroke-width="1"/>
@@ -394,7 +472,6 @@ header_body = """
     "dark_hill": DARK_HILL,
     "on_dark": ON_DARK,
     "on_dark_sub": ON_DARK_SUB,
-    "callout_border": CALLOUT_BORDER,
     "serif": FONT_SERIF,
     "sans": FONT_SANS,
     "cursive": FONT_CURSIVE,
@@ -404,7 +481,7 @@ header_body = """
     "s2": sparkle_path(548, 42, 10, ON_DARK, 0.95),
     "s3": sparkle_path(628, 72, 6, ON_DARK_SUB, 0.8),
     "s4": sparkle_path(384, 88, 5, ON_DARK_SUB, 0.7),
-    "s5": sparkle_path(838, 92, 7, CALLOUT_BORDER, 0.85),
+    "s5": sparkle_path(838, 92, 7, "#F0D5C6", 0.85),
 }
 save_svg("header.svg", *CARD_SIZES["header"], header_body)
 
@@ -853,70 +930,76 @@ BENTO_CATS = [
     ("Tools", "tools", "wrench"),
 ]
 
-bento_svg = []
-for idx, (label, cat_key, vec_key) in enumerate(BENTO_CATS):
-    col = idx % 4
-    row = idx // 4
-    bx = 26 + col * 210
-    by = 76 + row * 108
-    tech_keys = profile["tech_stack"].get(cat_key, [])[:3]
-    n_icons = len(tech_keys)
-    icon_size = 30
-    gap = 16
-    total_iw = n_icons * icon_size + max(0, n_icons - 1) * gap
-    ix0 = bx + (198 - total_iw) / 2.0
-    imgs = []
-    for i_idx, tkey in enumerate(tech_keys):
-        src = find_icon(cat_key, tkey)
-        if not src:
-            print("Warning: no icon for %s/%s" % (cat_key, tkey))
-            continue
-        ix = ix0 + i_idx * (icon_size + gap)
-        iy = by + 46
-        imgs.append(
-            '<image href="%s" xlink:href="%s" x="%.1f" y="%d" width="%d" height="%d"/>'
-            % (src, src, ix, iy, icon_size, icon_size)
+import base64 as _b64
+
+DARK_ICON_SWAPS = {
+    "github": ("#181616", "#FAF5EF"),
+    "amazonwebservices": ("#252f3e", "#E8D8D0"),
+    "grpc": ("#244C5A", "#7CC6D4"),
+}
+
+
+def find_icon_themed(cat, key, dark=False):
+    src = find_icon(cat, key)
+    if not src or not dark or key not in DARK_ICON_SWAPS:
+        return src
+    old_hex, new_hex = DARK_ICON_SWAPS[key]
+    prefix, b64 = src.split(",", 1)
+    raw = _b64.b64decode(b64).decode("utf-8", "replace").replace(old_hex, new_hex)
+    return prefix + "," + _b64.b64encode(raw.encode("utf-8")).decode("ascii")
+
+
+def build_stack_body(dark=False):
+    bento_svg = []
+    for idx, (label, cat_key, vec_key) in enumerate(BENTO_CATS):
+        col = idx % 4
+        row = idx // 4
+        bx = 26 + col * 210
+        by = 76 + row * 108
+        tech_keys = profile["tech_stack"].get(cat_key, [])[:3]
+        n_icons = len(tech_keys)
+        icon_size = 30
+        gap = 16
+        total_iw = n_icons * icon_size + max(0, n_icons - 1) * gap
+        ix0 = bx + (198 - total_iw) / 2.0
+        imgs = []
+        for i_idx, tkey in enumerate(tech_keys):
+            src = find_icon_themed(cat_key, tkey, dark=dark)
+            if not src:
+                if not dark:
+                    print("Warning: no icon for %s/%s" % (cat_key, tkey))
+                continue
+            ix = ix0 + i_idx * (icon_size + gap)
+            iy = by + 46
+            imgs.append(
+                '<image href="%s" xlink:href="%s" x="%.1f" y="%d" width="%d" height="%d"/>'
+                % (src, src, ix, iy, icon_size, icon_size)
+            )
+        bento_svg.append(
+            """
+            %(sub)s
+            %(cicon)s
+            <text x="%(lx)d" y="%(ly)d" font-family="%(sans)s" font-size="11.5" font-weight="700" fill="%(head)s">%(label)s</text>
+            <line x1="%(x1)d" y1="%(line_y)d" x2="%(x2)d" y2="%(line_y)d" stroke="%(subborder)s" stroke-width="1"/>
+            %(imgs)s
+            """
+            % {
+                "sub": subcard_frame(bx, by, 198, 96),
+                "cicon": vec_icon(vec_key, bx + 14, by + 13, CRIMSON, size=13),
+                "lx": bx + 32,
+                "ly": by + 23,
+                "sans": FONT_SANS,
+                "head": TEXT_HEAD,
+                "label": xml_esc(label),
+                "x1": bx + 14,
+                "x2": bx + 184,
+                "line_y": by + 35,
+                "subborder": SUBCARD_BORDER,
+                "imgs": "".join(imgs),
+            }
         )
-    bento_svg.append(
-        """
-        %(sub)s
-        %(cicon)s
-        <text x="%(lx)d" y="%(ly)d" font-family="%(sans)s" font-size="11.5" font-weight="700" fill="%(head)s">%(label)s</text>
-        <line x1="%(x1)d" y1="%(line_y)d" x2="%(x2)d" y2="%(line_y)d" stroke="%(subborder)s" stroke-width="1"/>
-        %(imgs)s
-        """
-        % {
-            "sub": subcard_frame(bx, by, 198, 96),
-            "cicon": vec_icon(vec_key, bx + 14, by + 13, CRIMSON, size=13),
-            "lx": bx + 32,
-            "ly": by + 23,
-            "sans": FONT_SANS,
-            "head": TEXT_HEAD,
-            "label": xml_esc(label),
-            "x1": bx + 14,
-            "x2": bx + 184,
-            "line_y": by + 35,
-            "subborder": SUBCARD_BORDER,
-            "imgs": "".join(imgs),
-        }
-    )
 
-core_skills = profile["tech_stack"].get("core_skills", [])
-placed_pills, pills_h = layout_pills(
-    core_skills, x0=42, y0=324, max_width=796, pill_h=23, gap_x=6, gap_y=6, font_size=10.5, pad_x=14
-)
-primitives_sub_h = 44 + pills_h + 14
-stack_total_h = 294 + primitives_sub_h + 20
-CARD_SIZES["stack"] = (GRID, stack_total_h)
-
-pill_svgs = "".join(
-    '<rect x="%d" y="%d" width="%d" height="23" rx="6" fill="%s" stroke="%s" stroke-width="1"/>'
-    '<text x="%.1f" y="%d" text-anchor="middle" font-family="%s" font-size="10.5" font-weight="500" fill="%s">%s</text>'
-    % (px, py, pw, PILL_BG, PILL_BORDER, px + pw / 2.0, py + 15.0, FONT_SANS, PILL_TEXT, xml_esc(lbl))
-    for lbl, px, py, pw in placed_pills
-)
-
-stack_body = """
+    return """
 %(frame)s
 <!-- Header row -->
 <text x="26" y="48" font-family="%(mono)s" font-size="22" font-weight="700" fill="%(crimson)s">//</text>
@@ -938,21 +1021,38 @@ stack_body = """
 <text x="42" y="314" font-family="%(sans)s" font-size="10.5" font-weight="700" letter-spacing="1.2" fill="%(muted)s">SYSTEMS, DATA &amp; STORAGE PRIMITIVES</text>
 %(pills)s
 """ % {
-    "frame": card_frame(880, stack_total_h),
-    "mono": FONT_MONO,
-    "crimson": CRIMSON,
-    "serif": FONT_SERIF,
-    "head": TEXT_HEAD,
-    "border": CANVAS_BORDER,
-    "cursive": FONT_CURSIVE,
-    "callout_acc": CALLOUT_ACCENT,
-    "bento": "".join(bento_svg),
-    "prim_sub": subcard_frame(26, 294, 828, primitives_sub_h),
-    "sans": FONT_SANS,
-    "muted": TEXT_MUTED,
-    "pills": pill_svgs,
-}
-save_svg("stack.svg", *CARD_SIZES["stack"], stack_body)
+        "frame": card_frame(880, stack_total_h),
+        "mono": FONT_MONO,
+        "crimson": CRIMSON,
+        "serif": FONT_SERIF,
+        "head": TEXT_HEAD,
+        "border": CANVAS_BORDER,
+        "cursive": FONT_CURSIVE,
+        "callout_acc": CALLOUT_ACCENT,
+        "bento": "".join(bento_svg),
+        "prim_sub": subcard_frame(26, 294, 828, primitives_sub_h),
+        "sans": FONT_SANS,
+        "muted": TEXT_MUTED,
+        "pills": pill_svgs,
+    }
+
+
+core_skills = profile["tech_stack"].get("core_skills", [])
+placed_pills, pills_h = layout_pills(
+    core_skills, x0=42, y0=324, max_width=796, pill_h=23, gap_x=6, gap_y=6, font_size=10.5, pad_x=14
+)
+primitives_sub_h = 44 + pills_h + 14
+stack_total_h = 294 + primitives_sub_h + 20
+CARD_SIZES["stack"] = (GRID, stack_total_h)
+
+pill_svgs = "".join(
+    '<rect x="%d" y="%d" width="%d" height="23" rx="6" fill="%s" stroke="%s" stroke-width="1"/>'
+    '<text x="%.1f" y="%d" text-anchor="middle" font-family="%s" font-size="10.5" font-weight="500" fill="%s">%s</text>'
+    % (px, py, pw, PILL_BG, PILL_BORDER, px + pw / 2.0, py + 15.0, FONT_SANS, PILL_TEXT, xml_esc(lbl))
+    for lbl, px, py, pw in placed_pills
+)
+
+save_svg("stack.svg", *CARD_SIZES["stack"], build_stack_body(dark=False), dark_body=build_stack_body(dark=True))
 
 
 # =====================================================================
@@ -1645,8 +1745,12 @@ ALT_TEXT = {
 
 
 def img_tag(filename, width, alt, href=None):
-    img = '<img src="assets/cards/%s" width="%d" alt="%s">' % (filename, width, html_attr(alt))
-    return '<a href="%s">%s</a>' % (html_attr(href), img) if href else img
+    markup = (
+        '<picture><source media="(prefers-color-scheme: dark)" '
+        'srcset="assets/cards/dark/%s"><img src="assets/cards/%s" width="%d" '
+        'alt="%s"></picture>' % (filename, filename, width, html_attr(alt))
+    )
+    return '<a href="%s">%s</a>' % (html_attr(href), markup) if href else markup
 
 
 def row(markup):
@@ -1727,31 +1831,34 @@ README_BLOCKS = [
 
 readme = "\n\n".join(README_BLOCKS) + "\n"
 
-# Remove dark/ directory and any stale SVGs no longer produced.
-dark_dir = os.path.join(CARDS_DIR, "dark")
-if os.path.isdir(dark_dir):
-    shutil.rmtree(dark_dir)
-for existing_name in os.listdir(CARDS_DIR):
-    if existing_name.endswith(".svg") and existing_name not in GENERATED_CARDS:
-        os.remove(os.path.join(CARDS_DIR, existing_name))
+# Remove stale SVGs no longer produced in either light or dark directory.
+for directory in (CARDS_DIR, DARK_DIR):
+    for existing_name in os.listdir(directory):
+        if existing_name.endswith(".svg") and existing_name not in GENERATED_CARDS:
+            os.remove(os.path.join(directory, existing_name))
 
-# ----------------- XML Validation -----------------
+# ----------------- XML & Dark Color Validation -----------------
 INVALID_CARDS = []
-for card_name in sorted(os.listdir(CARDS_DIR)):
-    if not card_name.endswith(".svg"):
-        continue
-    path = os.path.join(CARDS_DIR, card_name)
-    try:
-        xml.etree.ElementTree.parse(path)
-    except xml.etree.ElementTree.ParseError as exc:
-        INVALID_CARDS.append("%s: %s" % (card_name, exc))
+for directory in (CARDS_DIR, DARK_DIR):
+    for card_name in sorted(os.listdir(directory)):
+        if not card_name.endswith(".svg"):
+            continue
+        path = os.path.join(directory, card_name)
+        try:
+            xml.etree.ElementTree.parse(path)
+        except xml.etree.ElementTree.ParseError as exc:
+            INVALID_CARDS.append("%s: %s" % (os.path.relpath(path, CARDS_DIR), exc))
 
 if INVALID_CARDS:
     for problem in INVALID_CARDS:
         print("INVALID CARD: %s" % problem)
     raise SystemExit("Refusing to write README.md: %d card(s) are not valid XML" % len(INVALID_CARDS))
+if UNMAPPED_COLORS:
+    for colour in sorted(UNMAPPED_COLORS):
+        print("UNMAPPED COLOUR: %s -- no dark counterpart" % colour)
+    raise SystemExit("Refusing to write README.md: %d colour(s) missing from DARK_COLORS" % len(UNMAPPED_COLORS))
 
-print("Validated: %d pure-SVG cards are well-formed XML" % len(GENERATED_CARDS))
+print("Validated: %d pure-SVG cards (light + dark) are well-formed XML and every colour has a dark counterpart" % (2 * len(GENERATED_CARDS)))
 
 README_MD = os.path.join(WORKSPACE_DIR, "README.md")
 with open(README_MD, "w", encoding="utf-8") as rf:

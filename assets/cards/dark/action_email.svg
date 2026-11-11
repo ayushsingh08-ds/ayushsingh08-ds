@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 880 48" width="880" height="48">
+
+<rect x="0.5" y="0.5" width="879" height="47" rx="12" fill="#8C2D2D" stroke="#8C2D2D" stroke-width="1"/>
+<g transform="translate(22.0, 16.5) scale(0.9375)"><rect x="1.8" y="3.2" width="12.4" height="9.6" rx="1.6" fill="none" stroke="#FAF5EF" stroke-width="1.5"/><path d="M2.2 4l5.8 4.4L13.8 4" fill="none" stroke="#FAF5EF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="48" y="29" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="600" fill="#FAF5EF">Email Me</text>
+<text x="854" y="29" text-anchor="end" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" font-weight="600" fill="#FAF5EF">→</text>
+
+</svg>

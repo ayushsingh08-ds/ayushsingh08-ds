@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 196 40" width="196" height="40">
+
+    <rect x="0.5" y="0.5" width="195" height="39" rx="12" fill="#251C1A" stroke="#42322D" stroke-width="1"/>
+    <g transform="translate(34.5, 13.0) scale(0.8750)"><path d="M2.5 13.5V8.5M6.5 13.5V4.5M10.5 13.5V6.5M14 13.5V2.5" fill="none" stroke="#C44B46" stroke-width="1.8" stroke-linecap="round"/></g>
+    <text x="54.5" y="24.5" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" font-weight="600" fill="#EDE2D8">GitHub Analytics</text>
+    
+</svg>
