@@ -1,6 +1,6 @@
-<svg fill="none" viewBox="0 0 850 56" width="850" height="56" xmlns="http://www.w3.org/2000/svg">
-  <foreignObject x="0" y="0" width="850" height="56">
-    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 850px; height: 56px; box-sizing: border-box;">
+<svg fill="none" viewBox="0 0 850 128" width="850" height="128" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject x="0" y="0" width="850" height="128">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 850px; height: 128px; box-sizing: border-box;">
       <style>
         @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;family=Inter:wght@400;500;600&amp;family=Outfit:wght@500;600&amp;display=swap');
 body { font-family: 'Inter', sans-serif; color: #c9d1d9; margin: 0; padding: 0;
@@ -26,7 +26,20 @@ body { font-family: 'Inter', sans-serif; color: #c9d1d9; margin: 0; padding: 0;
 
         
       </style>
-      <div style="width: 100%; height: 100%; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; background-color: #161b22; border: 1px solid #30363d; color: #e6edf3; font-family: 'Courier Prime', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;"><span>View resume</span><span style="color: #7d8590;">PDF →</span></div>
+      
+    <div class="card">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span class="mono" style="font-size: 10.5px; color: #e08d63;">06</span>
+        <span class="name" style="font-size: 15.5px; color: #e6edf3;">Mini E-Commerce ETL Data Pipeline</span>
+        <span class="rule"></span>
+        <span class="pill pill-done">Done</span>
+      </div>
+      <div style="font-size: 12.5px; line-height: 1.45; color: #8b949e; margin: 9px 0 10px;">
+        Zero-dependency Python generator streaming ETL into SQLite3 with JSON Lines DLQ quarantine, atomic high-watermark upserts (-80% runtime), and parameterized Pytest.
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip">Python</span><span class="chip">SQLite3</span><span class="chip">Pytest</span><span class="chip">JSONL</span><span class="chip">ETL / DLQ</span></div>
+    </div>
+    
     </div>
   </foreignObject>
 </svg>

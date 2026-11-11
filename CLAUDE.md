@@ -38,8 +38,9 @@ silently broken images (see "Bugs this project has already hit"). The `scratch/`
 checks are run by hand; nothing in CI depends on them.
 
 After regenerating, run `check_readme.py` and re-measure `qc.html`; the expected
-output is 17 images, all 850px wide, one per line, zero overflow issues and 7–24px
-of bottom slack per card.
+output is 18 images (light + dark = 36 cards, or 19/38 when `upcoming_projects`
+is populated), all 850px wide, one per line, zero overflow issues and 11–22px of
+bottom slack per content card.
 
 ## Design system
 
@@ -64,16 +65,17 @@ terracotta accent `#b05a30`. Type: Outfit (display), Inter (body), Courier Prime
 (uppercase labels, indices, chips). Radii: 10px cards, 8px buttons, 4px chips.
 
 Section order: header (monogram/name/contact) → nav links → hero → Email CTA →
-resume CTA → at-a-glance grid → About → Tech Stack → principles + currently
-building (one card, two columns) → Next → Featured Projects → GitHub Analytics
-(stats + languages in one card, then the calendar) → closing → contact links.
+portfolio CTA → at-a-glance grid → About → Tech Stack → principles + currently
+building (one card, two columns) → (Next when populated) → Featured Projects →
+Certifications (or Achievements when populated) → GitHub Analytics (stats +
+languages in one card, then the calendar) → closing → contact links.
 
 Two rows are *links, not images*: the section nav (About · Tech Stack · Featured
-Projects · GitHub Analytics) and the contact strip at the bottom. They are text
-so they wrap wherever the reader's window needs them to, they inherit GitHub's
-link colours in either theme, and they stay keyboard- and screen-reader
-reachable. The Email / View resume CTAs are still drawn cards (one per line,
-each wrapped in its own `<a>`), and the separator between two links is ` · `.
+Projects · Certifications · GitHub Analytics) and the contact strip at the
+bottom. They are text so they wrap wherever the reader's window needs them to,
+they inherit GitHub's link colours in either theme, and they stay keyboard- and
+screen-reader reachable. The Email / Portfolio CTAs are still drawn cards (one per
+line, each wrapped in its own `<a>`), and the separator between two links is ` · `.
 
 ### Two themes, one geometry
 
@@ -221,13 +223,16 @@ Rules that keep the pair honest:
 ## Unverified / open issues
 
 - **The Resume link is dead.** `profile.json` → `about_me.resume_url` (a Google
-  Drive file) answers `400 / "Page not found"` for anonymous visitors. It is
-  published as-is because only the owner can supply a working URL; fix the value
-  in `profile.json` and rebuild.
+  Drive file) answers `400 / "Page not found"` for anonymous visitors. The
+  secondary CTA card now points to the live portfolio (`https://ayudev-shiro.vercel.app`),
+  while `resume_url` remains in the footer contact strip until the owner
+  supplies a working URL in `profile.json`.
 - Anchors are confirmed on the live page: GitHub renders each heading as
   `<h2 class="heading-element">Text</h2>` plus a sibling
   `<a id="user-content-<slug>" class="anchor" href="#<slug>">`, so renaming a
   heading means renaming the nav item in `NAV_ITEMS` too (or the slug changes).
+  Current slugs: `about`, `tech-stack`, `featured-projects`, `certifications`,
+  `github-analytics`.
 - GitHub wraps every image that is not already inside a link in an `<a>` to the
   card's blob, so unlinked cards are clickable to their source file. Cards that
   need a specific destination (CTAs, nav, contact, projects) are wrapped in their

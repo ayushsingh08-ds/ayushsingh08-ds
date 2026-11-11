@@ -30,14 +30,14 @@ body { font-family: 'Inter', sans-serif; color: #c9d1d9; margin: 0; padding: 0;
     <div class="card">
       <div style="display: flex; align-items: center; gap: 14px;">
         <span class="mono" style="font-size: 10.5px; color: #e08d63;">05</span>
-        <span class="name" style="font-size: 15.5px; color: #e6edf3;">Edge-Cloud Predictive Maintenance</span>
+        <span class="name" style="font-size: 15.5px; color: #e6edf3;">Device Experience Manager</span>
         <span class="rule"></span>
         <span class="pill pill-done">Done</span>
       </div>
       <div style="font-size: 12.5px; line-height: 1.45; color: #8b949e; margin: 9px 0 10px;">
-        Research-backed smart-factory framework: CNN-LSTM remaining-useful-life estimation (RMSE 57.29), a SimPy digital twin and a Flutter dashboard for routing-aware what-if analysis.
+        Enterprise endpoint telemetry &amp; remediation platform in TypeScript and Express 5 with real-time rule evaluation, PostgreSQL &amp; Prisma composite indexing, RBAC, and Vitest.
       </div>
-      <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip">CNN-LSTM</span><span class="chip">SimPy</span><span class="chip">Flutter</span><span class="chip">FastAPI</span><span class="chip">SQLite</span></div>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip">TypeScript</span><span class="chip">Node.js</span><span class="chip">Express 5</span><span class="chip">Prisma</span><span class="chip">PostgreSQL</span><span class="chip">Vitest</span></div>
     </div>
     
     </div>

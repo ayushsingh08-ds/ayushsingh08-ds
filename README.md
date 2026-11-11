@@ -2,64 +2,66 @@
 
 <!-- Header: monogram, name, contact meta. -->
 
-<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/header.svg"><img src="assets/cards/header.svg" width="850" alt="Ayush Singh — Building reliable distributed systems, streaming data infrastructure, and backend platforms. ayushsingh2005811@gmail.com"></picture></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/header.svg"><img src="assets/cards/header.svg" width="850" alt="Ayush Singh — Building reliable distributed systems, high-concurrency backend platforms, and analytics-ready data pipelines. ayushsingh2005811@gmail.com"></picture></p>
 
 <!-- Section navigation. -->
 
-<p align="center"><a href="#about">About</a> · <a href="#tech-stack">Tech Stack</a> · <a href="#featured-projects">Featured Projects</a> · <a href="#github-analytics">GitHub Analytics</a></p>
+<p align="center"><a href="#about">About</a> · <a href="#tech-stack">Tech Stack</a> · <a href="#featured-projects">Featured Projects</a> · <a href="#certifications">Certifications</a> · <a href="#github-analytics">GitHub Analytics</a></p>
 
 <!-- Hero. -->
 
-<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/hero.svg"><img src="assets/cards/hero.svg" width="850" alt="Ayush Singh: Building reliable distributed systems, streaming data infrastructure, and backend platforms. Focus: distributed systems, backend engineering, data infrastructure. I enjoy designing systems that continue to work under failure. I turn ideas into production-grade systems."></picture></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/hero.svg"><img src="assets/cards/hero.svg" width="850" alt="Ayush Singh: Building reliable distributed systems, high-concurrency backend platforms, and analytics-ready data pipelines. Focus: distributed systems &amp; storage, backend &amp; platform engineering, data engineering &amp; lakehouses. I design systems that stay reliable under failure and contention. From low-level WALs to production data &amp; backend platforms."></picture></p>
 
 <!-- Primary and secondary action. -->
 
 <p align="center"><a href="mailto:ayushsingh2005811@gmail.com"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/action_email.svg"><img src="assets/cards/action_email.svg" width="850" alt="Email me at ayushsingh2005811@gmail.com"></picture></a></p>
 
-<p align="center"><a href="https://drive.google.com/file/d/1ZtA7NnBvqgq2d3lZ_0J9q3f2qWJ1-T5X/view?usp=sharing"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/action_resume.svg"><img src="assets/cards/action_resume.svg" width="850" alt="Open my resume"></picture></a></p>
+<p align="center"><a href="https://ayudev-shiro.vercel.app"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/action_portfolio.svg"><img src="assets/cards/action_portfolio.svg" width="850" alt="Open my portfolio at https://ayudev-shiro.vercel.app"></picture></a></p>
 
 <!-- Profile at a glance. -->
 
-<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/info.svg"><img src="assets/cards/info.svg" width="850" alt="Profile: B.Tech CSE (Data Science) at Dayananda Sagar University; based in Bengaluru, India (IST, UTC+5:30, remote-friendly); open to SDE and data engineering, backend and infrastructure roles; open to collaboration by email"></picture></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/info.svg"><img src="assets/cards/info.svg" width="850" alt="Profile: Education: B.Tech CSE (Data Science) (DSU · 2027 · CGPA 9.05 / 10); Location: Bengaluru, India (IST (UTC+5:30) · remote-friendly); Open to: Backend · Systems · Data (SDE · Platform · Analytics Eng.); Connection: Open to collaboration (Reach me by email)"></picture></p>
 
 <h2 align="center">About</h2>
 
-<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/about.svg"><img src="assets/cards/about.svg" width="850" alt="I build systems that are reliable, scalable and observable. My interests lie in distributed systems, streaming pipelines, backend platforms and automation. Exploring: System Design, Cloud, and High Performance Systems. Interests: Distributed Systems, Observability, Databases, DevOps. I drink coffee and write code. Repeat."></picture></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/about.svg"><img src="assets/cards/about.svg" width="850" alt="Backend and data systems engineer focused on what happens under the hood, database locking, replication boundaries, and fault-tolerant lakehouse architectures. I prefer hard problems involving distributed state and data integrity over surface-level integrations. Exploring: Consensus &amp; Replication, Storage Engines, Lakehouse Architecture. Interests: Concurrency Control, Observability, Dimensional Modeling, Cloud Infra. I drink coffee and write code. Repeat."></picture></p>
 
 <h2 align="center">Tech Stack</h2>
 
-<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/stack.svg"><img src="assets/cards/stack.svg" width="850" alt="Tech stack by category: Go, Java, Python, C++, JavaScript, Kafka, gRPC, RabbitMQ, Redis, Spark, Airflow, Google Cloud, PostgreSQL, MySQL, MongoDB, AWS, Docker, Kubernetes, Terraform, Prometheus, Grafana, Git, GitHub, Linux, VS Code, IntelliJ"></picture></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/stack.svg"><img src="assets/cards/stack.svg" width="850" alt="Tech stack: Python, Go, TypeScript, JavaScript, C, Java, FastAPI, Node.js, gRPC, React, Tailwind CSS, Apache Airflow, DuckDB, SQLite3, PostgreSQL, Redis, RabbitMQ, MongoDB, AWS, Docker, Nginx, GitHub Actions, Pytest, Vitest, Prometheus, Grafana, Git, GitHub, Linux, VS Code. Core skills: SQL, Bash, Express 5, Protobuf, SQLAlchemy 2.0, Prisma ORM, dbt-core, PyArrow / Parquet, Great Expectations, BoltDB, MinIO / S3, Milvus, pgvector, WAL &amp; CRC32, Leader-Follower Replication, Consistent Hashing (FNV-1a), SKIP LOCKED, Medallion Lakehouse, Star Schema, MCP"></picture></p>
 
 <!-- Principles beside current work. -->
 
-<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/principles_building.svg"><img src="assets/cards/principles_building.svg" width="850" alt="Engineering principles: Build for failure first. Prefer observability over assumptions. Measure before optimizing. Automate repetitive work. Simple architectures scale better. Currently building, self-assessed progress: Distributed Cache with RYW Consistency 90%; Lakehouse Gold Layer &amp; Data Contracts 70%; LLM Gateway Smart Routing 60%"></picture></p>
-
-<!-- Planned work, labelled as planned. -->
-
-<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/next.svg"><img src="assets/cards/next.svg" width="850" alt="Planned, not started: Feed Ranking Engine with Distributed Scoring &amp; Cache Coherence; Carbon-Aware LLM Scheduling promoting the mock carbon signal to real grid intensity data"></picture></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/principles_building.svg"><img src="assets/cards/principles_building.svg" width="850" alt="Engineering principles: Build for failure first. Prefer observability over assumptions. Measure before optimizing. Automate repetitive work. Simple architectures scale better. Currently building: Solaraeus — Incremental radiative transfer &amp; GPU-accelerated 3D microclimate digital twin; Portfolio — Interactive developer portfolio &amp; project showcase at ayudev-shiro.vercel.app"></picture></p>
 
 <h2 align="center">Featured Projects</h2>
 
-<p align="center"><a href="https://github.com/ayushsingh08-ds/market-stream-ingestion-engine"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/project_0.svg"><img src="assets/cards/project_0.svg" width="850" alt="Market Stream Ingestion Engine — Real-time order-book ingestion on Redpanda (Kafka) with PySpark Structured Streaming and Delta Lake: strict schema validation, DLQ routing and VWAP over tumbling windows. Status: Done."></picture></a></p>
+<p align="center"><a href="https://github.com/ayushsingh08-ds/traceguard"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/project_0.svg"><img src="assets/cards/project_0.svg" width="850" alt="TraceGuard — Incident &amp; Telemetry Engine — Async FastAPI &amp; SQLAlchemy 2.0 triage backend with Redis ZSET SHA-256 deduplication, PostgreSQL SKIP LOCKED priority queues, pgvector RCA, and Prometheus metrics. Status: Done."></picture></a></p>
 
-<p align="center"><a href="https://github.com/ayushsingh08-ds/notification-queue-service-with-reliability-guarantees"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/project_1.svg"><img src="assets/cards/project_1.svg" width="850" alt="Notification Queue Service — Fault-tolerant Go message broker with per-key ordering, persistence, consumer groups, acks and exactly-once semantics (simulated), plus a load generator and monitoring stack. Status: Done."></picture></a></p>
+<p align="center"><a href="https://github.com/ayushsingh08-ds/Switchyard"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/project_1.svg"><img src="assets/cards/project_1.svg" width="850" alt="Switchyard — Distributed Execution Runtime — Go control-plane broker coordinating bidirectional gRPC streaming leases, append-only WAL storage with CRC32 checksums, token-bucket rate limiting, and MCP Python workers. Status: Done."></picture></a></p>
 
-<p align="center"><a href="https://github.com/ayushsingh08-ds/financial-market-lakehouse"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/project_2.svg"><img src="assets/cards/project_2.svg" width="850" alt="Financial Market Lakehouse — Medallion-architecture (Bronze to Gold) market data platform: Airflow orchestration, a DuckDB warehouse, dbt models and Great Expectations quality gates, all reproducible locally. Status: Done."></picture></a></p>
+<p align="center"><a href="https://github.com/ayushsingh08-ds/notification-queue-service-with-reliability-guarantees"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/project_2.svg"><img src="assets/cards/project_2.svg" width="850" alt="Distributed Notification Queue — High-throughput Go async queue (8,200 QPS, 18ms P99 locally) with gRPC leader-follower replication, FNV-1a consistent hashing, BoltDB WAL, and RabbitMQ DLQ routing. Status: Done."></picture></a></p>
 
-<p align="center"><a href="https://github.com/ayushsingh08-ds/LLM-Efficiency-Engine"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/project_3.svg"><img src="assets/cards/project_3.svg" width="850" alt="Cost &amp; Carbon-Aware LLM Gateway — LLM gateway with semantic caching (Redis exact-match plus Milvus similarity), multi-provider failover and cost-aware routing, backed by an offline benchmark and routing pipeline. Status: In progress."></picture></a></p>
+<p align="center"><a href="https://github.com/ayushsingh08-ds/financial-market-lakehouse"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/project_3.svg"><img src="assets/cards/project_3.svg" width="850" alt="Financial Market Medallion Lakehouse — Bronze/Silver/Gold Medallion lakehouse orchestrated by Apache Airflow with PyArrow and MinIO/S3, DuckDB star-schema marts in dbt-core, and Great Expectations gates. Status: Done."></picture></a></p>
 
-<p align="center"><a href="https://github.com/ayushsingh08-ds/edge-cloud-predictive-maintenance"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/project_4.svg"><img src="assets/cards/project_4.svg" width="850" alt="Edge-Cloud Predictive Maintenance — Research-backed smart-factory framework: CNN-LSTM remaining-useful-life estimation (RMSE 57.29), a SimPy digital twin and a Flutter dashboard for routing-aware what-if analysis. Status: Done."></picture></a></p>
+<p align="center"><a href="https://github.com/ayushsingh08-ds/device-experience-manager"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/project_4.svg"><img src="assets/cards/project_4.svg" width="850" alt="Device Experience Manager — Enterprise endpoint telemetry &amp; remediation platform in TypeScript and Express 5 with real-time rule evaluation, PostgreSQL &amp; Prisma composite indexing, RBAC, and Vitest. Status: Done."></picture></a></p>
+
+<p align="center"><a href="https://github.com/ayushsingh08-ds/fluffy-broccoli"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/project_5.svg"><img src="assets/cards/project_5.svg" width="850" alt="Mini E-Commerce ETL Data Pipeline — Zero-dependency Python generator streaming ETL into SQLite3 with JSON Lines DLQ quarantine, atomic high-watermark upserts (-80% runtime), and parameterized Pytest. Status: Done."></picture></a></p>
 
 <p align="center"><a href="https://github.com/ayushsingh08-ds?tab=repositories">View all repositories &rarr;</a></p>
 
+<h2 align="center">Certifications</h2>
+
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/certifications.svg"><img src="assets/cards/certifications.svg" width="850" alt="Certifications: OCI Certified Data Science Professional (Oracle Cloud), Azure Data Fundamentals (DP-900) (Microsoft), Snowflake for Developers (Snowflake), Agentforce Service &amp; Prompt Builder (Salesforce), Recommender Systems (NPTEL)"></picture></p>
+
 <h2 align="center">GitHub Analytics</h2>
 
-<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/analytics.svg"><img src="assets/cards/analytics.svg" width="850" alt="GitHub stats for ayushsingh08-ds: 16 public repositories, 76 stars, 37 followers and 6 languages, from the GitHub REST API. Top 5 languages by repository count: Python (8), JavaScript (2), Jupyter Notebook (2), TypeScript (1), Go (1)"></picture></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/analytics.svg"><img src="assets/cards/analytics.svg" width="850" alt="GitHub stats for ayushsingh08-ds: 16 public repositories, 75 stars, 36 followers and 6 languages, from the GitHub REST API. Top 5 languages by repository count: Python (8), JavaScript (2), Jupyter Notebook (2), TypeScript (1), Go (1)"></picture></p>
 
-<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/contrib.svg"><img src="assets/cards/contrib.svg" width="850" alt="Contribution calendar for ayushsingh08-ds: 288 contributions between 2025-11-02 and 2026-11-04"></picture></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/contrib.svg"><img src="assets/cards/contrib.svg" width="850" alt="Contribution calendar for ayushsingh08-ds: 321 contributions between 2025-11-09 and 2026-11-11"></picture></p>
 
 <!-- Closing. -->
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/closing.svg"><img src="assets/cards/closing.svg" width="850" alt="Let’s build something meaningful — always open to collaboration, new opportunities and interesting technical conversations"></picture></p>
 
-<p align="center"><a href="https://github.com/ayushsingh08-ds">GitHub</a> · <a href="https://www.linkedin.com/in/ayush-singh-b7760a224/">LinkedIn</a> · <a href="mailto:ayushsingh2005811@gmail.com">Email</a> · <a href="https://drive.google.com/file/d/1ZtA7NnBvqgq2d3lZ_0J9q3f2qWJ1-T5X/view?usp=sharing">Resume</a></p>
+<p align="center"><a href="https://github.com/ayushsingh08-ds">GitHub</a> · <a href="https://ayudev-shiro.vercel.app">Portfolio</a> · <a href="https://www.linkedin.com/in/ayush-singh-b7760a224/">LinkedIn</a> · <a href="mailto:ayushsingh2005811@gmail.com">Email</a> · <a href="https://drive.google.com/file/d/1ZtA7NnBvqgq2d3lZ_0J9q3f2qWJ1-T5X/view?usp=sharing">Resume</a></p>

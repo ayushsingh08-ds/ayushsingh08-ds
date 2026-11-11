@@ -31,7 +31,7 @@ body { font-family: 'Inter', sans-serif; color: #c9d1d9; margin: 0; padding: 0;
                 padding-left: 0; border-left: none;">
       <div class="label">Education</div>
       <div style="font-size: 13px; font-weight: 600; color: #e6edf3; margin-top: 7px;">B.Tech CSE (Data Science)</div>
-      <div style="font-size: 11.5px; color: #8b949e; margin-top: 3px;">Dayananda Sagar University</div>
+      <div style="font-size: 11.5px; color: #8b949e; margin-top: 3px;">DSU · 2027 · CGPA 9.05 / 10</div>
     </div>
     
     <div style="flex: 1 1 0; min-width: 0; padding: 0 16px; border-left: 1px solid #21262d;
@@ -44,8 +44,8 @@ body { font-family: 'Inter', sans-serif; color: #c9d1d9; margin: 0; padding: 0;
     <div style="flex: 1 1 0; min-width: 0; padding: 0 16px; border-left: 1px solid #21262d;
                 ">
       <div class="label">Open to</div>
-      <div style="font-size: 13px; font-weight: 600; color: #e6edf3; margin-top: 7px;">SDE · Data Engineering</div>
-      <div style="font-size: 11.5px; color: #8b949e; margin-top: 3px;">Backend · Infrastructure</div>
+      <div style="font-size: 13px; font-weight: 600; color: #e6edf3; margin-top: 7px;">Backend · Systems · Data</div>
+      <div style="font-size: 11.5px; color: #8b949e; margin-top: 3px;">SDE · Platform · Analytics Eng.</div>
     </div>
     
     <div style="flex: 1 1 0; min-width: 0; padding: 0 16px; border-left: 1px solid #21262d;

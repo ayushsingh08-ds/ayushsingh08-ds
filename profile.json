@@ -1,58 +1,89 @@
 {
   "name": "Ayush Singh",
-  "role": "Building reliable distributed systems, streaming data infrastructure, and backend platforms.",
-  "kicker": "Final-year Computer Science · Bengaluru, India",
+  "role": "Building reliable distributed systems, high-concurrency backend platforms, and analytics-ready data pipelines.",
+  "role_short": "Backend platforms · distributed systems · data engineering",
+  "kicker": "Final-year B.Tech CSE (Data Science) · 2027 · Bengaluru, India",
   "quote": {
     "lines": [
-      "I enjoy designing systems that continue to work under failure.",
-      "I turn ideas into <span class=\"highlight-text\">production-grade systems</span>."
+      "I design systems that stay reliable under failure and contention.",
+      "From low-level WALs to <span class=\"highlight-text\">production data &amp; backend platforms</span>."
     ]
   },
   "focus": [
-    "Distributed Systems",
-    "Backend Engineering",
-    "Data Infrastructure"
+    "Distributed Systems & Storage",
+    "Backend & Platform Engineering",
+    "Data Engineering & Lakehouses"
   ],
   "about_me": {
-    "text": "I build systems that are reliable, scalable and observable. My interests lie in distributed systems, streaming pipelines, backend platforms and automation.",
-    "exploring": "System Design, Cloud, and High Performance Systems",
-    "interests": "Distributed Systems, Observability, Databases, DevOps",
+    "text": "Backend and data systems engineer focused on what happens under the hood, database locking, replication boundaries, and fault-tolerant lakehouse architectures. I prefer hard problems involving distributed state and data integrity over surface-level integrations.",
+    "exploring": "Consensus & Replication, Storage Engines, Lakehouse Architecture",
+    "interests": "Concurrency Control, Observability, Dimensional Modeling, Cloud Infra",
     "fun_fact": "I drink coffee and write code. Repeat.",
     "email": "ayushsingh2005811@gmail.com",
+    "portfolio_url": "https://ayudev-shiro.vercel.app",
     "resume_url": "https://drive.google.com/file/d/1ZtA7NnBvqgq2d3lZ_0J9q3f2qWJ1-T5X/view?usp=sharing",
     "github_url": "https://github.com/ayushsingh08-ds",
     "linkedin_url": "https://www.linkedin.com/in/ayush-singh-b7760a224/",
     "twitter_url": "https://twitter.com/@11d_ayush"
   },
+  "info": [
+    {
+      "label": "Education",
+      "main": "B.Tech CSE (Data Science)",
+      "sub": "DSU · 2027 · CGPA 9.05 / 10"
+    },
+    {
+      "label": "Location",
+      "main": "Bengaluru, India",
+      "sub": "IST (UTC+5:30) · remote-friendly"
+    },
+    {
+      "label": "Open to",
+      "main": "Backend · Systems · Data",
+      "sub": "SDE · Platform · Analytics Eng."
+    },
+    {
+      "label": "Connection",
+      "main": "Open to collaboration",
+      "sub": "Reach me by email"
+    }
+  ],
   "tech_stack": {
     "languages": [
-      "go",
-      "java",
       "python",
-      "cplusplus",
-      "javascript"
+      "go",
+      "typescript",
+      "javascript",
+      "c",
+      "java"
     ],
-    "distributed": [
-      "apachekafka",
+    "backend_apis": [
+      "fastapi",
+      "nodejs",
       "grpc",
-      "rabbitmq",
-      "redis"
+      "react",
+      "tailwindcss"
     ],
-    "data_streaming": [
-      "apachespark",
+    "data_lakehouse": [
       "apacheairflow",
-      "googlecloud"
+      "duckdb",
+      "sqlite"
     ],
     "databases": [
       "postgresql",
-      "mysql",
+      "redis",
+      "rabbitmq",
       "mongodb"
     ],
-    "cloud_devops": [
+    "cloud_infra": [
       "amazonwebservices",
       "docker",
-      "kubernetes",
-      "terraform"
+      "nginx"
+    ],
+    "ci_testing": [
+      "githubactions",
+      "pytest",
+      "vitest"
     ],
     "observability": [
       "prometheus",
@@ -62,8 +93,29 @@
       "git",
       "github",
       "linux",
-      "vscode",
-      "intellij"
+      "vscode"
+    ],
+    "core_skills": [
+      "SQL",
+      "Bash",
+      "Express 5",
+      "Protobuf",
+      "SQLAlchemy 2.0",
+      "Prisma ORM",
+      "dbt-core",
+      "PyArrow / Parquet",
+      "Great Expectations",
+      "BoltDB",
+      "MinIO / S3",
+      "Milvus",
+      "pgvector",
+      "WAL & CRC32",
+      "Leader-Follower Replication",
+      "Consistent Hashing (FNV-1a)",
+      "SKIP LOCKED",
+      "Medallion Lakehouse",
+      "Star Schema",
+      "MCP"
     ]
   },
   "principles": [
@@ -75,93 +127,120 @@
   ],
   "currently_building": [
     {
-      "name": "Distributed Cache with RYW Consistency",
-      "percentage": 90
+      "name": "Solaraeus",
+      "desc": "Incremental radiative transfer & GPU-accelerated 3D microclimate digital twin"
     },
     {
-      "name": "Lakehouse Gold Layer & Data Contracts",
-      "percentage": 70
-    },
-    {
-      "name": "LLM Gateway Smart Routing",
-      "percentage": 60
+      "name": "Portfolio",
+      "desc": "Interactive developer portfolio & project showcase at ayudev-shiro.vercel.app"
     }
   ],
   "featured_projects": [
     {
-      "name": "Market Stream Ingestion Engine",
+      "name": "TraceGuard — Incident & Telemetry Engine",
       "status": "Done",
-      "desc": "Real-time order-book ingestion on Redpanda (Kafka) with PySpark Structured Streaming and Delta Lake: strict schema validation, DLQ routing and VWAP over tumbling windows.",
+      "desc": "Async FastAPI & SQLAlchemy 2.0 triage backend with Redis ZSET SHA-256 deduplication, PostgreSQL SKIP LOCKED priority queues, pgvector RCA, and Prometheus metrics.",
       "tags": [
-        "Redpanda",
-        "PySpark",
-        "Delta Lake",
-        "Docker",
-        "Python"
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "Redis",
+        "pgvector",
+        "Prometheus"
       ],
-      "url": "https://github.com/ayushsingh08-ds/market-stream-ingestion-engine"
+      "url": "https://github.com/ayushsingh08-ds/traceguard"
     },
     {
-      "name": "Notification Queue Service",
+      "name": "Switchyard — Distributed Execution Runtime",
       "status": "Done",
-      "desc": "Fault-tolerant Go message broker with per-key ordering, persistence, consumer groups, acks and exactly-once semantics (simulated), plus a load generator and monitoring stack.",
+      "desc": "Go control-plane broker coordinating bidirectional gRPC streaming leases, append-only WAL storage with CRC32 checksums, token-bucket rate limiting, and MCP Python workers.",
+      "tags": [
+        "Go",
+        "Python",
+        "gRPC",
+        "WAL",
+        "PostgreSQL",
+        "React"
+      ],
+      "url": "https://github.com/ayushsingh08-ds/Switchyard"
+    },
+    {
+      "name": "Distributed Notification Queue",
+      "status": "Done",
+      "desc": "High-throughput Go async queue (8,200 QPS, 18ms P99 locally) with gRPC leader-follower replication, FNV-1a consistent hashing, BoltDB WAL, and RabbitMQ DLQ routing.",
       "tags": [
         "Go",
         "gRPC",
         "BoltDB",
-        "Prometheus",
-        "Docker"
+        "RabbitMQ",
+        "Prometheus"
       ],
       "url": "https://github.com/ayushsingh08-ds/notification-queue-service-with-reliability-guarantees"
     },
     {
-      "name": "Financial Market Lakehouse",
+      "name": "Financial Market Medallion Lakehouse",
       "status": "Done",
-      "desc": "Medallion-architecture (Bronze to Gold) market data platform: Airflow orchestration, a DuckDB warehouse, dbt models and Great Expectations quality gates, all reproducible locally.",
+      "desc": "Bronze/Silver/Gold Medallion lakehouse orchestrated by Apache Airflow with PyArrow and MinIO/S3, DuckDB star-schema marts in dbt-core, and Great Expectations gates.",
       "tags": [
         "Airflow",
-        "dbt",
+        "dbt-core",
         "DuckDB",
-        "Great Expectations",
-        "Docker"
+        "PyArrow",
+        "MinIO/S3",
+        "Great Expectations"
       ],
       "url": "https://github.com/ayushsingh08-ds/financial-market-lakehouse"
     },
     {
-      "name": "Cost & Carbon-Aware LLM Gateway",
-      "status": "In progress",
-      "desc": "LLM gateway with semantic caching (Redis exact-match plus Milvus similarity), multi-provider failover and cost-aware routing, backed by an offline benchmark and routing pipeline.",
+      "name": "Device Experience Manager",
+      "status": "Done",
+      "desc": "Enterprise endpoint telemetry & remediation platform in TypeScript and Express 5 with real-time rule evaluation, PostgreSQL & Prisma composite indexing, RBAC, and Vitest.",
       "tags": [
-        "FastAPI",
-        "Redis",
-        "Milvus",
-        "Prometheus",
-        "Python"
+        "TypeScript",
+        "Node.js",
+        "Express 5",
+        "Prisma",
+        "PostgreSQL",
+        "Vitest"
       ],
-      "url": "https://github.com/ayushsingh08-ds/LLM-Efficiency-Engine"
+      "url": "https://github.com/ayushsingh08-ds/device-experience-manager"
     },
     {
-      "name": "Edge-Cloud Predictive Maintenance",
+      "name": "Mini E-Commerce ETL Data Pipeline",
       "status": "Done",
-      "desc": "Research-backed smart-factory framework: CNN-LSTM remaining-useful-life estimation (RMSE 57.29), a SimPy digital twin and a Flutter dashboard for routing-aware what-if analysis.",
+      "desc": "Zero-dependency Python generator streaming ETL into SQLite3 with JSON Lines DLQ quarantine, atomic high-watermark upserts (-80% runtime), and parameterized Pytest.",
       "tags": [
-        "CNN-LSTM",
-        "SimPy",
-        "Flutter",
-        "FastAPI",
-        "SQLite"
+        "Python",
+        "SQLite3",
+        "Pytest",
+        "JSONL",
+        "ETL / DLQ"
       ],
-      "url": "https://github.com/ayushsingh08-ds/edge-cloud-predictive-maintenance"
+      "url": "https://github.com/ayushsingh08-ds/fluffy-broccoli"
     }
   ],
-  "upcoming_projects": [
+  "achievements": [],
+  "certifications": [
     {
-      "name": "Feed Ranking Engine",
-      "desc": "with Distributed Scoring & Cache Coherence"
+      "name": "OCI Certified Data Science Professional",
+      "issuer": "Oracle Cloud"
     },
     {
-      "name": "Carbon-Aware LLM Scheduling",
-      "desc": "promoting the mock carbon signal to real grid intensity data"
+      "name": "Azure Data Fundamentals (DP-900)",
+      "issuer": "Microsoft"
+    },
+    {
+      "name": "Snowflake for Developers",
+      "issuer": "Snowflake"
+    },
+    {
+      "name": "Agentforce Service & Prompt Builder",
+      "issuer": "Salesforce"
+    },
+    {
+      "name": "Recommender Systems",
+      "issuer": "NPTEL"
     }
-  ]
+  ],
+  "upcoming_projects": []
 }

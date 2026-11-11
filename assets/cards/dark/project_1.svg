@@ -30,14 +30,14 @@ body { font-family: 'Inter', sans-serif; color: #c9d1d9; margin: 0; padding: 0;
     <div class="card">
       <div style="display: flex; align-items: center; gap: 14px;">
         <span class="mono" style="font-size: 10.5px; color: #e08d63;">02</span>
-        <span class="name" style="font-size: 15.5px; color: #e6edf3;">Notification Queue Service</span>
+        <span class="name" style="font-size: 15.5px; color: #e6edf3;">Switchyard — Distributed Execution Runtime</span>
         <span class="rule"></span>
         <span class="pill pill-done">Done</span>
       </div>
       <div style="font-size: 12.5px; line-height: 1.45; color: #8b949e; margin: 9px 0 10px;">
-        Fault-tolerant Go message broker with per-key ordering, persistence, consumer groups, acks and exactly-once semantics (simulated), plus a load generator and monitoring stack.
+        Go control-plane broker coordinating bidirectional gRPC streaming leases, append-only WAL storage with CRC32 checksums, token-bucket rate limiting, and MCP Python workers.
       </div>
-      <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip">Go</span><span class="chip">gRPC</span><span class="chip">BoltDB</span><span class="chip">Prometheus</span><span class="chip">Docker</span></div>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip">Go</span><span class="chip">Python</span><span class="chip">gRPC</span><span class="chip">WAL</span><span class="chip">PostgreSQL</span><span class="chip">React</span></div>
     </div>
     
     </div>

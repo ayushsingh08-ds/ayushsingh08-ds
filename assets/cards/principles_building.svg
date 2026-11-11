@@ -65,42 +65,24 @@ body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
     </div>
     <div style="flex: 1; min-width: 0; border-left: 1px solid #efe6da;
                 padding-left: 30px;">
-      <div class="head"><span class="label">Currently building</span><span class="rule"></span><span class="label">self-assessed</span></div>
+      <div class="head"><span class="label">Currently building</span><span class="rule"></span><span class="label">active</span></div>
       
-    <div style="margin-bottom: 30px;">
-      <div style="display: flex; justify-content: space-between; align-items: baseline;">
-        <span style="font-size: 13px; font-weight: 500; color: #3c2f2f;">Distributed Cache with RYW Consistency</span>
-        <span class="mono" style="font-size: 10.5px; color: #9c8b86;">90%</span>
+    <div style="padding: 12px 0; ">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px;">
+        <span style="font-size: 13.5px; font-weight: 600; color: #2c1e1e;">Solaraeus</span>
+        <span class="mono" style="font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase;
+                     color: #b05a30;">ACTIVE</span>
       </div>
-      <div style="height: 6px; background-color: #f0e7db; border-radius: 3px; margin-top: 8px;
-                  overflow: hidden;">
-        <div style="height: 100%; width: 90%; background-color: #b05a30;
-                    border-radius: 3px;"></div>
-      </div>
+      <div style="font-size: 12px; line-height: 1.45; color: #5a4a42; margin-top: 5px;">Incremental radiative transfer &amp; GPU-accelerated 3D microclimate digital twin</div>
     </div>
     
-    <div style="margin-bottom: 30px;">
-      <div style="display: flex; justify-content: space-between; align-items: baseline;">
-        <span style="font-size: 13px; font-weight: 500; color: #3c2f2f;">Lakehouse Gold Layer &amp; Data Contracts</span>
-        <span class="mono" style="font-size: 10.5px; color: #9c8b86;">70%</span>
+    <div style="padding: 12px 0; border-top: 1px solid #f2ebe1;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px;">
+        <span style="font-size: 13.5px; font-weight: 600; color: #2c1e1e;">Portfolio</span>
+        <span class="mono" style="font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase;
+                     color: #b05a30;">ACTIVE</span>
       </div>
-      <div style="height: 6px; background-color: #f0e7db; border-radius: 3px; margin-top: 8px;
-                  overflow: hidden;">
-        <div style="height: 100%; width: 70%; background-color: #b05a30;
-                    border-radius: 3px;"></div>
-      </div>
-    </div>
-    
-    <div style="margin-bottom: 30px;">
-      <div style="display: flex; justify-content: space-between; align-items: baseline;">
-        <span style="font-size: 13px; font-weight: 500; color: #3c2f2f;">LLM Gateway Smart Routing</span>
-        <span class="mono" style="font-size: 10.5px; color: #9c8b86;">60%</span>
-      </div>
-      <div style="height: 6px; background-color: #f0e7db; border-radius: 3px; margin-top: 8px;
-                  overflow: hidden;">
-        <div style="height: 100%; width: 60%; background-color: #b05a30;
-                    border-radius: 3px;"></div>
-      </div>
+      <div style="font-size: 12px; line-height: 1.45; color: #5a4a42; margin-top: 5px;">Interactive developer portfolio &amp; project showcase at ayudev-shiro.vercel.app</div>
     </div>
     
     </div>

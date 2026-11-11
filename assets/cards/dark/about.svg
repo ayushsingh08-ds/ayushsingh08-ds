@@ -1,6 +1,6 @@
-<svg fill="none" viewBox="0 0 850 196" width="850" height="196" xmlns="http://www.w3.org/2000/svg">
-  <foreignObject x="0" y="0" width="850" height="196">
-    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 850px; height: 196px; box-sizing: border-box;">
+<svg fill="none" viewBox="0 0 850 216" width="850" height="216" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject x="0" y="0" width="850" height="216">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 850px; height: 216px; box-sizing: border-box;">
       <style>
         @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;family=Inter:wght@400;500;600&amp;family=Outfit:wght@500;600&amp;display=swap');
 body { font-family: 'Inter', sans-serif; color: #c9d1d9; margin: 0; padding: 0;
@@ -29,7 +29,7 @@ body { font-family: 'Inter', sans-serif; color: #c9d1d9; margin: 0; padding: 0;
       
 <div class="card" style="display: flex; gap: 40px;">
   <div style="width: 468px;">
-    <div style="font-size: 15px; line-height: 1.6; color: #c9d1d9;">I build systems that are reliable, scalable and observable. My interests lie in distributed systems, streaming pipelines, backend platforms and automation.</div>
+    <div style="font-size: 15px; line-height: 1.6; color: #c9d1d9;">Backend and data systems engineer focused on what happens under the hood, database locking, replication boundaries, and fault-tolerant lakehouse architectures. I prefer hard problems involving distributed state and data integrity over surface-level integrations.</div>
     <div style="margin-top: 16px; border-left: 2px solid #30363d; padding-left: 12px;
                 font-size: 13px; color: #8b949e;">I drink coffee and write code. Repeat.</div>
   </div>
@@ -37,12 +37,12 @@ body { font-family: 'Inter', sans-serif; color: #c9d1d9; margin: 0; padding: 0;
     
     <div style="padding: 12px 0; ">
       <div class="label">Exploring</div>
-      <div style="font-size: 12.5px; line-height: 1.5; color: #c9d1d9; margin-top: 5px;">System Design, Cloud, and High Performance Systems</div>
+      <div style="font-size: 12.5px; line-height: 1.5; color: #c9d1d9; margin-top: 5px;">Consensus &amp; Replication, Storage Engines, Lakehouse Architecture</div>
     </div>
     
     <div style="padding: 12px 0; border-top: 1px solid #21262d;">
       <div class="label">Interests</div>
-      <div style="font-size: 12.5px; line-height: 1.5; color: #c9d1d9; margin-top: 5px;">Distributed Systems, Observability, Databases, DevOps</div>
+      <div style="font-size: 12.5px; line-height: 1.5; color: #c9d1d9; margin-top: 5px;">Concurrency Control, Observability, Dimensional Modeling, Cloud Infra</div>
     </div>
     
   </div>

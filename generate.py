@@ -87,6 +87,7 @@ profile = escape_dict(profile)
 GITHUB_URL = profile["about_me"]["github_url"]
 GITHUB_USER = GITHUB_URL.split("/")[-1]
 EMAIL = profile["about_me"]["email"]
+PORTFOLIO_URL = profile["about_me"]["portfolio_url"]
 RESUME_URL = profile["about_me"]["resume_url"]
 
 # ----------------- Layout grid -----------------
@@ -106,13 +107,15 @@ GRID = 850
 
 CARD_SIZES = {
     "header": (GRID, 88),
-    "hero": (GRID, 240),
+    "hero": (GRID, 248),
     "action": (GRID, 56),
     "info": (GRID, 112),
-    "about": (GRID, 196),
-    "stack": (GRID, 146),
+    "about": (GRID, 216),
+    "stack": (GRID, 254),
     "principles_building": (GRID, 232),
     "project": (GRID, 128),
+    "achievements": (GRID, 232),
+    "certifications": (GRID, 233),
     "analytics": (GRID, 196),
     "contrib": (GRID, 212),
     "next": (GRID, 96),
@@ -251,8 +254,12 @@ body { font-family: 'Inter', sans-serif; color: %(body)s; margin: 0; padding: 0;
 )
 
 
+GENERATED_CARDS = set()
+
+
 def save_svg(filename, width, height, content, extra_css=""):
     """Write one card, in both themes. Every card is a fixed-size foreignObject."""
+    GENERATED_CARDS.add(filename)
     svg = """<svg fill="none" viewBox="0 0 %(w)d %(h)d" width="%(w)d" height="%(h)d" xmlns="http://www.w3.org/2000/svg">
   <foreignObject x="0" y="0" width="%(w)d" height="%(h)d">
     <div xmlns="http://www.w3.org/1999/xhtml" style="width: %(w)dpx; height: %(h)dpx; box-sizing: border-box;">
@@ -291,20 +298,34 @@ TECH_LABELS = {
     "go": "Go",
     "java": "Java",
     "python": "Python",
+    "typescript": "TypeScript",
+    "c": "C",
+    "bash": "Bash",
     "cplusplus": "C++",
     "javascript": "JavaScript",
+    "fastapi": "FastAPI",
+    "nodejs": "Node.js",
+    "react": "React",
+    "tailwindcss": "Tailwind CSS",
     "apachekafka": "Kafka",
     "grpc": "gRPC",
     "rabbitmq": "RabbitMQ",
     "redis": "Redis",
     "apachespark": "Spark",
-    "apacheairflow": "Airflow",
+    "apacheairflow": "Apache Airflow",
+    "duckdb": "DuckDB",
+    "sqlite": "SQLite3",
+    "sqlalchemy": "SQLAlchemy",
     "googlecloud": "Google Cloud",
     "postgresql": "PostgreSQL",
     "mysql": "MySQL",
     "mongodb": "MongoDB",
     "amazonwebservices": "AWS",
     "docker": "Docker",
+    "nginx": "Nginx",
+    "githubactions": "GitHub Actions",
+    "pytest": "Pytest",
+    "vitest": "Vitest",
     "kubernetes": "Kubernetes",
     "terraform": "Terraform",
     "prometheus": "Prometheus",
@@ -363,7 +384,7 @@ header_content = """
     "muted": MUTED,
     "faint": FAINT,
     "name": profile["name"],
-    "role_short": "Distributed systems · backend platforms · data infrastructure",
+    "role_short": profile.get("role_short", "Backend platforms · distributed systems · data engineering"),
     "user": GITHUB_USER,
     "email": EMAIL,
 }
@@ -378,15 +399,20 @@ save_svg("header.svg", *CARD_SIZES["header"], header_content)
 # wraps into a ragged 3 + 1 or overflows the column. Links are text, so they wrap
 # wherever the reader's window needs them to, they pick up GitHub's own theme
 # colours, and a screen reader and a keyboard user can both reach them.
+HAS_ACHIEVEMENTS = bool(profile.get("achievements"))
+HAS_UPCOMING = bool(profile.get("upcoming_projects"))
+
 NAV_ITEMS = [
     ("About", "#about"),
     ("Tech Stack", "#tech-stack"),
     ("Featured Projects", "#featured-projects"),
+    ("Achievements" if HAS_ACHIEVEMENTS else "Certifications", "#achievements" if HAS_ACHIEVEMENTS else "#certifications"),
     ("GitHub Analytics", "#github-analytics"),
 ]
 
 CONTACT_ITEMS = [
     ("GitHub", GITHUB_URL),
+    ("Portfolio", PORTFOLIO_URL),
     ("LinkedIn", profile["about_me"]["linkedin_url"]),
     ("Email", "mailto:" + EMAIL),
     ("Resume", RESUME_URL),
@@ -489,17 +515,15 @@ def action_content(label, trailing, primary):
 
 
 save_svg("action_email.svg", *CARD_SIZES["action"], action_content("Email me", "→", True))
-save_svg("action_resume.svg", *CARD_SIZES["action"], action_content("View resume", "PDF →", False))
+save_svg("action_portfolio.svg", *CARD_SIZES["action"], action_content("View portfolio", "ayudev-shiro.vercel.app →", False))
 
 
 # =====================================================================
 # 05 -- Profile information grid (four balanced columns, one card)
 # =====================================================================
 INFO = [
-    ("Education", "B.Tech CSE (Data Science)", "Dayananda Sagar University"),
-    ("Location", "Bengaluru, India", "IST (UTC+5:30) · remote-friendly"),
-    ("Open to", "SDE · Data Engineering", "Backend · Infrastructure"),
-    ("Connection", "Open to collaboration", "Reach me by email"),
+    (item["label"], item["main"], item["sub"])
+    for item in profile["info"]
 ]
 
 info_cols = "".join(
@@ -585,10 +609,11 @@ save_svg("about.svg", *CARD_SIZES["about"], about_content)
 # one category (no icon is repeated across the grid).
 TECH_CATEGORIES = [
     ("Languages", "languages"),
-    ("Distributed systems", "distributed"),
-    ("Data &amp; streaming", "data_streaming"),
-    ("Databases", "databases"),
-    ("Cloud &amp; DevOps", "cloud_devops"),
+    ("Backend &amp; APIs", "backend_apis"),
+    ("Data &amp; Lakehouse", "data_lakehouse"),
+    ("Databases &amp; Queues", "databases"),
+    ("Cloud &amp; Infra", "cloud_infra"),
+    ("CI &amp; Testing", "ci_testing"),
     ("Observability", "observability"),
     ("Tools", "tools"),
 ]
@@ -607,13 +632,20 @@ tech_cells = "".join(
     for label, category in TECH_CATEGORIES
 )
 
+core_skills = profile["tech_stack"].get("core_skills", [])
+core_chips = "".join('<span class="chip">%s</span>' % skill for skill in core_skills)
+
 stack_content = """
 <div class="card">
-  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px 18px;">
+  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px 18px;">
     %(cells)s
   </div>
+  <div style="border-top: 1px solid #f2ebe1; margin-top: 16px; padding-top: 14px;">
+    <div class="label" style="font-size: 10px; margin-bottom: 8px;">Systems, Data &amp; Storage Primitives</div>
+    <div style="display: flex; flex-wrap: wrap; gap: 6px;">%(core)s</div>
+  </div>
 </div>
-""" % {"cells": tech_cells}
+""" % {"cells": tech_cells, "core": core_chips}
 save_svg("stack.svg", *CARD_SIZES["stack"], stack_content)
 
 
@@ -641,9 +673,14 @@ principle_rows = "".join(
 # The bars are the owner's own estimates from profile.json, not something this
 # build can verify against the repositories, so the card says so. Anything the
 # build cannot check is labelled rather than stated as fact.
-building_items = "".join(
-    """
-    <div style="margin-bottom: 30px;">
+has_pct = any("percentage" in item for item in profile["currently_building"])
+building_gap = 38 if len(profile["currently_building"]) <= 2 else 30
+
+if has_pct:
+    building_note = "self-assessed"
+    building_items = "".join(
+        """
+    <div style="margin-bottom: %(gap)dpx;">
       <div style="display: flex; justify-content: space-between; align-items: baseline;">
         <span style="font-size: 13px; font-weight: 500; color: #3c2f2f;">%(name)s</span>
         <span class="mono" style="font-size: 10.5px; color: %(faint)s;">%(percentage)d%%</span>
@@ -655,14 +692,37 @@ building_items = "".join(
       </div>
     </div>
     """
-    % {
-        "name": item["name"],
-        "percentage": item["percentage"],
-        "faint": FAINT,
-        "accent": ACCENT,
-    }
-    for item in profile["currently_building"]
-)
+        % {
+            "gap": building_gap,
+            "name": item["name"],
+            "percentage": item["percentage"],
+            "faint": FAINT,
+            "accent": ACCENT,
+        }
+        for item in profile["currently_building"]
+    )
+else:
+    building_note = "active"
+    building_items = "".join(
+        """
+    <div style="padding: 12px 0; %(border)s">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 10px;">
+        <span style="font-size: 13.5px; font-weight: 600; color: %(ink)s;">%(name)s</span>
+        <span class="mono" style="font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase;
+                     color: %(accent)s;">ACTIVE</span>
+      </div>
+      <div style="font-size: 12px; line-height: 1.45; color: #5a4a42; margin-top: 5px;">%(desc)s</div>
+    </div>
+    """
+        % {
+            "border": "border-top: 1px solid #f2ebe1;" if index else "",
+            "ink": INK,
+            "accent": ACCENT,
+            "name": item["name"],
+            "desc": item.get("desc", ""),
+        }
+        for index, item in enumerate(profile["currently_building"])
+    )
 
 # Both columns live in one card. As two half-width images they could clip on a
 # narrow column (see the layout notes at the top); as two internal columns they
@@ -686,7 +746,7 @@ principles_building_content = """
     "border_soft": BORDER_SOFT,
     "principles_head": head("Engineering principles"),
     "principles": principle_rows,
-    "building_head": head("Currently building", "self-assessed"),
+    "building_head": head("Currently building", building_note),
     "building": building_items,
 }
 save_svg(
@@ -695,26 +755,26 @@ save_svg(
     principles_building_content
 )
 
-# Planned work, labelled as planned: the brief for this page (and honesty) is
-# that nothing here is presented as finished.
-next_items = "".join(
-    """
-    <div style="flex: 1;">
-      <div style="font-size: 12.5px; font-weight: 500; color: #3c2f2f;">%(name)s</div>
-      <div style="font-size: 11.5px; color: %(muted)s; margin-top: 3px;">%(desc)s</div>
-    </div>
-    """
-    % {"name": item["name"], "desc": item["desc"], "muted": MUTED}
-    for item in profile["upcoming_projects"]
-)
+# Planned work, labelled as planned: rendered only when upcoming_projects is populated.
+if HAS_UPCOMING:
+    next_items = "".join(
+        """
+        <div style="flex: 1;">
+          <div style="font-size: 12.5px; font-weight: 500; color: #3c2f2f;">%(name)s</div>
+          <div style="font-size: 11.5px; color: %(muted)s; margin-top: 3px;">%(desc)s</div>
+        </div>
+        """
+        % {"name": item["name"], "desc": item["desc"], "muted": MUTED}
+        for item in profile["upcoming_projects"]
+    )
 
-next_content = """
-<div class="card">
-  %(head)s
-  <div style="display: flex; gap: 28px;">%(items)s</div>
-</div>
-""" % {"head": head("Next", "planned, not started"), "items": next_items}
-save_svg("next.svg", *CARD_SIZES["next"], next_content)
+    next_content = """
+    <div class="card">
+      %(head)s
+      <div style="display: flex; gap: 28px;">%(items)s</div>
+    </div>
+    """ % {"head": head("Next", "planned, not started"), "items": next_items}
+    save_svg("next.svg", *CARD_SIZES["next"], next_content)
 
 
 # =====================================================================
@@ -749,6 +809,110 @@ for idx, project in enumerate(profile["featured_projects"]):
         "tags": tags,
     }
     save_svg("project_%d.svg" % idx, *CARD_SIZES["project"], project_content)
+
+
+# =====================================================================
+# 09b -- Achievements / Certifications
+# =====================================================================
+if HAS_ACHIEVEMENTS:
+    achievement_rows = "".join(
+        """
+        <div style="padding: 10px 0; %(border)s">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 10px;">
+            <div style="display: flex; align-items: baseline; gap: 10px;">
+              <span class="mono" style="font-size: 10px; color: %(accent)s;">%(idx)s</span>
+              <span style="font-size: 13px; font-weight: 600; color: %(ink)s;">%(title)s</span>
+            </div>
+            <span class="mono" style="font-size: 10px; color: %(faint)s; white-space: nowrap;">%(period)s</span>
+          </div>
+          <div style="font-size: 12px; line-height: 1.45; color: #5a4a42; margin-top: 4px; padding-left: 22px;">
+            %(desc)s
+          </div>
+        </div>
+        """
+        % {
+            "border": "border-top: 1px solid #f2ebe1;" if index else "",
+            "accent": ACCENT,
+            "ink": INK,
+            "faint": FAINT,
+            "idx": "%02d" % (index + 1),
+            "title": item["title"],
+            "period": item["period"],
+            "desc": item["desc"],
+        }
+        for index, item in enumerate(profile.get("achievements", []))
+    )
+
+    cert_rows = "".join(
+        """
+        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+                    padding: 7px 0; %(border)s">
+          <span style="font-size: 12px; color: #3c2f2f;">%(name)s</span>
+          <span class="mono" style="font-size: 10px; color: %(faint)s; white-space: nowrap;">%(issuer)s</span>
+        </div>
+        """
+        % {
+            "border": "border-top: 1px solid #f2ebe1;" if index else "",
+            "faint": FAINT,
+            "name": cert["name"],
+            "issuer": cert["issuer"],
+        }
+        for index, cert in enumerate(profile.get("certifications", []))
+    )
+
+    achievements_content = """
+    <div class="card">
+      <div style="display: flex; gap: 30px;">
+        <div style="width: 400px;">
+          %(ach_head)s
+          %(ach_rows)s
+        </div>
+        <div style="flex: 1; min-width: 0; border-left: 1px solid %(border_soft)s; padding-left: 30px;">
+          %(cert_head)s
+          %(cert_rows)s
+        </div>
+      </div>
+    </div>
+    """ % {
+        "border_soft": BORDER_SOFT,
+        "ach_head": head("Leadership &amp; Hackathons"),
+        "ach_rows": achievement_rows,
+        "cert_head": head("Certifications"),
+        "cert_rows": cert_rows,
+    }
+    save_svg("achievements.svg", *CARD_SIZES["achievements"], achievements_content)
+else:
+    cert_rows = "".join(
+        """
+        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
+                    padding: 8px 0; %(border)s">
+          <div style="display: flex; align-items: baseline; gap: 12px;">
+            <span class="mono" style="font-size: 10px; color: %(accent)s;">%(idx)s</span>
+            <span style="font-size: 13px; color: #3c2f2f;">%(name)s</span>
+          </div>
+          <span class="mono" style="font-size: 10.5px; color: %(faint)s; white-space: nowrap;">%(issuer)s</span>
+        </div>
+        """
+        % {
+            "border": "border-top: 1px solid #f2ebe1;" if index else "",
+            "accent": ACCENT,
+            "faint": FAINT,
+            "idx": "%02d" % (index + 1),
+            "name": cert["name"],
+            "issuer": cert["issuer"],
+        }
+        for index, cert in enumerate(profile.get("certifications", []))
+    )
+    certifications_content = """
+    <div class="card">
+      %(cert_head)s
+      %(cert_rows)s
+    </div>
+    """ % {
+        "cert_head": head("Certifications"),
+        "cert_rows": cert_rows,
+    }
+    save_svg("certifications.svg", *CARD_SIZES["certifications"], certifications_content)
 
 
 # =====================================================================
@@ -1160,6 +1324,7 @@ tech_names = ", ".join(
     for _label, category in TECH_CATEGORIES
     for key in profile["tech_stack"].get(category, [])
 )
+core_skill_names = ", ".join(profile["tech_stack"].get("core_skills", []))
 
 # Alt text is read aloud, so it carries the same content as the cards with the
 # markup flattened out of it.
@@ -1178,10 +1343,9 @@ ALT_TEXT = {
         "quote": " ".join(plain(line) for line in profile["quote"]["lines"]),
     },
     "action_email": "Email me at %s" % EMAIL,
-    "action_resume": "Open my resume",
-    "info": "Profile: B.Tech CSE (Data Science) at Dayananda Sagar University; "
-    "based in Bengaluru, India (IST, UTC+5:30, remote-friendly); open to SDE and data "
-    "engineering, backend and infrastructure roles; open to collaboration by email",
+    "action_portfolio": "Open my portfolio at %s" % PORTFOLIO_URL,
+    "info": "Profile: "
+    + "; ".join("%s: %s (%s)" % (label, main, sub) for label, main, sub in INFO),
     "about": "%s Exploring: %s. Interests: %s. %s"
     % (
         profile["about_me"]["text"],
@@ -1189,13 +1353,27 @@ ALT_TEXT = {
         profile["about_me"]["interests"],
         profile["about_me"]["fun_fact"],
     ),
-    "stack": "Tech stack by category: %s" % tech_names,
+    "stack": "Tech stack: %s. Core skills: %s" % (tech_names, core_skill_names),
     "principles_building": "Engineering principles: "
     + " ".join(as_sentence(item) for item in profile["principles"])
-    + " Currently building, self-assessed progress: "
-    + "; ".join("%s %d%%" % (item["name"], item["percentage"]) for item in profile["currently_building"]),
+    + " Currently building: "
+    + "; ".join(
+        ("%s %d%%" % (item["name"], item["percentage"]))
+        if "percentage" in item
+        else ("%s — %s" % (item["name"], item.get("desc", "")))
+        for item in profile["currently_building"]
+    ),
     "next": "Planned, not started: "
     + "; ".join("%s %s" % (item["name"], item["desc"]) for item in profile["upcoming_projects"]),
+    "achievements": "Leadership & Hackathons: "
+    + "; ".join(
+        "%s (%s) — %s" % (a["title"], a["period"], a["desc"])
+        for a in profile.get("achievements", [])
+    )
+    + " Certifications: "
+    + ", ".join("%s (%s)" % (c["name"], c["issuer"]) for c in profile.get("certifications", [])),
+    "certifications": "Certifications: "
+    + ", ".join("%s (%s)" % (c["name"], c["issuer"]) for c in profile.get("certifications", [])),
     "analytics": "GitHub stats for %s: %d public repositories, %d stars, %d followers and %d "
     "languages, from the GitHub REST API. Top %d languages by repository count: %s"
     % (
@@ -1275,7 +1453,7 @@ README_BLOCKS = [
             href="mailto:" + EMAIL,
         )
     ),
-    row(card_image("action_resume.svg", GRID, ALT_TEXT["action_resume"], href=RESUME_URL)),
+    row(card_image("action_portfolio.svg", GRID, ALT_TEXT["action_portfolio"], href=PORTFOLIO_URL)),
     # Four balanced columns inside one card, so they are always four columns on
     # one row and can never wrap into a ragged 3 + 1.
     "<!-- Profile at a glance. -->",
@@ -1288,11 +1466,28 @@ README_BLOCKS = [
     # columns are a property of the drawing rather than of the reader's window.
     "<!-- Principles beside current work. -->",
     row(card_image("principles_building.svg", GRID, ALT_TEXT["principles_building"])),
-    "<!-- Planned work, labelled as planned. -->",
-    row(card_image("next.svg", GRID, ALT_TEXT["next"])),
+    *(
+        [
+            "<!-- Planned work, labelled as planned. -->",
+            row(card_image("next.svg", GRID, ALT_TEXT["next"])),
+        ]
+        if HAS_UPCOMING
+        else []
+    ),
     '<h2 align="center">Featured Projects</h2>',
     *PROJECT_ROWS,
     '<p align="center"><a href="%s?tab=repositories">View all repositories &rarr;</a></p>' % GITHUB_URL,
+    *(
+        [
+            '<h2 align="center">Achievements</h2>',
+            row(card_image("achievements.svg", GRID, ALT_TEXT["achievements"])),
+        ]
+        if HAS_ACHIEVEMENTS
+        else [
+            '<h2 align="center">Certifications</h2>',
+            row(card_image("certifications.svg", GRID, ALT_TEXT["certifications"])),
+        ]
+    ),
     '<h2 align="center">GitHub Analytics</h2>',
     row(card_image("analytics.svg", GRID, ALT_TEXT["analytics"])),
     row(card_image("contrib.svg", GRID, ALT_TEXT["contrib"])),
@@ -1302,6 +1497,12 @@ README_BLOCKS = [
 ]
 
 readme = "\n\n".join(README_BLOCKS) + "\n"
+
+# Remove stale generated card files so no orphan assets remain on disk.
+for directory in (CARDS_DIR, DARK_DIR):
+    for existing_name in os.listdir(directory):
+        if existing_name.endswith(".svg") and existing_name not in GENERATED_CARDS:
+            os.remove(os.path.join(directory, existing_name))
 
 # ----------------- Card validation -----------------
 # Every card is an XML document, and a browser silently drops an SVG it cannot

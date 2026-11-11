@@ -35,7 +35,7 @@ body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
                 font-size: 14px; letter-spacing: 0.04em; color: #b05a30;">AS.</div>
     <div>
       <div class="name" style="font-size: 18px; color: #2c1e1e;">Ayush Singh</div>
-      <div style="font-size: 12px; color: #7a6a65; margin-top: 2px;">Distributed systems · backend platforms · data infrastructure</div>
+      <div style="font-size: 12px; color: #7a6a65; margin-top: 2px;">Backend platforms · distributed systems · data engineering</div>
     </div>
   </div>
   <div class="mono" style="text-align: right; font-size: 11px; color: #9c8b86;

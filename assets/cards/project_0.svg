@@ -30,14 +30,14 @@ body { font-family: 'Inter', sans-serif; color: #4a3f39; margin: 0; padding: 0;
     <div class="card">
       <div style="display: flex; align-items: center; gap: 14px;">
         <span class="mono" style="font-size: 10.5px; color: #b05a30;">01</span>
-        <span class="name" style="font-size: 15.5px; color: #2c1e1e;">Market Stream Ingestion Engine</span>
+        <span class="name" style="font-size: 15.5px; color: #2c1e1e;">TraceGuard — Incident &amp; Telemetry Engine</span>
         <span class="rule"></span>
         <span class="pill pill-done">Done</span>
       </div>
       <div style="font-size: 12.5px; line-height: 1.45; color: #5a4a42; margin: 9px 0 10px;">
-        Real-time order-book ingestion on Redpanda (Kafka) with PySpark Structured Streaming and Delta Lake: strict schema validation, DLQ routing and VWAP over tumbling windows.
+        Async FastAPI &amp; SQLAlchemy 2.0 triage backend with Redis ZSET SHA-256 deduplication, PostgreSQL SKIP LOCKED priority queues, pgvector RCA, and Prometheus metrics.
       </div>
-      <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip">Redpanda</span><span class="chip">PySpark</span><span class="chip">Delta Lake</span><span class="chip">Docker</span><span class="chip">Python</span></div>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px;"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">PostgreSQL</span><span class="chip">Redis</span><span class="chip">pgvector</span><span class="chip">Prometheus</span></div>
     </div>
     
     </div>
