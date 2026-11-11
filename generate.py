@@ -73,7 +73,7 @@ RESUME_URL = profile["about_me"]["resume_url"]
 GRID = 880
 
 CARD_SIZES = {
-    "header": (GRID, 220),
+    "header": (900, 225),
     "hero": (GRID, 250),
     "action": (GRID, 48),
     "info": (GRID, 76),
@@ -194,7 +194,7 @@ FONT_CURSIVE = "'Caveat', 'Bradley Hand', 'Segoe Print', cursive"
 GENERATED_CARDS = set()
 
 
-def save_svg(filename, width, height, body, dark_body=None):
+def save_svg(filename, width, height, body, dark_body=None, apply_dark=True):
     """Write one standalone Camo-safe SVG card in both light and dark themes."""
     GENERATED_CARDS.add(filename)
 
@@ -208,7 +208,8 @@ def save_svg(filename, width, height, body, dark_body=None):
         ) % {"w": width, "h": height, "body": inner}
 
     light_svg = wrap(body)
-    dark_svg = to_dark(wrap(dark_body if dark_body is not None else body))
+    dark_raw = wrap(dark_body if dark_body is not None else body)
+    dark_svg = to_dark(dark_raw) if apply_dark else dark_raw
     with open(os.path.join(CARDS_DIR, filename), "w", encoding="utf-8") as sf:
         sf.write(light_svg)
     with open(os.path.join(DARK_DIR, filename), "w", encoding="utf-8") as sf:
@@ -393,97 +394,273 @@ TECH_LABELS = {
 
 
 # =====================================================================
-# 01 -- Header Banner (880x220)
+# 01 -- Header Banner (900x225, animated crimson sky & peeking cat)
 # =====================================================================
-header_body = """
-<defs>
-  <clipPath id="hdr-clip">
-    <rect x="0" y="0" width="880" height="220" rx="16"/>
-  </clipPath>
-  <linearGradient id="hdr-grad" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0%%" stop-color="#943030"/>
-    <stop offset="55%%" stop-color="#822627"/>
-    <stop offset="100%%" stop-color="#5E1A1B"/>
-  </linearGradient>
-</defs>
-<g clip-path="url(#hdr-clip)">
-  <rect x="0" y="0" width="880" height="220" fill="url(#hdr-grad)"/>
+header_body = """  <defs>
+    <!-- Rounded Banner Clip Path (clips the cat cleanly when it ducks down) -->
+    <clipPath id="bannerClip">
+      <rect x="0" y="0" width="900" height="225" rx="18" ry="18" />
+    </clipPath>
 
-  <!-- Layered rolling hills on the right -->
-  <path d="M320 220 C410 155, 505 182, 600 138 C695 94, 785 112, 880 78 L880 220 Z" fill="%(mid_hill)s" fill-opacity="0.72"/>
-  <path d="M410 220 C495 168, 575 188, 668 152 C748 120, 818 136, 880 112 L880 220 Z" fill="%(dark_hill)s"/>
-  <path d="M565 220 C645 185, 725 198, 805 165 C840 150, 862 154, 880 148 L880 220 Z" fill="#1A1011" fill-opacity="0.88"/>
+    <!-- Flowing Shade of Red Gradient -->
+    <linearGradient id="flowingRed" x1="0%%" y1="0%%" x2="100%%" y2="100%%">
+      <stop offset="0%%" stop-color="#9A3430">
+        <animate attributeName="stop-color" values="#9A3430;#7B2321;#B13E39;#6E1E1C;#9A3430" dur="7s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="50%%" stop-color="#862A27">
+        <animate attributeName="stop-color" values="#862A27;#A83834;#6D1E1C;#9A3430;#862A27" dur="7s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="100%%" stop-color="#6B1E1C">
+        <animate attributeName="stop-color" values="#6B1E1C;#9A3430;#7B2321;#A63834;#6B1E1C" dur="7s" repeatCount="indefinite" />
+      </stop>
+    </linearGradient>
 
-  <!-- Ringed planet doodle (top-center) -->
-  <g transform="translate(432, 54)">
-    <circle cx="0" cy="0" r="14" fill="#A53F3A" stroke="%(on_dark)s" stroke-width="1.6"/>
-    <path d="M-8 -5 Q-2 -10 5 -6" fill="none" stroke="%(on_dark_sub)s" stroke-width="1" stroke-linecap="round"/>
-    <ellipse cx="0" cy="1" rx="25" ry="6.5" transform="rotate(-18)" fill="none" stroke="%(on_dark)s" stroke-width="1.6"/>
-    <circle cx="29" cy="-9" r="1.5" fill="%(on_dark)s"/>
-  </g>
+    <!-- Flowing Midground Hill Gradient -->
+    <linearGradient id="flowingHill" x1="0%%" y1="0%%" x2="100%%" y2="0%%">
+      <stop offset="0%%" stop-color="#5B1F1E">
+        <animate attributeName="stop-color" values="#5B1F1E;#722624;#4D1918;#5B1F1E" dur="6s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="100%%" stop-color="#6A2422">
+        <animate attributeName="stop-color" values="#6A2422;#4E1918;#782927;#6A2422" dur="6s" repeatCount="indefinite" />
+      </stop>
+    </linearGradient>
 
-  <!-- 4-point sparkle stars -->
-  %(s1)s
-  %(s2)s
-  %(s3)s
-  %(s4)s
-  %(s5)s
-  <circle cx="355" cy="42" r="1.6" fill="%(on_dark_sub)s" fill-opacity="0.7"/>
-  <circle cx="515" cy="88" r="1.4" fill="%(on_dark_sub)s" fill-opacity="0.6"/>
-  <circle cx="605" cy="34" r="1.8" fill="%(on_dark)s" fill-opacity="0.85"/>
+    <!-- Subtle Text Drop Shadow for Readability -->
+    <filter id="softShadow" x="-10%%" y="-10%%" width="120%%" height="120%%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#2B0B0A" flood-opacity="0.35" />
+    </filter>
 
-  <!-- Peeking black cat silhouette (bottom-left) -->
-  <g transform="translate(38, 166)">
-    <!-- Ears -->
-    <polygon points="8,24 14,2 27,18" fill="#181010"/>
-    <polygon points="41,18 54,2 60,24" fill="#181010"/>
-    <polygon points="12,21 15,7 23,17" fill="#4A2525"/>
-    <polygon points="45,17 53,7 56,21" fill="#4A2525"/>
-    <!-- Head & shoulders -->
-    <ellipse cx="34" cy="34" rx="26" ry="21" fill="#181010"/>
-    <path d="M4 54 Q34 38 64 54 L68 58 L0 58 Z" fill="#181010"/>
-    <!-- Eyes (O . O) -->
-    <circle cx="23" cy="31" r="4.8" fill="%(on_dark)s"/>
-    <circle cx="45" cy="31" r="4.8" fill="%(on_dark)s"/>
-    <circle cx="23.8" cy="31" r="2.1" fill="#181010"/>
-    <circle cx="45.8" cy="31" r="2.1" fill="#181010"/>
-    <circle cx="24.6" cy="29.8" r="0.8" fill="#FFFFFF"/>
-    <circle cx="46.6" cy="29.8" r="0.8" fill="#FFFFFF"/>
-    <!-- Tiny nose dot -->
-    <circle cx="34" cy="37" r="1.3" fill="#F0D5C6"/>
-    <!-- Whiskers -->
-    <path d="M12 36 L2 34 M12 39 L2 40 M56 36 L66 34 M56 39 L66 40" stroke="#7A6A63" stroke-width="1" stroke-linecap="round"/>
-  </g>
+    <!-- Reusable 4-Point Star Symbol -->
+    <g id="sparkle">
+      <path d="M 0,-10 C 1.5,-3 3,-1.5 10,0 C 3,1.5 1.5,3 0,10 C -1.5,3 -3,1.5 -10,0 C -3,-1.5 -1.5,-3 0,-10 Z" />
+    </g>
+  </defs>
 
-  <!-- Title & subtitle (left) -->
-  <text x="38" y="102" font-family="%(serif)s" font-size="44" font-weight="700" fill="%(on_dark)s">%(name)s</text>
-  <text x="40" y="132" font-family="%(sans)s" font-size="14" font-weight="500" fill="%(on_dark_sub)s">%(role_short)s</text>
+  <style>
+    /* Typography */
+    .hero-title {
+      font-family: 'Playfair Display', Georgia, 'Times New Roman', Times, serif;
+      font-size: 48px;
+      font-weight: 700;
+      fill: #FAF3EB;
+      letter-spacing: 0.4px;
+    }
+    .hero-subtitle {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 14.5px;
+      font-weight: 400;
+      fill: #EEDCD6;
+      letter-spacing: 0.35px;
+    }
+    .handwritten-quote {
+      font-family: 'Caveat', 'Segoe Print', 'Bradley Hand', 'Chalkboard SE', cursive, sans-serif;
+      font-size: 21px;
+      font-weight: 600;
+      font-style: italic;
+      fill: #FAF2EC;
+      letter-spacing: 0.4px;
+    }
 
-  <!-- Top-right tilted handwritten annotation with double curved underline -->
-  <g transform="rotate(-8 730 56)">
-    <text x="730" y="54" text-anchor="middle" font-family="%(cursive)s" font-size="22" font-weight="700" fill="%(on_dark)s">Dream Big. Code Better.</text>
-    <path d="M635 63 Q728 57 826 62" fill="none" stroke="%(on_dark)s" stroke-width="1.8" stroke-linecap="round"/>
-    <path d="M648 69 Q730 64 815 68" fill="none" stroke="#F0D5C6" stroke-width="1.3" stroke-linecap="round"/>
-  </g>
-</g>
-<rect x="0.5" y="0.5" width="879" height="219" rx="16" fill="none" stroke="#6E2223" stroke-width="1"/>
-""" % {
-    "mid_hill": MID_HILL,
-    "dark_hill": DARK_HILL,
-    "on_dark": ON_DARK,
-    "on_dark_sub": ON_DARK_SUB,
-    "serif": FONT_SERIF,
-    "sans": FONT_SANS,
-    "cursive": FONT_CURSIVE,
+    /* Twinkling Stars */
+    .star {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: twinkle 2.6s ease-in-out infinite;
+    }
+    .s1 { animation-delay: 0.0s; animation-duration: 2.4s; }
+    .s2 { animation-delay: 0.6s; animation-duration: 3.0s; }
+    .s3 { animation-delay: 1.2s; animation-duration: 2.2s; }
+    .s4 { animation-delay: 1.8s; animation-duration: 2.8s; }
+    .s5 { animation-delay: 0.4s; animation-duration: 3.2s; }
+    .s6 { animation-delay: 1.5s; animation-duration: 2.5s; }
+
+    @keyframes twinkle {
+      0%%, 100%% {
+        opacity: 0.22;
+        transform: scale(0.75);
+      }
+      50%% {
+        opacity: 1;
+        transform: scale(1.18);
+      }
+    }
+
+    /* Gentle Floating Planet */
+    .planet {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: floatPlanet 5s ease-in-out infinite;
+    }
+    @keyframes floatPlanet {
+      0%%, 100%% { transform: translateY(0px) rotate(-19deg); }
+      50%% { transform: translateY(-4px) rotate(-15deg); }
+    }
+
+    /* Flowing Midground Wave */
+    .mid-wave {
+      animation: wavePulse 6s ease-in-out infinite;
+    }
+    @keyframes wavePulse {
+      0%%, 100%% { transform: translateY(0px); }
+      50%% { transform: translateY(4px); }
+    }
+
+    /* Subtle Quote Float */
+    .quote-group {
+      animation: quoteFloat 5.5s ease-in-out infinite;
+    }
+    @keyframes quoteFloat {
+      0%%, 100%% { transform: translate(790px, 82px) rotate(-13deg) translateY(0px); }
+      50%% { transform: translate(790px, 82px) rotate(-13deg) translateY(-3px); }
+    }
+
+    /* Cat Peeking Up from Down and Going Back Down */
+    .cat-peek {
+      animation: peekUpDown 4.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+    }
+    @keyframes peekUpDown {
+      0%%, 100%% {
+        transform: translateY(44px);
+      }
+      12%% {
+        transform: translateY(44px);
+      }
+      32%%, 68%% {
+        transform: translateY(0px);
+      }
+      88%% {
+        transform: translateY(44px);
+      }
+    }
+
+    /* Subtle Eye Blink While Cat Peeks at Top */
+    .cat-eyes {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: eyeBlink 4.2s infinite;
+    }
+    @keyframes eyeBlink {
+      0%%, 45%%, 51%%, 100%% { transform: scaleY(1); }
+      48%% { transform: scaleY(0.1); }
+    }
+  </style>
+
+  <!-- Main Clipped Banner Container -->
+  <g clip-path="url(#bannerClip)">
+    <!-- 1. Flowing Red Sky Background -->
+    <rect x="0" y="0" width="900" height="225" fill="url(#flowingRed)" />
+
+    <!-- 2. Layered Right-Side Hills -->
+    <!-- Midground Maroon Wave -->
+    <path class="mid-wave" d="M 335,226 C 395,180 455,168 535,155 C 615,142 665,108 755,100 C 825,94 865,86 902,75 L 902,226 Z" fill="url(#flowingHill)" />
+
+    <!-- Foreground Dark Espresso Wave -->
+    <path d="M 465,226 C 520,192 585,178 650,160 C 715,142 755,132 820,126 C 858,122 882,115 902,110 L 902,226 Z" fill="#261717" />
+
+    <!-- Bottom-Right Deep Shadow Wave -->
+    <path d="M 620,226 C 690,198 760,185 835,162 C 868,152 888,148 902,146 L 902,226 Z" fill="#1B1010" />
+
+    <!-- 3. Blinking Stars &amp; Sky Dots -->
+    <!-- Left-side &amp; Mid-sky 4-Point Stars -->
+    <g transform="translate(104, 102) scale(0.55)">
+      <use href="#sparkle" xlink:href="#sparkle" fill="#F9ECE8" class="star s2" />
+    </g>
+    <g transform="translate(128, 45) scale(0.45)">
+      <use href="#sparkle" xlink:href="#sparkle" fill="#DFABA4" class="star s5" />
+    </g>
+    <g transform="translate(168, 178) scale(0.45)">
+      <use href="#sparkle" xlink:href="#sparkle" fill="#DFABA4" class="star s3" />
+    </g>
+    <use href="#sparkle" xlink:href="#sparkle" x="296" y="45" fill="#F9ECE8" class="star s1" />
+    <g transform="translate(595, 42) scale(1.05)">
+      <use href="#sparkle" xlink:href="#sparkle" fill="#F9ECE8" class="star s2" />
+    </g>
+
+    <!-- Smaller Soft-Rose 4-Point Stars -->
+    <g transform="translate(522, 152) scale(0.52)">
+      <use href="#sparkle" xlink:href="#sparkle" fill="#DFABA4" class="star s3" />
+    </g>
+    <g transform="translate(682, 72) scale(0.55)">
+      <use href="#sparkle" xlink:href="#sparkle" fill="#DFABA4" class="star s4" />
+    </g>
+    <g transform="translate(862, 118) scale(0.65)">
+      <use href="#sparkle" xlink:href="#sparkle" fill="#DFABA4" class="star s5" />
+    </g>
+
+    <!-- Twinkling Sky Dots -->
+    <circle cx="385" cy="40" r="2.0" fill="#DFABA4" class="star s4" />
+    <circle cx="512" cy="42" r="2.0" fill="#F9ECE8" class="star s1" />
+    <circle cx="558" cy="96" r="1.8" fill="#DFABA4" class="star s6" />
+    <circle cx="648" cy="34" r="2.2" fill="#F9ECE8" class="star s3" />
+
+    <!-- 4. Ringed Planet Doodle -->
+    <g transform="translate(476, 46)">
+      <g class="planet">
+        <circle cx="0" cy="0" r="14" fill="none" stroke="#F7EAE4" stroke-width="1.9" />
+        <path d="M -12,-4 Q 0,-8.5 12,-4" fill="none" stroke="#F7EAE4" stroke-width="1.5" stroke-linecap="round" />
+        <ellipse cx="0" cy="1" rx="25" ry="6.2" fill="none" stroke="#F7EAE4" stroke-width="1.9" />
+      </g>
+    </g>
+
+    <!-- 5. Left Title &amp; Subtitle Overlay -->
+    <g filter="url(#softShadow)">
+      <text x="148" y="96" class="hero-title">%(name)s</text>
+      <text x="150" y="127" class="hero-subtitle">%(role_short)s</text>
+    </g>
+
+    <!-- 6. Right Tilted Quote Overlay ("Dream Big. Code Better.") + Double Underline -->
+    <g class="quote-group" transform="translate(790, 82) rotate(-13)" filter="url(#softShadow)">
+      <text x="0" y="0" text-anchor="middle" class="handwritten-quote">Dream Big.</text>
+      <text x="4" y="24" text-anchor="middle" class="handwritten-quote">Code Better.</text>
+      <!-- Curved Hand-Drawn Double Underline -->
+      <path d="M -58,36 Q 2,30 64,33" fill="none" stroke="#F7EAE4" stroke-width="2.3" stroke-linecap="round" />
+      <path d="M -42,43 Q 10,38 54,40" fill="none" stroke="#DFABA4" stroke-width="1.4" stroke-linecap="round" />
+    </g>
+
+    <!-- 7. Peeking Black Cat (Bottom-Left) -->
+    <g class="cat-peek">
+      <!-- Shoulders / Body Base -->
+      <ellipse cx="76" cy="227" rx="30" ry="12" fill="#181212" />
+
+      <!-- Left &amp; Right Pointed Ears -->
+      <polygon points="48,198 54,167 70,186" fill="#181212" stroke="#181212" stroke-width="2" stroke-linejoin="round" />
+      <polygon points="104,198 98,167 82,186" fill="#181212" stroke="#181212" stroke-width="2" stroke-linejoin="round" />
+
+      <!-- Inner Ears -->
+      <polygon points="52,193 55,173 66,186" fill="#4E2525" />
+      <polygon points="100,193 97,173 86,186" fill="#4E2525" />
+
+      <!-- Cat Head -->
+      <ellipse cx="76" cy="204" rx="27" ry="22" fill="#181212" />
+
+      <!-- Eyes + Tiny Nose -->
+      <g class="cat-eyes">
+        <!-- Left Eye -->
+        <circle cx="64" cy="202" r="5.3" fill="#FAF2EE" />
+        <circle cx="65.2" cy="202" r="2.3" fill="#181212" />
+        <!-- Right Eye -->
+        <circle cx="88" cy="202" r="5.3" fill="#FAF2EE" />
+        <circle cx="86.8" cy="202" r="2.3" fill="#181212" />
+      </g>
+
+      <!-- Tiny White Nose Dot -->
+      <circle cx="76" cy="206.5" r="1.4" fill="#FAF2EE" />
+
+      <!-- Whiskers Left -->
+      <line x1="42" y1="204" x2="52" y2="206" stroke="#7E5250" stroke-width="1.3" stroke-linecap="round" />
+      <line x1="41" y1="208" x2="52" y2="208.5" stroke="#7E5250" stroke-width="1.3" stroke-linecap="round" />
+      <line x1="43" y1="212" x2="53" y2="211" stroke="#7E5250" stroke-width="1.3" stroke-linecap="round" />
+
+      <!-- Whiskers Right -->
+      <line x1="110" y1="204" x2="100" y2="206" stroke="#7E5250" stroke-width="1.3" stroke-linecap="round" />
+      <line x1="111" y1="208" x2="100" y2="208.5" stroke="#7E5250" stroke-width="1.3" stroke-linecap="round" />
+      <line x1="109" y1="212" x2="99" y2="211" stroke="#7E5250" stroke-width="1.3" stroke-linecap="round" />
+    </g>
+  </g>""" % {
     "name": xml_esc(profile["name"]),
     "role_short": xml_esc(profile.get("role_short", "Backend platforms · distributed systems · data engineering")),
-    "s1": sparkle_path(290, 48, 8, ON_DARK, 0.9),
-    "s2": sparkle_path(548, 42, 10, ON_DARK, 0.95),
-    "s3": sparkle_path(628, 72, 6, ON_DARK_SUB, 0.8),
-    "s4": sparkle_path(384, 88, 5, ON_DARK_SUB, 0.7),
-    "s5": sparkle_path(838, 92, 7, "#F0D5C6", 0.85),
 }
-save_svg("header.svg", *CARD_SIZES["header"], header_body)
+save_svg("header.svg", *CARD_SIZES["header"], header_body, apply_dark=False)
 
 
 # =====================================================================
