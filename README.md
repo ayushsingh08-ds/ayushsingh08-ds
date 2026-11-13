@@ -45,7 +45,7 @@
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/analytics.svg"><img src="assets/cards/analytics.svg" width="880" alt="GitHub stats for ayushsingh08-ds: 16 public repositories, 75 stars, 36 followers and 6 languages."></picture></p>
 
-<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/contrib.svg"><img src="assets/cards/contrib.svg" width="880" alt="Contribution calendar for ayushsingh08-ds: 321 contributions between 2025-11-09 and 2026-11-11"></picture></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/contrib.svg"><img src="assets/cards/contrib.svg" width="880" alt="Contribution calendar for ayushsingh08-ds: 326 contributions between 2025-11-09 and 2026-11-13"></picture></p>
 
 <p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/cards/dark/closing.svg"><img src="assets/cards/closing.svg" width="880" alt="Let's build something meaningful — always open to collaboration, new opportunities and interesting technical conversations."></picture></p>
 
