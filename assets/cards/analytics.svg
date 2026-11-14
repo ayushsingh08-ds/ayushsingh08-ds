@@ -6,7 +6,7 @@
 <!-- Left: GitHub Stats -->
 <text x="26" y="42" font-family="'Playfair Display', Georgia, 'Times New Roman', serif" font-size="19" font-weight="700" fill="#231815">GitHub Stats</text>
 <line x1="152" y1="36" x2="274" y2="36" stroke="#E4D9C8" stroke-width="1"/>
-<text x="394" y="40" text-anchor="end" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="9.5" font-weight="600" fill="#7A6A63">REST API · 2026-11-13</text>
+<text x="394" y="40" text-anchor="end" font-family="'JetBrains Mono', 'SFMono-Regular', Consolas, monospace" font-size="9.5" font-weight="600" fill="#7A6A63">REST API · 2026-11-14</text>
 
         <rect x="26" y="64" width="178" height="58" rx="10" fill="#F3ECE2" stroke="#E2D5C5" stroke-width="1"/>
         <text x="40" y="92" font-family="'Playfair Display', Georgia, 'Times New Roman', serif" font-size="24" font-weight="700" fill="#231815">16</text>
